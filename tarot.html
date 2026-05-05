@@ -323,7 +323,7 @@ if (!apiKey) {
 
         async function fetchAI(prompt) {
             // 在此預覽環境必須使用 2.5 預覽模型
-            const model = "gemini-2.5-flash-preview-09-2025";
+            const model = "gemini-1.5-flash";
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
             
             const systemPrompt = `你是一位專業且溫柔的靈魂占卜師。請針對塔羅牌面進行深度解讀。請嚴格以繁體中文 JSON 回傳結果：{"interpretations":[{"keywords":[],"meaning":"","advice":""}],"summary":"","soulMantra":"","dailyActions":[]}`;
