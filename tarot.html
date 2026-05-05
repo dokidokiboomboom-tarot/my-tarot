@@ -291,7 +291,13 @@
          * 1. 預覽環境測試：apiKey 設為空字串，model 設為 gemini-2.5-flash-preview-09-2025。
          * 2. GitHub 部署：填入 apiKey，model 設為 gemini-1.5-flash。
          */
-        const apiKey = "import.meta.env.VITE_GEMINI_KEY"; 
+        // 注意：這裡不能有引號！
+const apiKey = import.meta.env?.VITE_GEMINI_KEY || ""; 
+
+// 這段可以幫妳在控制台檢查有沒有抓到 Key
+if (!apiKey) {
+    console.warn("⚠️ 警告：找不到 API 金鑰，請檢查 Vercel 設定");
+}; 
         const IMAGE_BASE = "https://www.sacred-texts.com/tarot/pkt/img/";
         
         window.state = { tab: 'daily', spread: 1, energy: 3, history: [], selectedCards: [], isDrawing: false };
