@@ -291,7 +291,7 @@
          * 1. 預覽環境測試：apiKey 設為空字串，model 設為 gemini-2.5-flash-preview-09-2025。
          * 2. GitHub 部署：填入 apiKey，model 設為 gemini-1.5-flash。
          */
-        const apiKey = ""; 
+        const apiKey = "import.meta.env.VITE_GEMINI_KEY"; 
         const IMAGE_BASE = "https://www.sacred-texts.com/tarot/pkt/img/";
         
         window.state = { tab: 'daily', spread: 1, energy: 3, history: [], selectedCards: [], isDrawing: false };
