@@ -123,8 +123,8 @@
             <div class="space-y-4">
                 <div class="inline-block px-4 py-1 rounded-full border border-brand/30 bg-brand/5 text-brand text-[10px] font-black tracking-[0.3em] animate-pulse uppercase">Doki Doki Soul Tarot</div>
                 <h1 class="text-5xl md:text-8xl serif font-black leading-tight tracking-tighter">看見潛意識中<br><span class="gold-glow">真正的卡點</span></h1>
-                <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed">
-                    透過生命數字演化與原型照見，開啟妳的轉化旅程。<br>
+                <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed font-serif">
+                    透過生命演化與原型照見，開啟妳的轉化旅程。<br>
                     這不是預測命運，而是與妳的靈魂重新連線。
                 </p>
             </div>
@@ -153,7 +153,7 @@
                 <!-- 每日一抽 -->
                 <div id="panel-daily" class="tab-panel flex flex-col items-center text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <h2 class="text-4xl serif font-black mb-4">今日能量照見</h2>
-                    <p class="text-gray-400 mb-12 font-medium max-w-md">深呼吸三次，清空雜念，當妳感覺心跳與宇宙對齊時，點擊牌面領取指引。</p>
+                    <p class="text-gray-400 mb-12 font-medium max-w-md font-serif">深呼吸三次，清空雜念，當妳感覺心跳與宇宙對齊時，點擊牌面領取指引。</p>
                     <div class="tarot-card-box mb-12">
                         <div class="tarot-card" id="daily-card-element" onclick="window.drawDaily()">
                             <div class="card-face card-back"><div class="text-brand/20 text-4xl"><i class="fa-solid fa-moon-stars"></i></div></div>
@@ -178,8 +178,8 @@
                                     </div>
                                 </div>
                                 <div><label class="block text-[10px] font-black text-brand mb-4 tracking-[0.3em] uppercase">STEP 2. 提問內容</label>
-                                    <select id="q-suggest" class="w-full bg-mystic-surface border border-white/10 rounded-2xl p-4 text-sm mb-3 outline-none font-bold" onchange="document.getElementById('q-custom').value=this.value"></select>
-                                    <textarea id="q-custom" rows="3" placeholder="請詳細描述妳目前的卡點..." class="w-full bg-mystic-surface border border-white/10 rounded-2xl p-4 text-sm focus:border-brand/50 outline-none transition font-bold resize-none"></textarea>
+                                    <select id="q-suggest" class="w-full bg-mystic-surface border border-white/10 rounded-2xl p-4 text-sm mb-3 outline-none font-bold font-serif" onchange="document.getElementById('q-custom').value=this.value"></select>
+                                    <textarea id="q-custom" rows="3" placeholder="請詳細描述妳目前的狀況..." class="w-full bg-mystic-surface border border-white/10 rounded-2xl p-4 text-sm focus:border-brand/50 outline-none transition font-bold resize-none"></textarea>
                                 </div>
                             </div>
                             <div class="space-y-8">
@@ -221,7 +221,7 @@
                 </div>
 
                 <!-- 結果區 -->
-                <div id="result" class="hidden space-y-16 animate-in fade-in duration-1000">
+                <div id="result" class="hidden space-y-16 animate-in fade-in duration-1000 pb-10">
                     <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-6">
                         <button onclick="window.backToSetup()" class="text-xs font-black text-gray-400 hover:text-brand transition flex items-center gap-2 bg-white/5 px-6 py-3 rounded-full"><i class="fa-solid fa-arrow-left"></i> 重新提問</button>
                         <button onclick="window.toggleFavoriteCurrent()" id="fav-btn" class="text-3xl text-gray-700 hover:text-yellow-400 transition"><i class="fa-regular fa-star"></i></button>
@@ -337,12 +337,7 @@
 
     <!-- 腳本邏輯 -->
     <script>
-        /**
-         * 重要：GitHub 部署設定
-         * 1. 填入 apiKey。
-         * 2. 確認 model 為 gemini-1.5-flash。
-         */
-        const apiKey = "AIzaSyAMvYyvoiMq8zDI--_Vfwh7_dMCg4Oy1s4"; 
+        const apiKey = import.meta.env.VITE_GEMINI_KEY; 
         const IMAGE_BASE = "https://www.sacred-texts.com/tarot/pkt/img/";
         
         window.state = { 
@@ -380,11 +375,11 @@
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
             
             const systemPrompt = `你是一位專業且溫柔的靈魂占卜師。請針對塔羅牌面進行深度解讀。
-解析必須包含：能量照見（牌義）、深度建議、整體總結。
+解析必須包含：能量照見（牌義與深度解析）、深度建議、整體總結。
 請嚴格以繁體中文 JSON 回傳結果：
 {
-  "interpretations": [{"keywords":["關鍵字"],"meaning":"深度能量解析內容","advice":"具體建議"}],
-  "summary": "整體能量整合總結",
+  "interpretations": [{"keywords":["關鍵字"],"meaning":"針對該牌面的深度能量解析內容","advice":"充滿療癒力的具體建議"}],
+  "summary": "整體牌陣的能量連結與總結",
   "soulMantra": "靈魂格言",
   "dailyActions": ["行動1", "行動2", "行動3"]
 }`;
@@ -398,8 +393,7 @@
                 const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 if (!response.ok) throw new Error(`API Error ${response.status}`);
                 const data = await response.json();
-                const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                return cleanJSON(rawText);
+                return cleanJSON(data.candidates[0].content.parts[0].text);
             } catch (err) {
                 if (retryCount < 2) return new Promise(r => setTimeout(r, 2000)).then(() => fetchAI(prompt, retryCount + 1));
                 throw err;
@@ -426,11 +420,11 @@
             window.state.isDrawing = true; document.getElementById('loading').classList.remove('hidden');
             const card = { ...tarotData[Math.floor(Math.random() * tarotData.length)], isRev: Math.random() > 0.5 };
             try {
-                const ai = await fetchAI(`每日一抽：${card.name} (${card.isRev?'逆位':'正位'})。`);
+                const ai = await fetchAI(`每日一抽占卜：${card.name} (${card.isRev?'逆位':'正位'})。`);
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('daily-card-front').innerHTML = `<img src="${IMAGE_BASE}${card.id}.jpg" class="card-img ${card.isRev?'reversed':''}">`;
                 document.getElementById('daily-card-element').classList.add('flipped');
-                setTimeout(() => displayResult("今日靈魂照見", "今日專屬能量", [card], ["核心能量"], ai), 1000);
+                setTimeout(() => displayResult("今日靈魂照見", "今日焦點能量", [card], ["核心能量"], ai), 1000);
             } catch(e) { 
                 document.getElementById('loading').classList.add('hidden'); window.showToast("連線失敗"); 
                 window.state.energy++; window.updateEnergyUI(); 
@@ -512,12 +506,12 @@
             document.getElementById('res-content').innerHTML = ai.interpretations.map((item, i) => `
                 <div class="glass p-10 rounded-[2.5rem] space-y-8 animate-in slide-in-from-bottom-6">
                     <div class="flex justify-between items-start">
-                        <h3 class="text-3xl serif font-black">【${pos[i]}】 ${cards[i].name}${cards[i].isRev ? ' (逆位)' : ' (正位)'}</h3>
+                        <h3 class="text-3xl serif font-black font-serif">【${pos[i]}】 ${cards[i].name}${cards[i].isRev ? ' (逆位)' : ' (正位)'}</h3>
                         <div class="flex gap-2">${(item.keywords || []).map(k => `<span class="tag">#${k}</span>`).join('')}</div>
                     </div>
                     <div class="space-y-8 text-lg font-bold font-serif">
                         <div class="border-l-2 border-brand/30 pl-6">
-                            <h4 class="text-xs font-black text-brand mb-2 uppercase tracking-widest font-sans">能量照見</h4>
+                            <h4 class="text-xs font-black text-brand mb-2 uppercase tracking-widest font-sans">能量照見 (牌義)</h4>
                             <p class="font-medium text-gray-200">${item.meaning}</p>
                         </div>
                         <div class="bg-brand/5 p-8 rounded-3xl border border-brand/10">
@@ -534,7 +528,7 @@
                     </div>
                 </div>
                 <div class="text-center pt-20 space-y-10 pb-10">
-                    <h3 class="text-4xl serif font-black gold-glow">能量整合結論</h3>
+                    <h3 class="text-4xl serif font-black gold-glow font-serif">能量整合結論</h3>
                     <p class="text-gray-300 text-xl font-medium max-w-2xl mx-auto leading-relaxed font-bold font-serif">${ai.summary}</p>
                     <div class="inline-block bg-white/5 p-12 rounded-[3.5rem] border border-white/10 italic text-3xl font-black text-brand shadow-2xl">「${ai.soulMantra}」</div>
                 </div>
@@ -611,7 +605,7 @@
                     "宇宙現在最想要傳遞給我的三個關鍵訊息是什麼？",
                     "我該如何深化與高我的連結，以獲得更清晰的直覺？",
                     "在接下來的三個月裡，我的靈魂功課重點是什麼？",
-                    "目前有哪種舊有的業力模式正影響著我？該如何解脫？"
+                    "目前有哪種業力模式正影響著我？該如何解脫？"
                 ]
             };
             document.getElementById('q-suggest').innerHTML = '<option value="">提問參考 (點擊快速填寫)</option>' + (q[c] || []).map(x => `<option value="${x}">${x}</option>`).join('');
