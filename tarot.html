@@ -32,15 +32,14 @@
             display: inline-flex; align-items: center; justify-content: center;
         }
         .btn-mystic:hover:not(:disabled) { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 30px rgba(251, 113, 133, 0.5); }
-        .btn-mystic:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+        .btn-mystic:disabled { opacity: 0.5; cursor: not-allowed; }
         
         .stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1a1221 0%, #050206 100%); z-index: -1; }
         .star-layer { position: absolute; inset: -50%; background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); opacity: 0.1; animation: starWarp 120s linear infinite; }
         @keyframes starWarp { from { transform: rotate(0deg); } to { transform: rotate(10deg); background-position: -4000px 4000px; } }
         
         .tarot-card-box { perspective: 1500px; width: 100%; max-width: 180px; margin: 0 auto; }
-        .tarot-card { width: 100%; padding-top: 175%; position: relative; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
-        .tarot-card.flipped { transform: rotateY(180deg); }
+        .tarot-card { width: 100%; padding-top: 175%; position: relative; transform-style: preserve-3d; transition: transform 0.8s; cursor: pointer; }
         .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; border: 1px solid rgba(251, 113, 133, 0.3); overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .card-back { background: linear-gradient(135deg, #1a1221, #2d1b33); background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); }
         .card-front { transform: rotateY(180deg); background: #221a2d; }
@@ -52,41 +51,27 @@
         .card-grid-item { transition: all 0.3s; }
         .card-grid-item:hover { transform: translateY(-5px); filter: brightness(1.2); }
         .card-grid-item.selected { border: 2px solid var(--brand); transform: scale(1.05); box-shadow: 0 0 15px var(--brand); }
-
         .secret-card-float { animation: float 6s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* 圖片失敗時的替換樣式 */
-        .card-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a1221 0%, #2d1b33 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid rgba(251, 113, 133, 0.2);
-        }
+        .card-placeholder { width: 100%; height: 100%; background: #1a1221; display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px; border: 1px solid #333; color: #fb7185; font-weight: bold; font-size: 12px; }
     </style>
 </head>
 <body class="antialiased">
     <div id="toast-container" class="msg-box"></div>
     <div class="stars-container"><div class="star-layer"></div></div>
     
-    <!-- 導覽列 -->
-    <nav class="fixed top-0 w-full z-[60] glass border-b border-white/5 py-4 px-6 transition-all" id="nav">
+    <nav class="fixed top-0 w-full z-[60] glass border-b border-white/5 py-4 px-6 transition-all">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
                 <i class="fa-solid fa-heart-pulse text-brand text-2xl animate-pulse"></i>
                 <span class="serif font-black text-xl gold-glow tracking-tighter">心小跳塔羅</span>
             </div>
-            <div class="flex items-center gap-4 md:gap-8 text-[10px] md:text-xs font-bold uppercase tracking-widest">
+            <div class="flex items-center gap-4 text-[10px] md:text-xs font-bold uppercase tracking-widest">
                 <a href="#intro" class="hover:text-brand transition hidden sm:block">認識塔羅</a>
                 <button onclick="window.switchTab('history')" class="hover:text-brand transition">我的軌跡</button>
                 <a href="https://www.instagram.com/dokidokiboomboom.tarot/" target="_blank" class="bg-brand/20 text-brand px-4 py-2 rounded-full border border-brand/30 hover:bg-brand hover:text-black transition-all flex items-center gap-2">
-                    <i class="fa-brands fa-instagram"></i> 預約占卜
+                    <i class="fa-brands fa-instagram text-lg"></i> 預約占卜
                 </a>
             </div>
         </div>
@@ -99,34 +84,44 @@
                 塔羅不是命定的結局，而是潛意識投射出的光。<br>當妳困惑時，讓星圖引領妳找回內在的力量。
             </p>
             <div class="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                <button onclick="window.switchTab('daily')" class="btn-mystic px-12 py-5 text-lg font-black tracking-widest">進入占卜場</button>
+                <button onclick="window.switchTab('daily')" class="btn-mystic px-12 py-5 text-lg font-black tracking-widest hover:scale-105 transition-transform">進入占卜場</button>
                 <a href="#intro" class="glass px-12 py-5 rounded-full text-lg font-black tracking-widest border-white/20 hover:border-brand/50 transition-all">探索塔羅之門</a>
             </div>
         </div>
     </header>
 
-    <section id="intro" class="py-24 px-6 max-w-5xl mx-auto">
+    <section id="intro" class="py-24 px-6 max-w-5xl mx-auto space-y-20">
         <div class="grid md:grid-cols-2 gap-16 items-center">
             <div class="space-y-6">
                 <h2 class="text-4xl serif font-black gold-glow underline decoration-brand/30">什麼是塔羅？</h2>
                 <p class="text-gray-300 leading-relaxed text-lg font-serif">
-                    塔羅牌由 78 張充滿象徵意義的卡片組成，它是一面「靈魂的鏡子」。透過圖像的解讀，我們能繞過大腦的防禦機制，直接與深層潛意識對話。它不預測死板的未來，而是揭示當下的能量流動。
+                    塔羅牌由 78 張充滿象徵意義的卡片組成，它是一面「靈魂的鏡子」。透過隨機的抽取與圖像的解讀，我們能繞過大腦的防禦機制，直接與深層潛意識對話。它揭示當下的能量流動，引領妳看見未來的路徑。
                 </p>
-                <div class="bg-brand/5 p-6 rounded-2xl border border-brand/10 space-y-4">
-                    <h3 class="text-brand font-black flex items-center gap-2 italic text-sm">
-                        <i class="fa-solid fa-sparkles"></i> 提問的藝術
-                    </h3>
-                    <ul class="text-xs text-gray-400 space-y-2">
-                        <li class="flex gap-2"><span>✦</span> 避免問「是/否」的結果，改問「如何改善」。</li>
-                        <li class="flex gap-2"><span>✦</span> 焦點放回自己：「我該學習什麼？」而非「他會愛我嗎？」</li>
-                        <li class="flex gap-2"><span>✦</span> 保持開放的心，所有的解釋都是為了讓妳更有力量。</li>
-                    </ul>
-                </div>
             </div>
             <div class="relative flex justify-center">
                 <div class="absolute inset-0 bg-brand/10 blur-[80px] rounded-full"></div>
-                <div id="intro-card-container" class="relative z-10 w-64 h-96 rounded-3xl overflow-hidden shadow-2xl border border-white/20 transform rotate-3">
-                    <img src="https://www.sacred-texts.com/tarot/pkt/img/ar17.jpg" class="w-full h-full object-cover" alt="星星牌" onerror="window.handleImageError(this, '星星')">
+                <img src="https://www.sacred-texts.com/tarot/pkt/img/ar17.jpg" class="relative z-10 w-64 rounded-3xl shadow-2xl border border-white/20 transform rotate-3" alt="星星" onerror="this.src='https://placehold.co/300x525/1a1221/fb7185?text=TAROT'">
+            </div>
+        </div>
+
+        <div class="bg-brand/5 p-8 md:p-12 rounded-[3rem] border border-brand/10 space-y-8">
+            <div class="text-center">
+                <h3 class="text-2xl serif font-black text-brand italic flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-sparkles"></i> 提問的藝術 Guidance
+                </h3>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 text-sm leading-relaxed text-gray-300">
+                <div class="space-y-3">
+                    <h4 class="font-black text-white flex items-center gap-2"><span class="w-2 h-2 bg-brand rounded-full"></span> 避免封閉式問題</h4>
+                    <p>避開「他愛不愛我？」這種是非題。改問「我該如何改善這段關係？」能獲得更有建設性的靈魂建議。</p>
+                </div>
+                <div class="space-y-3">
+                    <h4 class="font-black text-white flex items-center gap-2"><span class="w-2 h-2 bg-brand rounded-full"></span> 回歸自身力量</h4>
+                    <p>焦點應放在自己：「我能學習什麼？」而非試圖掌控他人。妳的選擇才是改變能量的關鍵。</p>
+                </div>
+                <div class="space-y-3">
+                    <h4 class="font-black text-white flex items-center gap-2"><span class="w-2 h-2 bg-brand rounded-full"></span> 保持開放與覺察</h4>
+                    <p>所有的解釋都是當下的能量投射。深呼吸，讓直覺帶領妳看見文字背後與妳共鳴的真相。</p>
                 </div>
             </div>
         </div>
@@ -134,10 +129,10 @@
 
     <main id="app" class="py-20 px-4 max-w-6xl mx-auto scroll-mt-24">
         <div class="glass rounded-[3rem] overflow-hidden shadow-2xl border border-white/10">
-            <div class="flex border-b border-white/5 bg-black/40 font-black text-[10px] md:text-sm tracking-widest uppercase overflow-x-auto hide-scroll">
-                <button onclick="window.switchTab('daily')" id="tab-daily" class="flex-1 min-w-[120px] py-6 transition-all border-r border-white/5 hover:bg-white/5">每日能量</button>
-                <button onclick="window.switchTab('reading')" id="tab-reading" class="flex-1 min-w-[120px] py-6 transition-all border-r border-white/5 hover:bg-white/5">深度解惑</button>
-                <button onclick="window.switchTab('history')" id="tab-history" class="flex-1 min-w-[120px] py-6 transition-all hover:bg-white/5">我的紀錄</button>
+            <div class="flex border-b border-white/5 bg-black/40 font-black text-[10px] md:text-sm tracking-widest uppercase overflow-x-auto">
+                <button onclick="window.switchTab('daily')" class="flex-1 min-w-[120px] py-6 border-r border-white/5">每日能量</button>
+                <button onclick="window.switchTab('reading')" class="flex-1 min-w-[120px] py-6 border-r border-white/5">深度解惑</button>
+                <button onclick="window.switchTab('history')" class="flex-1 min-w-[120px] py-6">我的紀錄</button>
             </div>
             
             <div class="p-6 md:p-16 min-h-[600px] relative">
@@ -155,55 +150,32 @@
 
                 <div id="panel-reading" class="tab-panel hidden flex flex-col items-center">
                     <div id="reading-step-1" class="w-full space-y-10">
-                        <div class="text-center">
-                            <h2 class="text-4xl serif font-black mb-4">選擇感應類別</h2>
-                            <p class="text-gray-500 italic">讓星圖根據妳的情況進行深層調頻</p>
-                        </div>
-                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                            <button onclick="window.selectCategory('love')" class="category-btn glass p-6 rounded-3xl flex flex-col items-center gap-3 hover:border-brand/50 transition-all">
-                                <i class="fa-solid fa-heart text-2xl text-brand"></i><span class="text-sm font-bold">感性愛戀</span>
-                            </button>
-                            <button onclick="window.selectCategory('career')" class="category-btn glass p-6 rounded-3xl flex flex-col items-center gap-3 hover:border-brand/50 transition-all">
-                                <i class="fa-solid fa-briefcase text-2xl text-brand"></i><span class="text-sm font-bold">事業轉折</span>
-                            </button>
-                            <button onclick="window.selectCategory('money')" class="category-btn glass p-6 rounded-3xl flex flex-col items-center gap-3 hover:border-brand/50 transition-all">
-                                <i class="fa-solid fa-coins text-2xl text-brand"></i><span class="text-sm font-bold">財富豐盛</span>
-                            </button>
-                            <button onclick="window.selectCategory('growth')" class="category-btn glass p-6 rounded-3xl flex flex-col items-center gap-3 hover:border-brand/50 transition-all">
-                                <i class="fa-solid fa-seedling text-2xl text-brand"></i><span class="text-sm font-bold">靈魂成長</span>
-                            </button>
-                            <button onclick="window.selectCategory('general')" class="category-btn glass p-6 rounded-3xl flex flex-col items-center gap-3 hover:border-brand/50 transition-all">
-                                <i class="fa-solid fa-compass text-2xl text-brand"></i><span class="text-sm font-bold">綜合指引</span>
-                            </button>
-                        </div>
+                        <div class="text-center"><h2 class="text-4xl serif font-black mb-4">選擇感應類別</h2><p class="text-gray-500 italic">讓星圖根據妳的情況進行深層調頻</p></div>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="cat-grid"></div>
                         <div id="question-area" class="hidden space-y-8 animate-fade-in">
                             <div class="bg-white/5 p-8 rounded-[2rem] border border-white/10 space-y-6">
                                 <div class="flex justify-between items-center">
                                     <label class="text-xs font-black text-brand tracking-widest uppercase">妳目前的困惑</label>
                                     <div class="flex gap-4">
-                                        <button onclick="window.setDrawMode('auto')" id="mode-auto" class="text-[10px] px-3 py-1 rounded-full bg-brand text-black font-black transition-all">自動感應</button>
-                                        <button onclick="window.setDrawMode('manual')" id="mode-manual" class="text-[10px] px-3 py-1 rounded-full bg-white/10 text-gray-400 font-black transition-all">手動親選</button>
+                                        <button onclick="window.setDrawMode('auto')" id="mode-auto" class="text-[10px] px-3 py-1 rounded-full bg-brand text-black font-black">自動感應</button>
+                                        <button onclick="window.setDrawMode('manual')" id="mode-manual" class="text-[10px] px-3 py-1 rounded-full bg-white/10 text-gray-400 font-black">手動親選</button>
                                     </div>
                                 </div>
-                                <textarea id="reading-intent" placeholder="請在此描述妳的情況或問題..." class="w-full bg-black/50 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-brand h-28 resize-none font-serif"></textarea>
-                                <div id="examples-container" class="space-y-3">
-                                    <p class="text-[10px] text-gray-500 tracking-widest font-black uppercase">推薦妳可以這樣問：</p>
+                                <textarea id="reading-intent" placeholder="請在此描述妳的情況或問題..." class="w-full bg-black/50 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-brand h-28 resize-none font-serif transition-all"></textarea>
+                                <div id="example-box" class="space-y-3">
+                                    <p class="text-[10px] text-gray-500 tracking-widest font-black uppercase flex items-center gap-2"><i class="fa-solid fa-lightbulb"></i> 推薦妳可以這樣問：</p>
                                     <div id="example-list" class="flex flex-wrap gap-2"></div>
                                 </div>
                             </div>
-                            <div class="text-center">
-                                <button onclick="window.initiateDraw()" class="btn-mystic px-20 py-5 text-xl font-black">與靈魂連線</button>
-                            </div>
+                            <div class="text-center"><button onclick="window.initiateDraw()" class="btn-mystic px-20 py-5 text-xl font-black">與靈魂連線</button></div>
                         </div>
                     </div>
                     <div id="reading-step-manual" class="hidden w-full text-center space-y-10">
-                        <div class="space-y-2">
-                            <h2 class="text-3xl serif font-black">請憑第一直覺選擇 3 張牌</h2>
-                            <p class="text-brand font-bold italic" id="manual-count">已選擇 0/3</p>
-                        </div>
-                        <div class="grid grid-cols-6 md:grid-cols-12 gap-2 max-h-[450px] overflow-y-auto p-6 glass rounded-2xl hide-scroll border-white/5" id="manual-deck"></div>
+                        <h2 class="text-3xl serif font-black">請憑第一直覺選擇 3 張牌</h2>
+                        <p class="text-brand font-bold italic" id="manual-count">已選擇 0/3</p>
+                        <div class="grid grid-cols-6 md:grid-cols-12 gap-2 max-h-[450px] overflow-y-auto p-6 glass rounded-2xl border-white/5" id="manual-deck"></div>
                         <div class="flex justify-center gap-4">
-                            <button onclick="window.switchTab('reading')" class="px-8 py-3 rounded-full border border-white/10 text-sm">重新開始</button>
+                            <button onclick="window.switchTab('reading')" class="px-8 py-3 rounded-full border border-white/10 text-sm text-gray-400">重新開始</button>
                             <button id="btn-confirm-manual" disabled onclick="window.processManualDraw()" class="btn-mystic px-16 py-4 opacity-50">確認連結結果</button>
                         </div>
                     </div>
@@ -211,62 +183,62 @@
 
                 <div id="result" class="hidden space-y-16 pb-12">
                     <div class="text-center space-y-4">
-                        <span id="res-badge" class="bg-brand/20 text-brand px-4 py-1 rounded-full text-[10px] font-black tracking-widest italic"></span>
+                        <span id="res-badge" class="bg-brand/20 text-brand px-4 py-1 rounded-full text-[10px] font-black tracking-widest uppercase italic"></span>
                         <h2 class="text-5xl serif font-black gold-glow" id="res-title"></h2>
                     </div>
+                    
                     <div id="intent-display" class="max-w-2xl mx-auto text-center italic text-gray-400 border-l-2 border-brand/30 pl-6 py-2 hidden font-serif text-lg"></div>
+
+                    <!-- 一鍵複製 AI Prompt -->
+                    <div id="ai-prompt-area" class="text-center hidden">
+                        <button onclick="window.copyAIPrompt()" class="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-8 py-4 rounded-full text-sm font-bold text-gray-300 hover:bg-brand/10 hover:text-brand transition-all shadow-xl">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 複製 AI 深度對談指令
+                        </button>
+                        <p class="text-[10px] text-gray-500 mt-3 italic">複製後貼給您的 AI 助理，可獲得針對性的「三位一體」靈魂解析</p>
+                    </div>
+
                     <div class="flex flex-wrap justify-center gap-6 md:gap-12 py-10" id="res-cards"></div>
                     <div id="res-content" class="max-w-4xl mx-auto space-y-12"></div>
+                    
                     <div id="extra-content" class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-                        <div class="glass p-8 rounded-[2.5rem] border-brand/20">
-                            <h3 class="text-brand font-black mb-6 flex items-center gap-2 text-sm"><i class="fa-solid fa-list-check"></i> 具體行動建議</h3>
-                            <ul id="action-list" class="space-y-4 text-gray-200 font-serif text-base"></ul>
-                        </div>
-                        <div class="glass p-8 rounded-[2.5rem] border-brand/20 bg-brand/5">
-                            <h3 class="text-brand font-black mb-6 flex items-center gap-2 text-sm"><i class="fa-solid fa-dove"></i> 大天使傳訊</h3>
-                            <div id="archangel-msg" class="italic text-white font-medium leading-relaxed font-serif text-base"></div>
-                        </div>
+                        <div class="glass p-8 rounded-[2.5rem] border-brand/20"><h3 class="text-brand font-black mb-6 text-sm italic"><i class="fa-solid fa-list-check"></i> 具體行動建議</h3><ul id="action-list" class="space-y-4 text-gray-200 font-serif"></ul></div>
+                        <div class="glass p-8 rounded-[2.5rem] border-brand/20 bg-brand/5"><h3 class="text-brand font-black mb-6 text-sm italic"><i class="fa-solid fa-dove"></i> 大天使傳訊</h3><div id="archangel-msg" class="italic text-white font-medium font-serif leading-relaxed"></div></div>
                     </div>
+
+                    <!-- 重要提醒區塊 (新增) -->
+                    <div class="max-w-4xl mx-auto bg-white/5 p-8 rounded-[2.5rem] border border-white/10 text-center">
+                        <p class="text-gray-400 text-sm font-serif italic leading-relaxed">
+                            「 靈魂的叮嚀：塔羅牌反映的是當下的能量趨勢與潛意識投射，而非絕對命定的結局。<br>
+                            妳的意志、決察與接下來的行動，才是改變生命軌跡、顯化理想未來的最強大力量。 」
+                        </p>
+                    </div>
+
+                    <!-- 宇宙神祕祝福 -->
                     <div id="secret-zone" class="max-w-4xl mx-auto pt-16 border-t border-white/5 space-y-10">
                         <div class="text-center space-y-4">
                             <h3 class="text-2xl serif font-black gold-glow">結束前的靈魂祝福</h3>
-                            <p class="text-gray-500 italic text-sm">除了塔羅，宇宙還有一句私密的話想告訴妳。<br>點擊下方卡片領取妳的「秘密實現卡」。</p>
+                            <p class="text-gray-500 italic text-sm">除了牌陣，宇宙還有一句私密的話想告訴妳。<br>點擊下方卡片領取妳的「宇宙神祕祝福」。</p>
                         </div>
                         <div class="flex justify-center">
-                            <div id="secret-card-container" onclick="window.drawSecretCard()" class="secret-card-float cursor-pointer w-48 h-72 glass rounded-2xl border-brand/40 flex flex-col items-center justify-center p-6 text-center space-y-4 group hover:border-brand transition-all duration-500 shadow-2xl">
-                                <div id="secret-card-inner">
-                                    <i class="fa-solid fa-envelope-open-text text-5xl text-brand/30 group-hover:scale-110 transition-transform"></i>
-                                    <p class="mt-4 text-[10px] font-black text-gray-500 tracking-widest uppercase">點擊拆閱</p>
-                                </div>
+                            <div id="secret-card-container" onclick="window.drawSecretCard()" class="secret-card-float cursor-pointer w-48 h-72 glass rounded-2xl border-brand/40 flex flex-col items-center justify-center p-6 text-center space-y-4 group hover:border-brand shadow-2xl transition-all">
+                                <div id="secret-card-inner"><i class="fa-solid fa-envelope-open-text text-5xl text-brand/30 group-hover:scale-110 transition-transform"></i><p class="mt-4 text-[10px] font-black text-gray-500 tracking-widest uppercase">點擊拆閱</p></div>
                             </div>
                         </div>
                     </div>
-                    <div class="text-center pt-10 space-y-8">
+
+                    <div class="text-center pt-10 space-y-8 border-t border-white/5">
                         <div class="flex flex-col sm:flex-row gap-4 justify-center">
                             <button onclick="location.reload()" class="btn-mystic px-12 py-4">再次連結能量</button>
                             <a href="https://www.instagram.com/dokidokiboomboom.tarot/" target="_blank" class="glass px-12 py-4 rounded-full font-black border-brand/40 text-brand hover:bg-brand/10 transition-all flex items-center justify-center gap-2 text-sm">
-                                <i class="fa-brands fa-instagram text-xl"></i> 追蹤 Instagram 預約
+                                <i class="fa-brands fa-instagram text-xl"></i> 追蹤 IG 預約深度占卜
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <div id="panel-history" class="tab-panel hidden">
-                    <div class="flex justify-between items-end mb-10 border-b border-white/10 pb-6">
-                        <h2 class="text-4xl serif font-black">能量軌跡</h2>
-                        <button onclick="window.clearHistory()" class="text-xs text-gray-500 hover:text-brand transition">清除紀錄</button>
-                    </div>
-                    <div id="history-list" class="space-y-4 max-h-[600px] overflow-y-auto pr-2"></div>
-                </div>
+                <div id="panel-history" class="tab-panel hidden"><div class="flex justify-between items-end mb-10 border-b border-white/10 pb-6"><h2 class="text-4xl serif font-black">能量軌跡</h2><button onclick="window.clearHistory()" class="text-xs text-gray-500">清除紀錄</button></div><div id="history-list" class="space-y-4 max-h-[600px] overflow-y-auto pr-2"></div></div>
 
-                <div id="loading" class="hidden absolute inset-0 glass z-[1000] flex flex-col items-center justify-center text-center rounded-[3rem]">
-                    <div class="relative w-24 h-24 mb-8">
-                        <div class="absolute inset-0 border-4 border-brand/20 rounded-full"></div>
-                        <div class="absolute inset-0 border-4 border-t-brand rounded-full animate-spin"></div>
-                        <i class="fa-solid fa-sparkles absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl text-brand"></i>
-                    </div>
-                    <p id="loading-text" class="text-brand font-black tracking-[0.5em] text-xl animate-pulse">正在調頻感應...</p>
-                </div>
+                <div id="loading" class="hidden absolute inset-0 glass z-[1000] flex flex-col items-center justify-center text-center rounded-[3rem]"><div class="relative w-24 h-24 mb-8"><div class="absolute inset-0 border-4 border-brand/20 rounded-full"></div><div class="absolute inset-0 border-4 border-t-brand rounded-full animate-spin"></div><i class="fa-solid fa-sparkles absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl text-brand"></i></div><p class="text-brand font-black tracking-[0.5em] text-xl animate-pulse">正在調頻感應...</p></div>
             </div>
         </div>
     </main>
@@ -276,292 +248,199 @@
     </footer>
 
     <script>
-        // --- 圖片處理邏輯 ---
-        // 主要圖片庫 (GitHub)
         const PRIMARY_IMAGE_BASE = "https://raw.githubusercontent.com/jekyll/rider-waite-tarot/master/images/tarot/";
-        // 備援圖片庫 (Sacred Texts)
         const FALLBACK_IMAGE_BASE = "https://www.sacred-texts.com/tarot/pkt/img/";
-
-        // 圖片 ID 轉換邏輯
-        function getImageUrl(cardId, isPrimary = true) {
-            if (isPrimary) {
-                // Primary repository format: major/01.jpg, wands/01.jpg
-                const prefix = cardId.substring(0, 2);
-                const num = cardId.substring(2);
-                let folder = "";
-                switch(prefix) {
-                    case 'ar': folder = "major"; break;
-                    case 'wa': folder = "wands"; break;
-                    case 'cu': folder = "cups"; break;
-                    case 'sw': folder = "swords"; break;
-                    case 'pe': folder = "pentacles"; break;
-                }
-                return `${PRIMARY_IMAGE_BASE}${folder}/${num}.jpg`;
-            } else {
-                return `${FALLBACK_IMAGE_BASE}${cardId}.jpg`;
-            }
-        }
-
-        window.handleImageError = function(img, cardName) {
-            // 如果第一次失敗，嘗試 Sacred Texts
-            if (img.src.includes('raw.githubusercontent.com')) {
-                const cardId = img.dataset.id;
-                img.src = getImageUrl(cardId, false);
-            } else {
-                // 如果第二次也失敗，顯示靈魂占位符
-                const parent = img.parentElement;
-                parent.innerHTML = `
-                    <div class="card-placeholder">
-                        <i class="fa-solid fa-sparkles text-brand/30 text-3xl mb-4"></i>
-                        <span class="text-xs font-black text-brand tracking-widest uppercase mb-2">靈魂照見</span>
-                        <span class="text-sm font-bold text-white">${cardName}</span>
-                    </div>
-                `;
-            }
-        };
-
-        const APP_ID = 'dokidokiboomboom-tarot-v1';
+        const APP_ID = 'dokidokiboomboom-tarot-v3';
 
         const TAROT_MAJOR_NAMES = ["愚者", "魔術師", "女祭司", "女皇", "皇帝", "教皇", "戀人", "戰車", "力量", "隱者", "命運之輪", "正義", "倒吊人", "死神", "節制", "惡魔", "高塔", "星星", "月亮", "太陽", "審判", "世界"];
         const MINOR_NAMES = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "侍從", "騎士", "皇后", "國王"];
-
-        // --- 78 張牌在地資料庫 ---
+        
+        // --- 全 78 張偉特牌義本地庫 (Fallback) ---
         const FALLBACK_DB = {
-            "ar00": { name: "愚者", meaning: "這是一個充滿可能性的開端，前方未知但充滿希望。", advice: ["保持純真出發", "不要害怕冒險", "聆聽直覺召喚"], angel: "大天使梅塔特隆：妳的夢想正在顯化。", summary: "這是一個歸零並重新出發的絕佳時機。" },
-            "ar01": { name: "魔術師", meaning: "妳擁有一切所需資源，具備將想法轉化為現實的能力。", advice: ["集中精神專注", "主動創造機會", "善用溝通技巧"], angel: "大天使拉吉爾：宇宙智慧與妳同在。", summary: "妳就是自己生命的顯化大師。" },
-            "ar02": { name: "女祭司", meaning: "直覺與潛意識正在運作，安靜觀察，真相會自然浮現。", advice: ["傾聽內在聲音", "紀錄夢境啟示", "保持靜默守秘密"], angel: "大天使漢尼爾：信任妳的神聖直覺。", summary: "答案不在外在，而是在妳的心底。" },
-            "ar03": { name: "女皇", meaning: "豐盛與滋養，充滿創造力的時期，適合享受感官愉悅。", advice: ["連結大自然", "照顧自己的身體", "發揮慈愛本能"], angel: "大天使加百列：創意正在萌芽。", summary: "這是一個收穫與豐盈的階段。" },
-            "ar04": { name: "皇帝", meaning: "結構、權威與穩定，需要更有條理地實踐目標。", advice: ["建立明確規劃", "展現領導擔當", "規劃長期目標"], angel: "大天使麥可：妳的力量被支持著。", summary: "用紀律來穩固妳的夢想基礎。" },
-            "ar05": { name: "教皇", meaning: "遵循傳統或尋求導師引導，精神層面的學習是關鍵。", advice: ["尋求專業建議", "遵守核心價值", "參與靈性社群"], angel: "大天使聖德芬：祈禱已得到回應。", summary: "在傳統與體制中尋求神聖的連結。" },
-            "ar06": { name: "戀人", meaning: "關於選擇與心靈契合。找回內在的對齊與和諧。", advice: ["聽從內心選擇", "平等溝通對談", "找回靈魂契合"], angel: "大天使夏彌爾：真愛就在妳身邊。", summary: "這是一個關於心靈契合的重要時刻。" },
-            "ar07": { name: "戰車", meaning: "意志力的勝利，克服障礙並朝著目標全力衝刺。", advice: ["堅定意志前進", "平衡衝突力量", "專注最終獲勝"], angel: "大天使梅塔特隆：加快妳的腳步。", summary: "勇往直前，成功就在不遠處。" },
-            "ar08": { name: "力量", meaning: "溫柔的慈悲比武力更強。運用內在韌性面對恐懼。", advice: ["溫和處理衝突", "接納自我陰影", "展現無比耐性"], angel: "大天使亞列爾：妳擁有無盡勇氣。", summary: "妳比妳想像中還要強大。" },
-            "ar09": { name: "隱者", meaning: "內省與獨處。在安靜中尋找屬於自己的指引光芒。", advice: ["遠離外在紛擾", "深度自我探索", "點亮內在燈塔"], angel: "大天使拉吉爾：智慧藏在寂靜中。", summary: "向內探求，妳會找到真正的答案。" },
-            "ar10": { name: "命運之輪", meaning: "變動正在發生，這是一個轉捩點，順應生命的節奏。", advice: ["接受生命變換", "抓住突發機會", "放手無法掌控"], angel: "大天使耶利米爾：好運即將降臨。", summary: "順流而行，命運正推動著妳。" },
-            "ar11": { name: "正義", meaning: "因果平衡。真相會大白，誠實的面對妳所做出的決定。", advice: ["做出客觀判斷", "尋求正當路徑", "為行為負責任"], angel: "大天使拉貴爾：正義終將獲得伸張。", summary: "一切都在完美的公平天秤上。" },
-            "ar12": { name: "倒吊人", meaning: "換個角度看世界，這是一個暫停、犧牲與智慧的等待。", advice: ["嘗試全新觀點", "放下控制慾望", "靜待時機成熟"], angel: "大天使約菲爾：讓靈魂稍作休息。", summary: "換個視野，妳會看見不同的出路。" },
-            "ar13": { name: "死神", meaning: "結束即是重生。放下束縛，迎接靈魂的徹底轉化。", advice: ["勇敢說聲再見", "清理腐朽模式", "接納不可避免"], angel: "大天使阿茲列爾：舊的不去新的不來。", summary: "大門關上是為了讓另一扇窗開啟。" },
-            "ar14": { name: "節制", meaning: "調和與平衡。將不同元素融合，尋求身心靈的穩定。", advice: ["尋求中間立場", "練習自我調節", "循序漸進實踐"], angel: "大天使薩基爾：療癒正平衡著妳。", summary: "在衝突中找到完美的調和點。" },
-            "ar15": { name: "惡魔", meaning: "覺察物慾或負面模式的束縛，妳隨時有能力解開鎖鏈。", advice: ["正視恐懼束縛", "打破自我設限", "尋求靈性解放"], angel: "大天使約菲爾：看透幻象的虛假。", summary: "自由就在妳覺醒的那一刻。" },
-            "ar16": { name: "高塔", meaning: "突然的劇變打破現狀。痛苦過後，是重建真理的機會。", advice: ["接受突發真相", "勇敢重建生活", "放下崩潰遺憾"], angel: "大天使夏彌爾：混亂後是重生的光。", summary: "根基不穩的終將傾覆，為真實讓路。" },
-            "ar17": { name: "星星", meaning: "希望、療癒與平靜。信任靈魂的指引，黑暗即將過去。", advice: ["保持樂觀信心", "分享真實才華", "深度身心洗滌"], angel: "大天使約菲爾：夢想終將照亮現實。", summary: "妳是星辰，散發著永恆的希望。" },
-            "ar18": { name: "月亮", meaning: "潛意識的恐懼與不安，直覺是穿透迷霧的唯一明燈。", advice: ["觀察不安根源", "信任模糊靈感", "避免情緒決定"], angel: "大天使漢尼爾：月光守護妳的直覺。", summary: "在黑暗中行走，請信任妳的第六感。" },
-            "ar19": { name: "太陽", meaning: "成功、歡樂與滿滿活力。這是最光明且正向的時刻。", advice: ["展現真實自我", "慶祝目前成就", "散播正向能量"], angel: "大天使烏列爾：妳是光明的存在。", summary: "一切都明朗化了，享受這份喜悅。" },
-            "ar20": { name: "審判", meaning: "靈魂的覺醒與關鍵決定。原諒過去，回應內在的呼喚。", advice: ["回應更高召喚", "原諒過去自己", "果斷採取行動"], angel: "大天使耶利米爾：妳做得很好。", summary: "這是重生與邁向新境界的宣告。" },
-            "ar21": { name: "世界", meaning: "圓滿、統合與和諧的終點。妳已完成這階段的靈魂使命。", advice: ["慶祝階段完結", "向大舞台擴張", "感受萬物連結"], angel: "大天使麥可：妳已完成神聖使命。", summary: "完美的終結，也是全新循環的開始。" },
-            "wa": { name: "權杖系列", meaning: "象徵熱情、創意與行動力。妳目前的能量聚焦在開創與執行。", advice: ["大膽去闖", "保持競爭力", "維持熱情不減"], angel: "大天使梅塔特隆：推動妳的夢想前進。", summary: "行動勝過千言萬語，去實踐它吧。" },
-            "cu": { name: "聖杯系列", meaning: "象徵情感、直覺與人際關係。妳目前的能量與感受深度連結。", advice: ["開放情感交流", "照顧情緒需求", "練習愛與包容"], angel: "大天使漢尼爾：愛正滋潤妳的心靈。", summary: "跟隨心的聲音，讓情感自然流淌。" },
-            "sw": { name: "寶劍系列", meaning: "象徵思想、理性與決斷。目前的挑戰在於釐清雜訊與決策。", advice: ["保持冷靜思考", "果斷切除紛擾", "勇敢說出真話"], angel: "大天使烏列爾：真相會帶領妳自由。", summary: "思維的清晰是妳最強大的武器。" },
-            "pe": { name: "五角星系列", meaning: "象徵物質、穩定與身體。妳正在為現實的基礎付出努力。", advice: ["著手務實計畫", "珍惜當下資源", "維持身體健康"], angel: "大天使亞列爾：豐盛之門已開啟。", summary: "腳踏實地，豐盛會以物質形式顯化。" },
-            "generic": { name: "神祕卡牌", meaning: "能量正在流動中，這張牌提醒妳要回歸內在的平靜來思考。", advice: ["深呼吸五次", "紀錄妳的夢境", "與信任的朋友交談"], angel: "大天使沙利葉：妳是被守護著的。", summary: "信任妳在此刻感應到的第一直覺。" }
+            // 大牌 0-21
+            "ar00": { name: "愚者", meaning: "自由、開端與純真。這是一段新旅程的開始，請保持好奇心，勇敢邁開步伐。", advice: ["保持純真出發", "不要害怕犯錯", "聆聽內心召喚"], angel: "大天使梅塔特隆：妳的夢想正在顯化。", summary: "歸零並重新出發的絕佳時機。" },
+            "ar01": { name: "魔術師", meaning: "顯化、創造力與行動力。妳擁有一切所需資源，具備將想法轉化為現實的能力。", advice: ["集中精神專注", "主動創造機會", "善用溝通技巧"], angel: "大天使拉吉爾：宇宙智慧與妳同在。", summary: "妳就是自己生命的顯化大師。" },
+            "ar02": { name: "女祭司", meaning: "直覺、潛意識與神秘。靜心觀察，不要急著行動，真相會透過夢境或直覺顯現。", advice: ["傾聽內在聲音", "紀錄夢境啟示", "保持靜默守秘密"], angel: "大天使漢尼爾：信任妳的神聖直覺。", summary: "答案不在外在，而是在妳的心底。" },
+            "ar03": { name: "女皇", meaning: "豐盛、多產與滋養。目前的能量非常溫暖且感性，適合孕育新的計畫或享受感官愉悅。", advice: ["連結大自然能量", "照顧自己的身體", "發揮慈愛本能"], angel: "大天使加百列：創意正在萌芽。", summary: "這是一個收穫與豐盈的階段。" },
+            "ar04": { name: "皇帝", meaning: "權威、穩定與結構。展現領導力，建立規則，現在是需要纪律與執行力的時刻。", advice: ["建立明確規範", "展現領導者擔當", "規劃長期執行步驟"], angel: "大天使麥可：妳的力量是被支持的。", summary: "用紀律來穩固妳的夢想基礎。" },
+            "ar05": { name: "教皇", meaning: "傳統、信仰與精神指引。遵循已有的智慧或體制，向值得信任的導師請教。", advice: ["尋找信任的導師", "參與靈性社群", "遵守核心價值觀"], angel: "大天使聖德芬：祈禱已得到回應。", summary: "在傳統與體制中尋求神聖的連結。" },
+            "ar06": { name: "戀人", meaning: "選擇、對齊與合諧。無論是感情或計畫，找回內在的平衡，聽從靈魂深處的召喚。", advice: ["聽從內心的選擇", "建立平等的溝通", "找回靈魂的共鳴"], angel: "大天使夏彌爾：真愛就在妳身邊。", summary: "這是一個關於心靈契合的重要時刻。" },
+            "ar07": { name: "戰車", meaning: "意志力、進取與勝利。堅定目標，平衡衝突的能量，妳即將突破萬難獲得成功。", advice: ["堅定意志前進", "平衡衝突的力量", "專注最終獲勝"], angel: "大天使梅塔特隆：加快妳的腳步衝刺。", summary: "勇往直前，成功就在不遠處。" },
+            "ar08": { name: "力量", meaning: "韌性、勇氣與柔性。運用內在的溫和力量感化周遭，真正的強大來自包容與慈悲。", advice: ["溫和地處理衝突", "接納自我的陰影", "展現無比耐性"], angel: "大天使亞列爾：妳擁有無盡的勇氣。", summary: "妳比妳想像中還要強大。" },
+            "ar09": { name: "隱者", meaning: "內省、孤獨與尋求真理。暫時遠離塵囂，點亮內在的燈塔，妳會找到真正的出口。", advice: ["暫時遠離外在紛擾", "進行深度自我探索", "點亮內在的燈塔"], angel: "大天使拉吉爾：智慧藏在寂靜中。", summary: "向內探求，妳會找到真正的答案。" },
+            "ar10": { name: "命運之輪", meaning: "輪迴、轉捩點與擴張。順應生命的節奏，生命的大門正在開啟，接受改變帶來的驚喜。", advice: ["接受生命週期變換", "放手無法控制的事", "抓住突發的機會"], angel: "大天使耶利米爾：好運正在敲門。", summary: "順流而行，命運正推動著妳。" },
+            "ar11": { name: "正義", meaning: "公正、因果與誠實。一切行為皆有迴響，請保持冷靜理智，為自己的決定負責任。", advice: ["做出客觀判斷", "尋求正當路徑", "為行為負責"], angel: "大天使拉貴爾：正義終將獲得伸張。", summary: "一切都在完美的公平天秤上。" },
+            "ar12": { name: "倒吊人", meaning: "暫停、犧牲與新觀點。放下執著，現在是看清真相的過度期，等待會帶來更高的智慧。", advice: ["換個角度看世界", "放下控制欲望", "靜待時機成熟"], angel: "大天使約菲爾：讓靈魂稍作休息。", summary: "換個視野，妳會看見不同的出路。" },
+            "ar13": { name: "死神", meaning: "轉化、結束與重生。勇敢放下那些不再適合妳的人事物，為新生騰出足夠的空間。", advice: ["勇敢說再見", "清理腐朽的模式", "接納不可避免的改變"], angel: "大天使阿茲列爾：舊的不去，新的不來。", summary: "大門關上是為了讓另一扇窗開啟。" },
+            "ar14": { name: "節制", meaning: "調和、中庸與平衡。將不同元素優雅地融合，尋求情感與理智間的完美比例。", advice: ["尋求中間立場", "練習情緒的自我調節", "循序漸進地實踐"], angel: "大天使薩基爾：療癒正平衡著妳。", summary: "在衝突中找到完美的調和點。" },
+            "ar15": { name: "惡魔", meaning: "束縛、成癮與幻象。覺察那些困住妳的負面慣性，自由的鑰匙其實一直握在妳手中。", advice: ["正視妳的恐懼", "打破自我設限", "尋求物質與靈性的平衡"], angel: "大天使約菲爾：看透幻象的虛假。", summary: "自由就在妳覺醒的那一刻。" },
+            "ar16": { name: "高塔", meaning: "劇變、真相與崩潰。雖然突如其來的變化令人不安，但它清除了根基不穩的幻象。", advice: ["接受突發的真相", "勇敢重建生活", "放下崩潰的遺憾"], angel: "大天使夏彌爾：混亂後是重生的光。", summary: "根基不穩的終將傾覆，為真實讓路。" },
+            "ar17": { name: "星星", meaning: "希望、靈感與療癒。平靜的光芒正引領妳，保持信心，妳的願景正被宇宙祝福。", advice: ["保持樂觀與信心", "分享妳的真實才華", "進行深度的身心洗滌"], angel: "大天使約菲爾：夢想終將照亮現實。", summary: "妳是星辰，散發著永恆的希望。" },
+            "ar18": { name: "月亮", meaning: "不安、迷惘與幻覺。在黑暗中行走請信任直覺，觀察心中浮動的情緒，而非恐懼。", advice: ["觀察不安的根源", "信任模糊中的靈感", "避免在情緒激動時決定"], angel: "大天使漢尼爾：月光會守護妳的直覺。", summary: "在黑暗中行走，請信任妳的第六感。" },
+            "ar19": { name: "太陽", meaning: "活力、成功與喜悅。這是最光明且正向的時刻，展現自信，一切都正能量爆棚。", advice: ["展現真實的自我", "慶祝目前的成就", "散播正能量給他人"], angel: "大天使烏列爾：妳是光明的存在。", summary: "一切都明朗化了，享受這份喜悅。" },
+            "ar20": { name: "審判", meaning: "覺醒、重生與召喚。原諒過去的自己，回應靈魂更深層的渴求，妳正邁向新境界。", advice: ["聽從更高自我的召喚", "原諒過去的自己", "果斷地採取行動"], angel: "大天使耶利米爾：妳已經做得很好了。", summary: "這是重生與邁向新境界的宣告。" },
+            "ar21": { name: "世界", meaning: "圓滿、統合與完成。這是一個階段性的終點與新開始，妳已經學會了這階段的課題。", advice: ["慶祝階段性的完結", "向更大的舞台擴張", "感受與萬物的連結"], angel: "大天使麥可：妳已完成神聖使命。", summary: "完美的終結，也是全新循環的開始。" },
+            
+            // 小牌系列通用定義
+            "wa": { name: "權杖系列", meaning: "火元素的熱情與行動力。妳目前的能量聚焦在計畫的啟動、競爭或創意的實踐。", advice: ["大膽去闖", "保持競爭力", "維持熱情不減"], angel: "大天使梅塔特隆：推動夢想前進。", summary: "行動勝過千言萬語。" },
+            "cu": { name: "聖杯系列", meaning: "水元素的情感與連結。能量在妳的人際關係、直覺或內在感受中緩緩流動。", advice: ["開放情感交流", "照顧情緒需求", "練習愛與包容"], angel: "大天使漢尼爾：愛正滋潤妳的心靈。", summary: "跟隨心的聲音，讓情感自然流淌。" },
+            "sw": { name: "寶劍系列", meaning: "風元素的思想與決斷。目前的挑戰在於釐清邏輯雜訊，做出理性的選擇或切割。", advice: ["保持冷靜思考", "果斷切除紛擾", "勇敢說出真話"], angel: "大天使烏列爾：真相會讓妳自由。", summary: "思維的清晰是妳最強大的武器。" },
+            "pe": { name: "五角星系列", meaning: "土元素的穩定與物質。能量落實在身體健康、財務狀況或現實基礎的耕耘。", advice: ["著手務實計畫", "珍惜當下資源", "維持身體健康"], angel: "大天使亞列爾：豐盛之門已開啟。", summary: "腳踏實地，豐盛會以物質形式顯化。" }
         };
 
         const FALLBACK_SECRETS = [
             { title: "顯化大師", message: "當妳專注於擁有的事物，全宇宙會給妳更多。豐盛始於內在的感謝。" },
-            { title: "宇宙律動", message: "妳所發出的每一份愛，都會以百倍的力量回到妳身上。今天就傳遞溫暖吧。" },
             { title: "吸引力法則", message: "保持高頻的喜悅，妳渴望的人事物就會自動奔向妳。妳就是磁鐵。" },
-            { title: "靈魂勇氣", message: "不要害怕前路模糊，只要邁出第一步，路就會自動顯現。妳被光守護著。" },
-            { title: "心靈空間", message: "清空不再適合妳的事物，騰出空間，驚喜才能進入妳的生活。" },
-            { title: "當下奇蹟", message: "奇蹟不在未來，而在妳現在的呼吸裡。感受這一刻的平安。" },
-            { title: "內在神性", message: "妳不需要變得更完美，妳本身就是宇宙最完美的傑作。" },
-            { title: "信任之旅", message: "放手交給宇宙去編排細節，妳只需要維持願景。一切都在完美的時程上。" }
+            { title: "心靈空間", message: "清空不再適合妳的事物，騰出空間，驚喜才能進入妳的生活。" }
         ];
 
-        const FULL_DECK = [];
-        const SUITS_MAP = [
-            { code: 'ar', name: '大牌', count: 22 },
-            { code: 'wa', name: '權杖', count: 14 },
-            { code: 'cu', name: '聖杯', count: 14 },
-            { code: 'sw', name: '寶劍', count: 14 },
-            { code: 'pe', name: '五角星', count: 14 }
-        ];
-
-        SUITS_MAP.forEach(suit => {
-            for(let i=0; i<suit.count; i++) {
-                let cardName = suit.code === 'ar' ? TAROT_MAJOR_NAMES[i] : `${suit.name}${MINOR_NAMES[i]}`;
-                let cardId = suit.code === 'ar' ? `ar${String(i).padStart(2,'0')}` : `${suit.code}${String(i+1).padStart(2,'0')}`;
-                FULL_DECK.push({ id: cardId, name: cardName, suitCode: suit.code });
-            }
-        });
-
+        // 類別設定
         const CATEGORIES = {
-            love: { title: "感性愛戀", examples: ["目前這段關係的真實樣貌？", "我該如何打破現狀與他復合？", "近期是否有正緣桃花出現？", "我在感情中盲點是什麼？", "對方對我的真實感覺？"] },
-            career: { title: "事業轉折", examples: ["目前的職場轉捩點該如何抉擇？", "我想轉職的話未來三個月的運勢？", "我在工作中感到瓶頸，建議的方向？", "與主管/同事關係的改善之道？", "我適合自行創業嗎？"] },
-            money: { title: "財富豐盛", examples: ["我目前的財運流向與能量？", "這筆投資是否能為我帶來獲利？", "如何改善目前的財務焦慮感？", "如何吸引更多的豐盛進入生命？", "我對金錢的潛意識阻礙為何？"] },
-            growth: { title: "靈魂成長", examples: ["我目前的靈魂課題與挑戰為何？", "我天賦的內在力量該如何發揮？", "我該如何面對內心深處的恐懼？", "這段低潮期帶給我的正向訊息？", "我該如何找回生命的原動力？"] },
-            general: { title: "綜合指引", examples: ["我近期的整體運勢與核心提醒？", "面對當前的困惑，給我的行動指引？", "我現在最需要注意的心理能量？", "目前生活中的各個面向是否平衡？", "未來一個月最重要的轉機在哪？"] }
+            love: { title: "感性愛戀", icon: "fa-heart", examples: ["目前這段關係的真實樣貌與發展趨勢？", "我該如何改善目前的冷戰或溝通僵局？", "近期是否有新的正緣桃花會出現？", "我在感情中的盲點或需要學習的課題？", "對方對我的真實感覺與潛意識想法？"] },
+            career: { title: "事業轉折", icon: "fa-briefcase", examples: ["目前的職場轉捩點，我該如何抉擇？", "若選擇轉職，未來三個月的事業運勢？", "我在工作中感到瓶頸，靈魂給予的方向建議？", "如何改善與主管或同事之間的人際能量？", "我目前的特質適合自行創業或開展副業嗎？"] },
+            money: { title: "財富豐盛", icon: "fa-coins", examples: ["我目前的財運流向與金錢能量狀態？", "這項投資計畫對我而言是否具備獲利潛力？", "我該如何顯化更多的豐盛進入我的生命？", "改善目前財務壓力或焦慮的具體指引？", "我對金錢的潛意識阻礙或限制性信念為何？"] },
+            growth: { title: "靈魂成長", icon: "fa-seedling", examples: ["我目前的靈魂課題與正在面對的挑戰為何？", "如何發揮我天賦的內在力量？", "面對內心深處的恐懼，我該如何調頻與療癒？", "這段低潮期帶給我的正向訊息與成長意義？", "我該如何找回生命的原動力與內在平靜？"] },
+            general: { title: "綜合指引", icon: "fa-compass", examples: ["我近期（未來一個月）整體的能量提醒？", "面對當前的困惑，宇宙給我的核心行動指引？", "我現在最需要注意的身心靈能量區塊？", "目前生活中的各個面向是否平衡？", "未來一個月最重要的轉機點會出現在哪裡？"] }
         };
 
-        window.state = {
-            history: JSON.parse(localStorage.getItem(`${APP_ID}_history`) || '[]'),
-            selectedCategory: null,
-            drawMode: 'auto',
-            selectedManualCards: []
+        const FULL_DECK = [];
+        const SUITS_MAP = [{ code: 'ar', name: '大牌', count: 22 }, { code: 'wa', name: '權杖', count: 14 }, { code: 'cu', name: '聖杯', count: 14 }, { code: 'sw', name: '寶劍', count: 14 }, { code: 'pe', name: '五角星', count: 14 }];
+        SUITS_MAP.forEach(suit => { for(let i=0; i<suit.count; i++) { let cardName = suit.code === 'ar' ? TAROT_MAJOR_NAMES[i] : `${suit.name}${MINOR_NAMES[i]}`; let cardId = suit.code === 'ar' ? `ar${String(i).padStart(2,'0')}` : `${suit.code}${String(i+1).padStart(2,'0')}`; FULL_DECK.push({ id: cardId, name: cardName }); } });
+
+        window.state = { history: JSON.parse(localStorage.getItem(`${APP_ID}_history`) || '[]'), currentDraw: null, drawMode: 'auto', selectedManualCards: [] };
+
+        // --- 核心邏輯 ---
+        function getImageUrl(id, isPrimary = true) {
+            const prefix = id.substring(0, 2); const num = id.substring(2);
+            if (isPrimary) {
+                let folder = {"ar":"major", "wa":"wands", "cu":"cups", "sw":"swords", "pe":"pentacles"}[prefix];
+                return `${PRIMARY_IMAGE_BASE}${folder}/${num}.jpg`;
+            }
+            return `${FALLBACK_IMAGE_BASE}${id}.jpg`;
+        }
+
+        window.handleImageError = (img, name) => {
+            if (img.src.includes('raw.githubusercontent.com')) { img.src = getImageUrl(img.dataset.id, false); }
+            else { img.parentElement.innerHTML = `<div class="card-placeholder"><span>${name}</span></div>`; }
         };
 
         async function fetchAIResponse(prompt, system, cardsArr = []) {
             try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt, system })
-                });
-                if (!response.ok) throw new Error();
-                const res = await response.json();
-                if (cardsArr.length > 1 && (!res.interpretations || res.interpretations.length < cardsArr.length)) {
-                    throw new Error("API回傳格式不足");
-                }
-                return res;
+                const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, system }) });
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                if (cardsArr.length > 1 && (!data.interpretations || data.interpretations.length < cardsArr.length)) throw new Error();
+                return data;
             } catch (e) {
-                if (cardsArr.length === 0) {
-                    return FALLBACK_SECRETS[Math.floor(Math.random() * FALLBACK_SECRETS.length)];
-                }
-                const interpretations = cardsArr.map(card => {
-                    let data = FALLBACK_DB[card.id] || FALLBACK_DB[card.id.substring(0,2)] || FALLBACK_DB["generic"];
-                    return {
-                        meaning: data.meaning,
-                        advice: data.advice[Math.floor(Math.random() * data.advice.length)]
-                    };
+                // 本地 78 張牌義處理
+                if (cardsArr.length === 0) return FALLBACK_SECRETS[Math.floor(Math.random() * FALLBACK_SECRETS.length)];
+                
+                const interpretations = cardsArr.map(c => {
+                    let data = FALLBACK_DB[c.id] || FALLBACK_DB[c.id.substring(0,2)] || FALLBACK_DB["generic"];
+                    return { meaning: data.meaning, advice: data.advice[0] };
                 });
-                const lastCardData = FALLBACK_DB[cardsArr[cardsArr.length-1].id] || FALLBACK_DB["generic"];
-                return {
-                    interpretations: interpretations,
-                    actions: lastCardData.advice || ["平靜觀照", "呼吸當下", "信任直覺"],
-                    archangelMsg: lastCardData.angel || "大天使正在溫柔守護妳。",
-                    summary: lastCardData.summary || "目前的能量正在整合，請信任妳內心的答案。",
-                    isFallback: true
-                };
+                const last = FALLBACK_DB[cardsArr[cardsArr.length-1].id] || FALLBACK_DB[cardsArr[cardsArr.length-1].id.substring(0,2)] || FALLBACK_DB["generic"];
+                return { interpretations, actions: last.advice, archangelMsg: last.angel, summary: last.summary, isFallback: true };
             }
+        }
+
+        window.drawDaily = async () => {
+            document.getElementById('loading').classList.remove('hidden');
+            const idx = Math.floor(Math.random() * 22); const card = { id: `ar${String(idx).padStart(2,'0')}`, name: TAROT_MAJOR_NAMES[idx], isRev: Math.random() > 0.5 };
+            const res = await fetchAIResponse(`抽到 ${card.name}`, "妳是心小跳。", [card]);
+            document.getElementById('daily-card-front').innerHTML = `<img src="${getImageUrl(card.id)}" data-id="${card.id}" class="w-full h-full object-cover ${card.isRev?'reversed':''}" onerror="window.handleImageError(this, '${card.name}')">`;
+            document.getElementById('daily-card-element').style.transform = 'rotateY(180deg)';
+            setTimeout(() => { window.state.currentDraw = { intent: "今日指引", cards: [card] }; displayResult("今日能量照見", [card], ["核心能量"], { ...res, type: 'DAILY' }); document.getElementById('loading').classList.add('hidden'); }, 800);
+        };
+
+        window.drawReading = async (isManual = false) => {
+            document.getElementById('loading').classList.remove('hidden');
+            const intent = document.getElementById('reading-intent').value.trim();
+            const cards = isManual ? window.state.selectedManualCards.map(i => ({ ...FULL_DECK[i], isRev: Math.random() > 0.5 })) : Array.from({length:3}).map(() => ({ ...FULL_DECK[Math.floor(Math.random()*FULL_DECK.length)], isRev: Math.random() > 0.5 }));
+            const res = await fetchAIResponse(`問題：${intent}`, "妳是心小跳。", cards);
+            window.state.currentDraw = { intent: intent || "當下的能量狀態", cards };
+            displayResult("生命演化解析", cards, ["過去因果", "現在卡點", "未來顯化"], { ...res, intent, type: 'READING' });
+            document.getElementById('loading').classList.add('hidden');
+        };
+
+        window.copyAIPrompt = () => {
+            if (!window.state.currentDraw) return;
+            const { intent, cards } = window.state.currentDraw;
+            const labels = ["過去因果", "現在卡點", "未來顯化"];
+            let cardStr = cards.map((c, i) => `${i+1}. ${labels[i] || '指引'}：${c.name} (${c.isRev?'逆位':'正位'})`).join('\n');
+            const prompt = `你好，我是占卜者。我剛在『心小跳塔羅』完成了一次靈魂調頻。
+
+【我的困惑】：『 ${intent} 』
+【抽出的牌陣】：
+${cardStr}
+
+請以專業塔羅師視角提供「能量糾纏(1+2)」與「顯化路徑(2+3)」的深度靈性解析、具體行動建議與大天使傳訊。
+---
+（真人占卜預約：https://www.instagram.com/dokidokiboomboom.tarot/ ）`;
+            const el = document.createElement('textarea'); el.value = prompt; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+            showToast("✨ 指令已複製！請至 AI 助手貼上。");
+        };
+
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const t = document.createElement('div'); t.className = 'glass px-6 py-3 rounded-full text-brand font-bold text-sm shadow-xl mb-2 border-brand/40'; t.innerText = msg;
+            container.appendChild(t); setTimeout(() => t.remove(), 2500);
+        }
+
+        function displayResult(title, cards, pos, ai) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById('result').classList.remove('hidden');
+            
+            const aiPromptArea = document.getElementById('ai-prompt-area');
+            aiPromptArea.classList.toggle('hidden', ai.type === 'DAILY');
+
+            document.getElementById('res-badge').innerText = ai.isFallback ? 'INTUITION MODE' : (ai.type || 'ENERGY');
+            document.getElementById('res-title').innerText = title;
+            document.getElementById('intent-display').innerText = `「 ${ai.intent || '未輸入問題'} 」`;
+            document.getElementById('intent-display').classList.toggle('hidden', ai.type === 'DAILY');
+            
+            document.getElementById('res-cards').innerHTML = cards.map((c, i) => `<div class="text-center w-36 md:w-44 flex-shrink-0 animate-fade-in"><p class="text-[9px] font-black text-brand mb-2 uppercase tracking-widest">${pos[i]}</p><div class="rounded-xl overflow-hidden shadow-2xl aspect-[10/17.5] bg-[#1a1221]"><img src="${getImageUrl(c.id)}" data-id="${c.id}" class="w-full h-full object-cover ${c.isRev?'reversed':''}" onerror="window.handleImageError(this, '${c.name}')"></div><p class="mt-3 text-sm font-bold text-white">${c.name} ${c.isRev?'(逆)':'(正)'}</p></div>`).join('');
+            document.getElementById('res-content').innerHTML = (ai.interpretations || []).map((item, i) => `<div class="glass p-8 rounded-[2rem] border-brand/20 mb-4 font-serif text-lg leading-relaxed"><h3 class="text-xs font-black text-brand uppercase mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand rounded-full"></span>【${pos[i]}】感應</h3>${item.meaning}</div>`).join('') + `<p class="text-center italic text-xl py-6">${ai.summary}</p>`;
+            document.getElementById('action-list').innerHTML = (ai.actions || []).map(a => `<li class="flex gap-2"><span>✦</span><span>${a}</span></li>`).join('');
+            document.getElementById('archangel-msg').innerText = `「 ${ai.archangelMsg} 」`;
+            window.scrollTo({ top: document.getElementById('app').offsetTop - 50, behavior: 'smooth' });
         }
 
         window.drawSecretCard = async () => {
             const container = document.getElementById('secret-card-inner');
             container.innerHTML = `<div class="animate-spin h-8 w-8 border-2 border-brand border-t-transparent rounded-full mx-auto"></div>`;
             try {
-                const res = await fetchAIResponse("一張顯化指引", "妳是顯化導師", []);
-                updateSecretUI(res);
-            } catch(e) {
-                updateSecretUI(FALLBACK_SECRETS[0]);
-            }
+                const res = await fetchAIResponse("靈魂祝福", "妳是顯化導師", []);
+                document.getElementById('secret-card-container').classList.remove('secret-card-float');
+                container.innerHTML = `<h4 class="text-brand font-black text-sm mb-3 underline decoration-brand/30">${res.title || "宇宙指引"}</h4><p class="text-xs text-white leading-relaxed font-serif italic animate-fade-in">「 ${res.message} 」</p>`;
+            } catch(e) { container.innerHTML = "宇宙目前訊號不穩。"; }
         };
 
-        function updateSecretUI(res) {
-            const container = document.getElementById('secret-card-inner');
-            document.getElementById('secret-card-container').classList.remove('secret-card-float');
-            container.innerHTML = `
-                <h4 class="text-brand font-black text-sm mb-3 underline decoration-brand/30">${res.title || "宇宙指引"}</h4>
-                <p class="text-xs text-white leading-relaxed font-serif italic">「 ${res.message} 」</p>
-            `;
-        }
-
-        window.drawDaily = async () => {
-            document.getElementById('loading').classList.remove('hidden');
-            const idx = Math.floor(Math.random() * 22);
-            const card = { id: `ar${String(idx).padStart(2,'0')}`, name: TAROT_MAJOR_NAMES[idx], isRev: Math.random() > 0.5 };
-            const res = await fetchAIResponse(`抽到 ${card.name}`, "妳是心小跳。", [card]);
-            
-            const cardFront = document.getElementById('daily-card-front');
-            cardFront.innerHTML = `<img src="${getImageUrl(card.id)}" data-id="${card.id}" class="card-img ${card.isRev?'reversed':''}" onerror="window.handleImageError(this, '${card.name}')">`;
-            
-            document.getElementById('daily-card-element').classList.add('flipped');
-            setTimeout(() => { 
-                displayResult("今日能量照見", [card], ["核心能量"], { ...res, type: 'DAILY' }); 
-                document.getElementById('loading').classList.add('hidden'); 
-            }, 800);
-        };
-
-        window.drawReading = async (isManual = false) => {
-            document.getElementById('loading').classList.remove('hidden');
-            const intent = document.getElementById('reading-intent').value.trim();
-            const cards = isManual ? window.state.selectedManualCards.map(i => ({ ...FULL_DECK[i], isRev: Math.random() > 0.5 })) : [...FULL_DECK].sort(() => Math.random() - 0.5).slice(0, 3).map(c => ({ ...c, isRev: Math.random() > 0.5 }));
-            const res = await fetchAIResponse(`問題：${intent}`, "妳是占卜師心小跳。", cards);
-            displayResult("生命演化解析", cards, ["過去因果", "現在卡點", "未來顯化"], { ...res, intent, type: 'READING' });
-            document.getElementById('loading').classList.add('hidden');
-        };
-
-        function displayResult(title, cards, pos, ai) {
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
-            document.getElementById('result').classList.remove('hidden');
-            document.getElementById('res-badge').innerText = ai.isFallback ? 'INTUITION MODE' : ai.type;
-            document.getElementById('res-title').innerText = title;
-            const intentDisplay = document.getElementById('intent-display');
-            if(ai.intent) { intentDisplay.innerText = `「 ${ai.intent} 」`; intentDisplay.classList.remove('hidden'); }
-            
-            document.getElementById('res-cards').innerHTML = cards.map((c, i) => `
-                <div class="text-center w-36 md:w-44 flex-shrink-0 animate-fade-in" style="animation-delay: ${i*0.1}s">
-                    <p class="text-[9px] font-black text-brand mb-2 uppercase tracking-widest">${pos[i]}</p>
-                    <div class="rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#1a1221] aspect-[10/17.5]">
-                        <img src="${getImageUrl(c.id)}" data-id="${c.id}" class="w-full h-full object-cover ${c.isRev?'reversed':''}" onerror="window.handleImageError(this, '${c.name}')">
-                    </div>
-                    <p class="mt-3 text-sm font-bold text-white">${c.name} ${c.isRev?'(逆)':'(正)'}</p>
-                </div>
-            `).join('');
-
-            const interpretations = ai.interpretations || [];
-            document.getElementById('res-content').innerHTML = interpretations.map((item, i) => `
-                <div class="glass p-8 rounded-[2rem] border-brand/20 space-y-4">
-                    <h3 class="text-xs font-black text-brand uppercase tracking-widest">【${pos[i]}】感應</h3>
-                    <p class="text-gray-200 text-lg leading-relaxed font-serif">${item.meaning}</p>
-                    <div class="bg-white/5 p-4 rounded-xl italic text-brand text-sm border border-brand/10">「 ${item.advice} 」</div>
-                </div>
-            `).join('') + `<p class="text-center text-gray-400 italic text-xl py-10 px-6 font-serif">${ai.summary}</p>`;
-            
-            document.getElementById('action-list').innerHTML = (ai.actions || []).map(a => `<li class="flex gap-3 text-base items-start"><span class="text-brand mt-1"><i class="fa-solid fa-circle-arrow-right"></i></span><span>${a}</span></li>`).join('');
-            document.getElementById('archangel-msg').innerText = `「 ${ai.archangelMsg} 」`;
-            
-            document.getElementById('secret-card-container').classList.add('secret-card-float');
-            document.getElementById('secret-card-inner').innerHTML = `<i class="fa-solid fa-envelope-open-text text-5xl text-brand/30"></i><p class="mt-4 text-[10px] font-black text-gray-500 tracking-widest uppercase">點擊拆閱</p>`;
-
-            window.state.history.unshift({ time: new Date().toLocaleString(), title, cards: cards.map(c=>c.name).join(', ') });
-            localStorage.setItem(`${APP_ID}_history`, JSON.stringify(window.state.history.slice(0, 15)));
-            renderHistory();
-            window.scrollTo({ top: document.getElementById('app').offsetTop - 50, behavior: 'smooth' });
-        }
-
-        function renderHistory() {
-            document.getElementById('history-list').innerHTML = window.state.history.map(h => `<div class="glass p-5 rounded-xl border-white/5"><p class="text-[9px] text-brand/50 font-bold">${h.time}</p><p class="font-black text-white">${h.title}</p><p class="text-xs text-gray-500 italic">${h.cards}</p></div>`).join('') || '<p class="text-center text-gray-600 italic">尚無軌跡</p>';
-        }
-
-        window.clearHistory = () => { if(confirm("清除？")) { window.state.history = []; localStorage.setItem(`${APP_ID}_history`, '[]'); renderHistory(); }};
-        
         window.switchTab = t => {
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('result').classList.add('hidden');
             document.getElementById(`panel-${t}`).classList.remove('hidden');
-            if (t !== 'daily') document.getElementById('daily-card-element').classList.remove('flipped');
+            if (t === 'daily') { document.getElementById('daily-card-element').style.transform = 'rotateY(0deg)'; document.getElementById('daily-card-front').innerHTML = ''; }
             window.scrollTo({ top: document.getElementById('app').offsetTop - 100, behavior: 'smooth' });
         };
 
         window.selectCategory = cat => {
-            window.state.selectedCategory = cat;
-            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('border-brand', 'bg-brand/10'));
-            const activeBtn = Array.from(document.querySelectorAll('.category-btn')).find(b => b.innerText.includes(CATEGORIES[cat].title));
-            activeBtn?.classList.add('border-brand', 'bg-brand/10');
             document.getElementById('question-area').classList.remove('hidden');
-            const exList = document.getElementById('example-list');
-            exList.innerHTML = CATEGORIES[cat].examples.map(ex => `<button onclick="document.getElementById('reading-intent').value='${ex}'" class="text-[10px] px-3 py-1 bg-white/5 border border-white/10 rounded-full hover:bg-brand/20 transition-all font-serif italic text-gray-300"># ${ex}</button>`).join('');
+            document.getElementById('example-list').innerHTML = (CATEGORIES[cat]?.examples || []).map(ex => `<button onclick="document.getElementById('reading-intent').value='${ex}'" class="text-[10px] px-3 py-1 bg-white/5 border border-white/10 rounded-full italic text-gray-400 hover:bg-brand/20 transition-all"># ${ex}</button>`).join('');
         };
 
-        window.setDrawMode = mode => {
-            window.state.drawMode = mode;
-            document.getElementById('mode-auto').className = mode === 'auto' ? 'text-[10px] px-3 py-1 rounded-full bg-brand text-black font-black transition-all' : 'text-[10px] px-3 py-1 rounded-full bg-white/10 text-gray-400 font-black transition-all';
-            document.getElementById('mode-manual').className = mode === 'manual' ? 'text-[10px] px-3 py-1 rounded-full bg-brand text-black font-black transition-all' : 'text-[10px] px-3 py-1 rounded-full bg-white/10 text-gray-400 font-black transition-all';
+        window.setDrawMode = m => {
+            window.state.drawMode = m;
+            document.getElementById('mode-auto').className = m === 'auto' ? 'text-[10px] px-3 py-1 rounded-full bg-brand text-black font-black' : 'text-[10px] px-3 py-1 rounded-full bg-white/10 text-gray-400 font-black';
+            document.getElementById('mode-manual').className = m === 'manual' ? 'text-[10px] px-3 py-1 rounded-full bg-brand text-black font-black' : 'text-[10px] px-3 py-1 rounded-full bg-white/10 text-gray-400 font-black';
         };
 
-        window.initiateDraw = () => {
-            if (window.state.drawMode === 'auto') window.drawReading();
-            else {
-                document.getElementById('reading-step-1').classList.add('hidden');
-                document.getElementById('reading-step-manual').classList.remove('hidden');
-                renderManualDeck();
-            }
-        }
+        window.initiateDraw = () => { if (window.state.drawMode === 'auto') window.drawReading(); else { document.getElementById('reading-step-1').classList.add('hidden'); document.getElementById('reading-step-manual').classList.remove('hidden'); renderManualDeck(); } };
 
         function renderManualDeck() {
             const deck = document.getElementById('manual-deck');
             deck.innerHTML = FULL_DECK.map((_, i) => `<div onclick="window.toggleManualCard(${i}, this)" class="card-grid-item cursor-pointer aspect-[5/8] bg-white/5 rounded-lg border border-white/10 flex items-center justify-center text-white/5 text-[8px]"><i class="fa-solid fa-moon"></i></div>`).join('');
-            window.state.selectedManualCards = [];
-            updateManualCounter();
+            window.state.selectedManualCards = []; updateManualCounter();
         }
 
         window.toggleManualCard = (i, el) => {
@@ -580,7 +459,14 @@
 
         window.processManualDraw = () => window.drawReading(true);
 
-        document.addEventListener('DOMContentLoaded', renderHistory);
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('cat-grid');
+            Object.entries(CATEGORIES).forEach(([key, val]) => {
+                const btn = document.createElement('button'); btn.className = "glass p-6 rounded-3xl flex flex-col items-center gap-3 hover:border-brand/50 transition-all";
+                btn.onclick = () => window.selectCategory(key); btn.innerHTML = `<i class="fa-solid ${val.icon} text-2xl text-brand"></i><span class="text-sm font-bold">${val.title}</span>`;
+                grid.appendChild(btn);
+            });
+        });
     </script>
 </body>
 </html>
