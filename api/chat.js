@@ -1,50 +1,29 @@
-// /api/chat.js
-export default async function handler(req, res) {
-    if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
+# Vercel Runtime Log
 
-    const { prompt } = req.body;
-    const apiKey = process.env.GEMINI_API_KEY;
+## Request
+ID: kggzq-1778039204840-c9476034e8a4
+Time: 2026-05-06T03:46:44.840Z
+POST /api/chat → 400
+Host: my-tarot-henna.vercel.app
+Duration: 660ms
+Cache: MISS
+Region: hkg1
+User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36
+Referer: https://my-tarot-henna.vercel.app/tarot.html
 
-    if (!apiKey) {
-        return res.status(500).json({ error: 'API Key 未設定，請檢查 Vercel 環境變數。' });
-    }
+## Lifecycle
 
-    try {
-        // 修改點：將 v1beta 改為 v1，這是最穩定的路徑
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-        
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: `你是一位靈魂塔羅占卜師。請針對牌面進行深度解析。
-                請嚴格以繁體中文 JSON 回傳（不要包含任何 Markdown 標籤或文字）：
-                {
-                  "interpretations": [{"meaning":"牌義描述","advice":"行動建議"}],
-                  "summary": "能量總結",
-                  "soulMantra": "一句話格言"
-                }
-                
-                內容：${prompt}` }] }],
-                generationConfig: {
-                    // 強制要求 JSON 格式回傳
-                    responseMimeType: "application/json"
-                }
-            })
-        });
+### Function
+Status: 400
+Duration: 185ms
+Runtime: nodejs24.x
+Memory: 243MB / 2048MB
+Region: iad1
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            return res.status(response.status).json({ error: 'Google API 報錯', details: errorText });
-        }
+## External APIs (1)
+POST generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent → 400 163ms
 
-        const data = await response.json();
-        const resultText = data.candidates[0].content.parts[0].text;
-        
-        // 回傳給前端
-        res.status(200).json(JSON.parse(resultText));
-
-    } catch (error) {
-        res.status(500).json({ error: '大腦執行失敗', message: error.message });
-    }
-}
+## Deployment
+ID: dpl_EkQrAk8iqBaUK8sRmQLQSEasDX5F
+Environment: production
+Branch: main
