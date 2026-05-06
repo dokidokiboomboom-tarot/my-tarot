@@ -207,7 +207,7 @@
 
         // --- 核心 API 請求 (指向 Vercel 後端) ---
         async function fetchAI(prompt) {
-            const response = await fetch('/api/interpret', {
+            const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt })
