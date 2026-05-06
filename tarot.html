@@ -404,8 +404,10 @@ async function fetchAI(prompt) {
             window.state.energy--; window.updateEnergyUI(); return true;
         };
 
-        window.drawDaily = async function() {
-            if (window.state.isDrawing || !window.consumeEnergy()) return;
+        // 確保這裡有寫 async
+window.drawDaily = async () => {
+    if (window.state.isDrawing || window.state.energy <= 0) return;
+    // ... 後面才可以用 await fetchAI;
             window.state.isDrawing = true; document.getElementById('loading').classList.remove('hidden');
             const card = { ...tarotData[Math.floor(Math.random() * tarotData.length)], isRev: Math.random() > 0.5 };
             try {
@@ -418,8 +420,10 @@ async function fetchAI(prompt) {
             finally { window.state.isDrawing = false; }
         };
 
-        window.startReading = async function() {
-            const q = document.getElementById('q-custom').value.trim();
+        // 確保這裡有寫 async
+window.startReading = async () => {
+    const q = document.getElementById('q-custom').value.trim();
+    // ...
             if(!q) return window.showToast("請描述妳的困惑");
             if (window.state.energy <= 0) return window.openModal('modal-limit');
             window.state.question = q;
@@ -457,18 +461,22 @@ async function fetchAI(prompt) {
             }
         }
 
-        window.revealManual = async function() {
-            if (!window.consumeEnergy()) return;
-            document.getElementById('loading').classList.remove('hidden');
-            const pos = window.getPositions(window.state.spread);
-            try {
-                const ai = await fetchAI(`提問：「${window.state.question}」，牌面：${window.state.selectedCards.map((c,i)=>`[${pos[i]}] ${c.name}(${c.isRev?'逆位':'正位'})`).join('、')}。`);
-                displayResult("個人靈魂透視", window.state.question, window.state.selectedCards, pos, ai);
-            } catch(e) { document.getElementById('loading').classList.add('hidden'); window.showToast("失敗"); window.state.energy++; window.updateEnergyUI(); }
-        };
-
-        function displayResult(title, q, cards, pos, ai) {
-            document.getElementById('loading').classList.add('hidden');
+        // 確保這裡有寫 async
+window.revealManual = async () => {
+    document.getElementById('loading').classList.remove('hidden');
+    const pos = window.getPositions(window.state.spread);
+    try {
+        // 因為門口有 async，這裡才可以用 await
+        const ai = await fetchAI(`提問：「${window.state.question}」，牌面：${window.state.selectedCards.map((c,i)=>`[${pos[i]}] ${c.name}(${c.isRev?'逆位':'正位'})`).join('、')}。`);
+        window.state.energy--; 
+        window.updateEnergyUI();
+        displayResult("靈魂深度解析", window.state.question, window.state.selectedCards, pos, ai);
+    } catch(e) { 
+        window.showToast("解析失敗"); 
+    } finally { 
+        document.getElementById('loading').classList.add('hidden'); 
+    }
+};
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('result').classList.remove('hidden');
             document.getElementById('res-title').innerText = title; document.getElementById('res-q').innerText = q;
