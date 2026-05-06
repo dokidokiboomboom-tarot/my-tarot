@@ -33,11 +33,9 @@
         :root { --brand: #fb7185; }
         body { background-color: #050206; color: #f3f4f6; overflow-x: hidden; scroll-behavior: smooth; font-family: 'Noto Sans TC', sans-serif; }
         
-        /* 視覺效果：玻璃擬態 */
         .glass { background: rgba(26, 18, 33, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(251, 113, 133, 0.15); }
         .gold-glow { text-shadow: 0 0 15px rgba(251, 113, 133, 0.6); color: var(--brand); }
         
-        /* 按鈕高級感 */
         .btn-mystic {
             background: linear-gradient(135deg, #fda4af 0%, #fb7185 100%);
             color: #1a1221; font-weight: 800; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -48,16 +46,13 @@
         .btn-mystic:active:not(:disabled) { transform: translateY(0) scale(0.98); }
         .btn-mystic:disabled { background: #333; color: #666; cursor: not-allowed; opacity: 0.7; }
 
-        /* 背景星空動畫 */
         .stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1a1221 0%, #050206 100%); z-index: -1; }
         .star-layer { position: absolute; inset: -50%; background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); opacity: 0.2; animation: starWarp 120s linear infinite; }
         @keyframes starWarp { from { transform: rotate(0deg); } to { transform: rotate(10deg); background-position: -4000px 4000px; } }
 
-        /* 發光心跳動畫 */
         @keyframes heartPulse { 0%, 30%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(251, 113, 133, 0.4)); } 15%, 45% { transform: scale(1.15); filter: drop-shadow(0 0 25px rgba(251, 113, 133, 0.9)); } }
         .pulse-heart { animation: heartPulse 2s infinite ease-in-out; color: var(--brand); display: inline-block; }
 
-        /* 塔羅牌效果 */
         .tarot-card-box { perspective: 1500px; width: 100%; max-width: 220px; margin: 0 auto; }
         .tarot-card { width: 100%; padding-top: 175%; position: relative; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
         .tarot-card.flipped { transform: rotateY(180deg); }
@@ -67,7 +62,6 @@
         .card-img { width: 100%; height: 100%; object-fit: cover; }
         .reversed { transform: rotate(180deg) !important; }
 
-        /* 選牌區域佈局 */
         .fan-area { position: relative; height: 380px; user-select: none; touch-action: none; overflow: visible; margin-top: 40px; }
         .fan-item { position: absolute; left: calc(50% - 40px); width: 80px; height: 135px; transform-origin: center 480px; cursor: pointer; transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: var(--idx); }
         .fan-item:hover { z-index: 1000 !important; transform: rotate(var(--rot)) translateY(-50px) scale(1.2) !important; border-color: var(--brand); box-shadow: 0 15px 40px rgba(251, 113, 133, 0.7); }
@@ -86,7 +80,6 @@
     </div>
     <div class="stars-container"><div class="star-layer"></div></div>
     
-    <!-- 頂部導覽 -->
     <nav class="fixed top-0 w-full z-[60] glass border-b border-white/5 py-4 px-6 transition-all" id="nav">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
@@ -111,7 +104,6 @@
         </div>
     </nav>
 
-    <!-- 標題區域 -->
     <header class="min-h-screen flex flex-col items-center justify-center pt-24 px-4 text-center">
         <div class="max-w-4xl space-y-10">
             <div class="relative inline-block">
@@ -134,7 +126,6 @@
         </div>
     </header>
 
-    <!-- 核心應用 -->
     <main id="app" class="py-20 px-4 max-w-6xl mx-auto scroll-mt-24">
         <div class="glass rounded-[3rem] overflow-hidden shadow-2xl border border-white/10">
             <div class="flex border-b border-white/5 bg-black/40 font-black text-xs md:text-sm tracking-widest uppercase">
@@ -211,7 +202,6 @@
                 <div id="result" class="hidden space-y-16 animate-in fade-in duration-1000">
                     <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-6">
                         <button onclick="window.backToSetup()" class="text-xs font-black text-gray-400 hover:text-brand transition flex items-center gap-2 bg-white/5 px-6 py-3 rounded-full font-sans"><i class="fa-solid fa-arrow-left"></i> 重新提問</button>
-                        <button onclick="window.toggleFavoriteCurrent()" id="fav-btn" class="text-3xl text-gray-700 hover:text-yellow-400 transition"><i class="fa-regular fa-star"></i></button>
                     </div>
                     <div class="text-center space-y-6">
                         <h2 class="text-5xl md:text-7xl serif font-black gold-glow" id="res-title"></h2>
@@ -220,7 +210,6 @@
                     <div class="flex flex-wrap justify-center gap-10 py-10" id="res-cards"></div>
                     <div id="res-content" class="max-w-4xl mx-auto space-y-12"></div>
                     
-                    <!-- 宇宙祝福與行動引導 -->
                     <div class="bg-gradient-to-br from-brand/20 to-mystic-surface p-12 md:p-16 rounded-[3.5rem] border border-brand/30 text-center shadow-3xl">
                         <h3 class="text-3xl serif font-black mb-10 text-brand tracking-widest font-serif">✨ 宇宙的神諭祝福 ✨</h3>
                         <p class="text-2xl font-bold font-serif text-white leading-relaxed mb-12 italic" id="angel-msg"></p>
@@ -242,7 +231,6 @@
         </div>
     </main>
 
-    <!-- 底部：引導區 -->
     <section class="py-32 text-center bg-mystic-bg relative overflow-hidden border-t border-white/5">
         <div class="max-w-3xl mx-auto px-6 relative z-10">
             <h2 class="text-4xl md:text-5xl serif mb-8 text-white font-black italic tracking-tighter">其實，答案一直都在妳心裡</h2>
@@ -286,12 +274,7 @@
     </div>
 
     <script>
-        /**
-         * 重要設定：
-         * 1. 預覽環境測試：apiKey 設為空字串，model 設為 gemini-2.5-flash-preview-09-2025。
-         * 2. GitHub 部署：填入 apiKey，model 設為 gemini-1.5-flash。
-         */
-        const apiKey = ""; 
+        // --- 核心配置：金鑰現在由 api/chat.js 處理，前端不再存放 ---
         const IMAGE_BASE = "https://www.sacred-texts.com/tarot/pkt/img/";
         
         window.state = { tab: 'daily', spread: 1, energy: 3, history: [], selectedCards: [], isDrawing: false };
@@ -315,22 +298,27 @@
             } catch (e) { throw new Error("解析失敗"); }
         }
 
+        // --- 第二步：修改後的 fetchAI 函數，呼叫妳自己的 Vercel 後端 ---
         async function fetchAI(prompt) {
-            // 在此預覽環境必須使用 2.5 預覽模型
-            const model = "gemini-2.5-flash-preview-09-2025";
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-            
-            const systemPrompt = `你是一位專業且溫柔的靈魂占卜師。請針對塔羅牌面進行深度解讀。請嚴格以繁體中文 JSON 回傳結果：{"interpretations":[{"keywords":[],"meaning":"","advice":""}],"summary":"","soulMantra":"","dailyActions":[]}`;
-            
-            const payload = {
-                contents: [{ parts: [{ text: systemPrompt + "\n\n內容：" + prompt }] }],
-                generationConfig: { responseMimeType: "application/json" }
-            };
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: prompt })
+            });
 
-            const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            if (!response.ok) throw new Error(`API Error ${response.status}`);
+            if (!response.ok) {
+                throw new Error("宇宙能量不穩，請確認 Vercel 後台金鑰是否設定正確");
+            }
+
             const data = await response.json();
-            return cleanJSON(data.candidates[0].content.parts[0].text);
+            
+            try {
+                // 從後端回傳的結構中提取 AI 回答的文字
+                const aiText = data.candidates[0].content.parts[0].text;
+                return cleanJSON(aiText);
+            } catch (e) {
+                throw new Error("解析神諭失敗，請再抽一次牌");
+            }
         }
 
         window.updateEnergyUI = function() {
