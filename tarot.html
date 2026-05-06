@@ -355,8 +355,13 @@
         }
 
         async function fetchAI(prompt) {
-            const model = "gemini-1.5-flash";
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const response = await fetch('/api/chat', { // 改成呼叫這裡
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: prompt })
+    });
+    // ...後續邏輯
+}
             
             const systemPrompt = `你是一位專業且溫柔的靈魂占卜師。請針對塔羅牌面進行深度解讀。
 解析必須包含：牌義照見、深度建議與整體總結。
