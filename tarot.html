@@ -33,9 +33,11 @@
         :root { --brand: #fb7185; }
         body { background-color: #050206; color: #f3f4f6; overflow-x: hidden; scroll-behavior: smooth; font-family: 'Noto Sans TC', sans-serif; }
         
+        /* 視覺效果：玻璃擬態 */
         .glass { background: rgba(26, 18, 33, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(251, 113, 133, 0.15); }
         .gold-glow { text-shadow: 0 0 15px rgba(251, 113, 133, 0.6); color: var(--brand); }
         
+        /* 按鈕高級感 */
         .btn-mystic {
             background: linear-gradient(135deg, #fda4af 0%, #fb7185 100%);
             color: #1a1221; font-weight: 800; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -46,13 +48,16 @@
         .btn-mystic:active:not(:disabled) { transform: translateY(0) scale(0.98); }
         .btn-mystic:disabled { background: #333; color: #666; cursor: not-allowed; opacity: 0.7; }
 
+        /* 背景星空動畫 */
         .stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1a1221 0%, #050206 100%); z-index: -1; }
         .star-layer { position: absolute; inset: -50%; background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); opacity: 0.2; animation: starWarp 120s linear infinite; }
         @keyframes starWarp { from { transform: rotate(0deg); } to { transform: rotate(10deg); background-position: -4000px 4000px; } }
 
+        /* 發光心跳動畫 */
         @keyframes heartPulse { 0%, 30%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(251, 113, 133, 0.4)); } 15%, 45% { transform: scale(1.15); filter: drop-shadow(0 0 25px rgba(251, 113, 133, 0.9)); } }
         .pulse-heart { animation: heartPulse 2s infinite ease-in-out; color: var(--brand); display: inline-block; }
 
+        /* 塔羅牌效果 */
         .tarot-card-box { perspective: 1500px; width: 100%; max-width: 220px; margin: 0 auto; }
         .tarot-card { width: 100%; padding-top: 175%; position: relative; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
         .tarot-card.flipped { transform: rotateY(180deg); }
@@ -62,6 +67,7 @@
         .card-img { width: 100%; height: 100%; object-fit: cover; }
         .reversed { transform: rotate(180deg) !important; }
 
+        /* 選牌區域佈局 */
         .fan-area { position: relative; height: 380px; user-select: none; touch-action: none; overflow: visible; margin-top: 40px; }
         .fan-item { position: absolute; left: calc(50% - 40px); width: 80px; height: 135px; transform-origin: center 480px; cursor: pointer; transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: var(--idx); }
         .fan-item:hover { z-index: 1000 !important; transform: rotate(var(--rot)) translateY(-50px) scale(1.2) !important; border-color: var(--brand); box-shadow: 0 15px 40px rgba(251, 113, 133, 0.7); }
@@ -80,6 +86,7 @@
     </div>
     <div class="stars-container"><div class="star-layer"></div></div>
     
+    <!-- 頂部導覽 -->
     <nav class="fixed top-0 w-full z-[60] glass border-b border-white/5 py-4 px-6 transition-all" id="nav">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
@@ -104,6 +111,7 @@
         </div>
     </nav>
 
+    <!-- 標題區域 -->
     <header class="min-h-screen flex flex-col items-center justify-center pt-24 px-4 text-center">
         <div class="max-w-4xl space-y-10">
             <div class="relative inline-block">
@@ -114,7 +122,7 @@
                 <div class="inline-block px-4 py-1 rounded-full border border-brand/30 bg-brand/5 text-brand text-[10px] font-black tracking-[0.3em] animate-pulse uppercase">Doki Doki Soul Tarot</div>
                 <h1 class="text-5xl md:text-8xl serif font-black leading-tight tracking-tighter">看見潛意識中<br><span class="gold-glow">真正的卡點</span></h1>
                 <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed font-serif">
-                    透過生命演化與原型照見，開啟妳的轉化旅程。<br>
+                    透過生命數字演化與原型照見，開啟妳的轉化旅程。<br>
                     每一張牌，都是宇宙寫給妳的私密信件。
                 </p>
             </div>
@@ -122,10 +130,15 @@
                 <a href="#app" onclick="window.switchTab('reading')" class="btn-mystic px-20 py-5 text-xl shadow-lg tracking-widest group font-black">
                     開啟靈魂解析 <i class="fa-solid fa-arrow-right ml-3 transition-transform group-hover:translate-x-2"></i>
                 </a>
+                <div class="flex flex-wrap justify-center gap-4 opacity-70">
+                    <button onclick="window.openModal('modal-waite')" class="text-gray-400 hover:text-brand text-xs border border-white/10 px-6 py-2 rounded-full transition bg-white/5 font-bold">解讀邏輯</button>
+                    <button onclick="window.openModal('modal-guide')" class="text-gray-400 hover:text-brand text-xs border border-white/10 px-6 py-2 rounded-full transition bg-white/5 font-bold">提問指南</button>
+                </div>
             </div>
         </div>
     </header>
 
+    <!-- 核心應用 -->
     <main id="app" class="py-20 px-4 max-w-6xl mx-auto scroll-mt-24">
         <div class="glass rounded-[3rem] overflow-hidden shadow-2xl border border-white/10">
             <div class="flex border-b border-white/5 bg-black/40 font-black text-xs md:text-sm tracking-widest uppercase">
@@ -158,10 +171,13 @@
                                     <div class="grid grid-cols-2 gap-3">
                                         <button class="cat-btn px-4 py-4 rounded-2xl border border-white/10 text-sm font-bold transition hover:bg-brand/10 hover:border-brand/40" onclick="window.setCategory('love', this)">親密關係</button>
                                         <button class="cat-btn px-4 py-4 rounded-2xl border border-white/10 text-sm font-bold transition hover:bg-brand/10 hover:border-brand/40" onclick="window.setCategory('career', this)">事業顯化</button>
+                                        <button class="cat-btn px-4 py-4 rounded-2xl border border-white/10 text-sm font-bold transition hover:bg-brand/10 hover:border-brand/40" onclick="window.setCategory('life', this)">生活/自我</button>
+                                        <button class="cat-btn px-4 py-4 rounded-2xl border border-white/10 text-sm font-bold transition hover:bg-brand/10 hover:border-brand/40" onclick="window.setCategory('spiritual', this)">靈性成長</button>
                                     </div>
                                 </div>
                                 <div><label class="block text-[10px] font-black text-brand mb-4 tracking-[0.3em] uppercase">STEP 2. 提問內容</label>
-                                    <textarea id="q-custom" rows="3" placeholder="請詳細描述妳目前的困惑..." class="w-full bg-mystic-surface border border-white/10 rounded-2xl p-4 text-sm focus:border-brand/50 outline-none transition font-bold resize-none"></textarea>
+                                    <select id="q-suggest" class="w-full bg-mystic-surface border border-white/10 rounded-2xl p-4 text-sm mb-3 outline-none font-bold font-serif" onchange="document.getElementById('q-custom').value=this.value"></select>
+                                    <textarea id="q-custom" rows="3" placeholder="請詳細描述妳目前的狀況..." class="w-full bg-mystic-surface border border-white/10 rounded-2xl p-4 text-sm focus:border-brand/50 outline-none transition font-bold resize-none"></textarea>
                                 </div>
                             </div>
                             <div class="space-y-8">
@@ -182,7 +198,7 @@
                     <!-- 手動選牌區 -->
                     <div id="reading-manual" class="hidden flex flex-col items-center animate-in fade-in zoom-in-95 duration-700">
                         <div id="deck-fan" class="fan-area w-full max-w-5xl"></div>
-                        <div class="w-full mt-8 bg-white/5 border border-white/10 rounded-[2rem] p-8 text-center">
+                        <div class="w-full mt-8 bg-white/5 border border-white/10 rounded-[2rem] p-8 text-center shadow-inner">
                             <div class="flex flex-wrap justify-center gap-4 min-h-[140px]" id="picked-slots"></div>
                         </div>
                         <button id="btn-manual-reveal" class="btn-mystic px-16 py-5 mt-10 hidden animate-pulse font-black tracking-widest" onclick="window.revealManual()">揭曉神諭</button>
@@ -199,9 +215,10 @@
                 </div>
 
                 <!-- 結果顯示區 -->
-                <div id="result" class="hidden space-y-16 animate-in fade-in duration-1000">
+                <div id="result" class="hidden space-y-16 animate-in fade-in duration-1000 pb-10">
                     <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-6">
                         <button onclick="window.backToSetup()" class="text-xs font-black text-gray-400 hover:text-brand transition flex items-center gap-2 bg-white/5 px-6 py-3 rounded-full font-sans"><i class="fa-solid fa-arrow-left"></i> 重新提問</button>
+                        <button onclick="window.toggleFavoriteCurrent()" id="fav-btn" class="text-3xl text-gray-700 hover:text-yellow-400 transition"><i class="fa-regular fa-star"></i></button>
                     </div>
                     <div class="text-center space-y-6">
                         <h2 class="text-5xl md:text-7xl serif font-black gold-glow" id="res-title"></h2>
@@ -210,11 +227,18 @@
                     <div class="flex flex-wrap justify-center gap-10 py-10" id="res-cards"></div>
                     <div id="res-content" class="max-w-4xl mx-auto space-y-12"></div>
                     
+                    <!-- 行動建議區 (已復原) -->
+                    <div id="action-recommendations" class="max-w-4xl mx-auto mt-12 space-y-8">
+                        <h4 class="text-brand text-[10px] font-black tracking-[0.5em] uppercase text-center font-sans">推薦落實的靈魂行動</h4>
+                        <div id="daily-actions-list" class="grid md:grid-cols-3 gap-6"></div>
+                    </div>
+
+                    <!-- 宇宙祝福與行動引導 -->
                     <div class="bg-gradient-to-br from-brand/20 to-mystic-surface p-12 md:p-16 rounded-[3.5rem] border border-brand/30 text-center shadow-3xl">
                         <h3 class="text-3xl serif font-black mb-10 text-brand tracking-widest font-serif">✨ 宇宙的神諭祝福 ✨</h3>
                         <p class="text-2xl font-bold font-serif text-white leading-relaxed mb-12 italic" id="angel-msg"></p>
                         <a href="https://www.instagram.com/dokidokiboomboom.tarot/" target="_blank" class="btn-mystic px-16 py-5 inline-block font-black tracking-widest shadow-2xl text-lg">
-                            與占卜師進行深度解析
+                            同步妳的顯化頻率
                         </a>
                     </div>
                 </div>
@@ -231,9 +255,10 @@
         </div>
     </main>
 
+    <!-- 底部引導區 -->
     <section class="py-32 text-center bg-mystic-bg relative overflow-hidden border-t border-white/5">
         <div class="max-w-3xl mx-auto px-6 relative z-10">
-            <h2 class="text-4xl md:text-5xl serif mb-8 text-white font-black italic tracking-tighter">其實，答案一直都在妳心裡</h2>
+            <h2 class="text-4xl md:text-5xl serif mb-8 text-white font-black italic tracking-tighter font-serif">其實，答案一直都在妳心裡</h2>
             <p class="text-gray-400 mb-16 text-xl font-medium leading-relaxed font-serif">
                 塔羅只是一盞路燈，照見妳早已知曉卻不敢直視的真理。<br>
                 現在，領受宇宙為妳準備的一份顯化力量。
@@ -249,6 +274,10 @@
         </div>
     </section>
 
+    <footer class="py-20 text-center text-gray-600 text-xs font-black tracking-[0.5em] uppercase">
+        <p>© 2024 心小跳塔羅 | DOKI DOKI TAROT LAB</p>
+    </footer>
+
     <!-- 視窗組 -->
     <div id="modal-universe" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="window.closeModal('modal-universe')"></div>
@@ -257,6 +286,32 @@
             <h3 class="text-2xl serif font-black mb-8 gold-glow tracking-widest">來自宇宙的訊息</h3>
             <p id="universe-msg-text" class="text-white text-xl mb-12 font-bold leading-relaxed font-serif italic"></p>
             <button class="btn-mystic w-full py-5 font-black tracking-widest" onclick="window.closeModal('modal-universe')">深信不疑地領受</button>
+        </div>
+    </div>
+
+    <!-- 功能視窗 -->
+    <div id="modal-waite" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="window.closeModal('modal-waite')"></div>
+        <div class="glass relative w-full max-w-lg rounded-[3rem] p-12 text-center" id="modal-waite-content">
+            <h3 class="text-4xl serif font-black mb-8 gold-glow">系統解讀邏輯</h3>
+            <div class="text-left text-gray-300 text-lg space-y-6 font-medium leading-relaxed font-serif">
+                <p>本系統結合了原型照見與「生命數字 1-9」的階段演化邏輯。</p>
+                <p>每一張牌都代表一個能量階段：從 <span class="text-brand">1 的起始</span> 到 <span class="text-brand">9 的整合</span>。這能協助妳定位目前的生命卡點，並獲得具體的轉向建議。</p>
+            </div>
+            <button class="btn-mystic w-full py-5 mt-10 font-black tracking-widest" onclick="window.closeModal('modal-waite')">我明白了</button>
+        </div>
+    </div>
+
+    <div id="modal-guide" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="window.closeModal('modal-guide')"></div>
+        <div class="glass relative w-full max-w-lg rounded-[3rem] p-12 text-center" id="modal-guide-content">
+            <h3 class="text-4xl serif font-black mb-10 gold-glow">如何獲得精準啟示？</h3>
+            <div class="space-y-8 text-left text-gray-300 text-lg font-serif">
+                <div class="flex gap-6 items-start"><div class="w-10 h-10 rounded-full bg-brand/20 flex-shrink-0 flex items-center justify-center text-brand font-black font-sans">01</div><p>加上<span class="text-white font-black">具體時限</span>：例如「未來三個月」。</p></div>
+                <div class="flex gap-6 items-start"><div class="w-10 h-10 rounded-full bg-brand/20 flex-shrink-0 flex items-center justify-center text-brand font-black font-sans">02</div><p>詢問<span class="text-white font-black">心態調整</span>：而非詢問「結果好壞」。</p></div>
+                <div class="flex gap-6 items-start"><div class="w-10 h-10 rounded-full bg-brand/20 flex-shrink-0 flex items-center justify-center text-brand font-black font-sans">03</div><p>描述<span class="text-white font-black">現狀</span>：能量是基於真實的連結。</p></div>
+            </div>
+            <button class="btn-mystic w-full py-5 mt-12 font-black tracking-widest" onclick="window.closeModal('modal-guide')">準備好了</button>
         </div>
     </div>
 
@@ -274,10 +329,11 @@
     </div>
 
     <script>
-        // --- 核心配置：金鑰現在由 api/chat.js 處理，前端不再存放 ---
+        // 配置：預覽測試用
+        const apiKey = ""; 
         const IMAGE_BASE = "https://www.sacred-texts.com/tarot/pkt/img/";
         
-        window.state = { tab: 'daily', spread: 1, energy: 3, history: [], selectedCards: [], isDrawing: false };
+        window.state = { tab: 'daily', spread: 1, energy: 3, history: [], method: 'auto', selectedCards: [], isDrawing: false };
 
         const tarotData = (() => {
             const majors = ["愚者","魔術師","女祭司","女皇","皇帝","教皇","戀人","戰車","力量","隱者","命運之輪","正義","倒吊人","死神","節制","惡魔","高塔","星星","月亮","太陽","審判","世界"];
@@ -298,27 +354,29 @@
             } catch (e) { throw new Error("解析失敗"); }
         }
 
-        // --- 第二步：修改後的 fetchAI 函數，呼叫妳自己的 Vercel 後端 ---
         async function fetchAI(prompt) {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: prompt })
-            });
-
-            if (!response.ok) {
-                throw new Error("宇宙能量不穩，請確認 Vercel 後台金鑰是否設定正確");
-            }
-
-            const data = await response.json();
+            const model = "gemini-1.5-flash";
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             
-            try {
-                // 從後端回傳的結構中提取 AI 回答的文字
-                const aiText = data.candidates[0].content.parts[0].text;
-                return cleanJSON(aiText);
-            } catch (e) {
-                throw new Error("解析神諭失敗，請再抽一次牌");
-            }
+            const systemPrompt = `你是一位專業且溫柔的靈魂占卜師。請針對塔羅牌面進行深度解讀。
+解析必須包含：牌義照見、深度建議與整體總結。
+請嚴格以繁體中文 JSON 回傳結果：
+{
+  "interpretations": [{"keywords":[],"meaning":"","advice":""}],
+  "summary": "整體能量總結",
+  "soulMantra": "靈魂格言",
+  "dailyActions": ["行動建議1", "行動建議2", "行動建議3"]
+}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: systemPrompt + "\n\n內容：" + prompt }] }],
+                generationConfig: { responseMimeType: "application/json" }
+            };
+
+            const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            if (!response.ok) throw new Error(`API Error ${response.status}`);
+            const data = await response.json();
+            return cleanJSON(data.candidates[0].content.parts[0].text);
         }
 
         window.updateEnergyUI = function() {
@@ -344,11 +402,9 @@
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('daily-card-front').innerHTML = `<img src="${IMAGE_BASE}${card.id}.jpg" class="card-img ${card.isRev?'reversed':''}">`;
                 document.getElementById('daily-card-element').classList.add('flipped');
-                setTimeout(() => displayResult("今日靈魂照見", "今日焦點能量", [card], ["核心能量"], ai), 1000);
-            } catch(e) { 
-                document.getElementById('loading').classList.add('hidden'); window.showToast("連線失敗"); 
-                window.state.energy++; window.updateEnergyUI(); 
-            } finally { window.state.isDrawing = false; }
+                setTimeout(() => displayResult("今日靈魂照見", "今日能量焦點", [card], ["核心能量"], ai), 1000);
+            } catch(e) { document.getElementById('loading').classList.add('hidden'); window.showToast("連線失敗"); window.state.energy++; window.updateEnergyUI(); }
+            finally { window.state.isDrawing = false; }
         };
 
         window.startReading = async function() {
@@ -373,7 +429,7 @@
             window.state.selectedCards = [];
             const fan = document.getElementById('deck-fan'), slots = document.getElementById('picked-slots');
             fan.innerHTML = ''; slots.innerHTML = '';
-            for(let i=0; i<window.state.spread; i++) slots.innerHTML += `<div class="w-16 h-24 border-2 border-dashed border-white/10 rounded-xl flex items-center justify-center text-[10px] text-gray-600">#${i+1}</div>`;
+            for(let i=0; i<window.state.spread; i++) slots.innerHTML += `<div class="w-16 h-24 border-2 border-dashed border-white/10 rounded-xl flex items-center justify-center text-[10px] text-gray-600 font-sans">#${i+1}</div>`;
             const currentDeck = [...tarotData].sort(() => Math.random() - 0.5);
             for(let i=0; i<35; i++) {
                 const rotate = -60 + (i * (120 / 34)), item = document.createElement('div');
@@ -414,15 +470,27 @@
                     <p class="mt-4 text-sm font-black text-white font-sans">${c.name} ${c.isRev?'(逆位)':'(正位)'}</p>
                 </div>
             `).join('');
+            
+            // 牌面解析
             document.getElementById('res-content').innerHTML = ai.interpretations.map((item, i) => `
                 <div class="glass p-10 rounded-[2.5rem] space-y-8 animate-in slide-in-from-bottom-6">
-                    <h3 class="text-3xl serif font-black">【${pos[i]}】 ${cards[i].name}${cards[i].isRev ? ' (逆位)' : ' (正位)'}</h3>
-                    <div class="space-y-8 text-lg font-bold font-serif">
-                        <div class="border-l-2 border-brand/30 pl-6"><h4 class="text-xs font-black text-brand mb-2 uppercase">能量照見</h4><p class="text-gray-200">${item.meaning}</p></div>
+                    <h3 class="text-3xl serif font-black font-serif">【${pos[i]}】 ${cards[i].name}${cards[i].isRev ? ' (逆位)' : ' (正位)'}</h3>
+                    <div class="space-y-8 text-lg font-bold font-serif leading-relaxed">
+                        <div class="border-l-2 border-brand/30 pl-6"><h4 class="text-xs font-black text-brand mb-2 uppercase font-sans">能量照見</h4><p class="text-gray-200">${item.meaning}</p></div>
                         <div class="bg-brand/5 p-8 rounded-3xl border border-brand/10 font-sans"><h4 class="text-xs font-black text-brand mb-2 uppercase">深度建議</h4><p class="text-white">${item.advice}</p></div>
                     </div>
                 </div>
-            `).join('') + `<div class="text-center pt-20"><h3 class="text-4xl serif font-black gold-glow mb-10">能量整合結論</h3><p class="text-gray-300 text-xl font-bold font-serif max-w-2xl mx-auto">${ai.summary}</p><div class="mt-12 inline-block bg-white/5 p-12 rounded-[3.5rem] border border-white/10 italic text-3xl font-black text-brand shadow-2xl">「${ai.soulMantra}」</div></div>`;
+            `).join('') + `<div class="text-center pt-20"><h3 class="text-4xl serif font-black gold-glow mb-10 font-serif">能量整合結論</h3><p class="text-gray-300 text-xl font-bold font-serif max-w-2xl mx-auto leading-relaxed">${ai.summary}</p><div class="mt-12 inline-block bg-white/5 p-12 rounded-[3.5rem] border border-white/10 italic text-3xl font-black text-brand shadow-2xl">「${ai.soulMantra}」</div></div>`;
+            
+            // 補回行動建議渲染
+            const actionList = document.getElementById('daily-actions-list');
+            actionList.innerHTML = (ai.dailyActions || []).map((a,idx) => `
+                <div class="glass p-8 rounded-3xl border-white/5 shadow-xl animate-in slide-in-from-bottom-4">
+                    <span class="text-brand/30 font-black italic text-4xl">0${idx+1}</span>
+                    <p class="text-white font-bold mt-4 font-serif">${a}</p>
+                </div>
+            `).join('');
+
             document.getElementById('angel-msg').innerText = universeMessages[Math.floor(Math.random() * universeMessages.length)];
             window.scrollTo({ top: document.getElementById('app').offsetTop, behavior: 'smooth' });
         }
@@ -448,7 +516,15 @@
         window.getPositions = n => n === 1 ? ["核心解方"] : (n === 3 ? ["過去之因", "現在卡點", "未來顯化"] : ["現狀", "阻礙", "潛意識", "基礎", "近期趨勢", "指引"]);
         window.setSpread = (n, b) => { window.state.spread = n; document.querySelectorAll('.spread-btn').forEach(x=>x.classList.remove('bg-brand/10', 'border-brand')); b.classList.add('bg-brand/10', 'border-brand'); };
         window.setMethod = (m, b) => { window.state.method = m; document.querySelectorAll('.method-btn').forEach(x=>x.classList.remove('bg-brand/10', 'border-brand')); b.classList.add('bg-brand/10', 'border-brand'); };
-        window.setCategory = (c, b) => { document.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('bg-brand/10', 'border-brand')); b.classList.add('bg-brand/10', 'border-brand'); };
+        window.setCategory = (c, b) => { 
+            document.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('bg-brand/10', 'border-brand')); 
+            b.classList.add('bg-brand/10', 'border-brand');
+            const q = { 
+                love: ["未來三個月，我該如何調整心態以吸引適合的伴侶？", "這段關係目前的能量卡點在哪裡？我該如何突破？"], 
+                career: ["未來三個月內，我在職場上的發展潛力與轉機為何？", "目前工作的卡點源自於哪種能量？我該如何轉向？"] 
+            };
+            document.getElementById('q-suggest').innerHTML = '<option value="">提問參考 (快速填寫)</option>' + (q[c] || []).map(x => `<option value="${x}">${x}</option>`).join('');
+        };
 
         document.addEventListener('DOMContentLoaded', () => { 
             window.updateEnergyUI(); window.setSpread(1, document.querySelector('.spread-btn'));
