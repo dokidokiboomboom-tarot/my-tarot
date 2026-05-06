@@ -273,7 +273,7 @@
             "ar16": { name: "高塔", upright: "突發的變故、崩毀與覺醒。雖然震驚，但那些虛假的根基必須倒塌，才能重建真實。", reversed: "逃過一劫、延遲的崩解或害怕混亂。妳可能正在勉強維持一個即將倒塌的幻象。", advice: ["接受瓦解", "清除虛假", "重新站起"], angel: "崩壞之後，迎接妳的是更純粹、更堅固的未來。" },
             "ar17": { name: "星星", upright: "希望、療癒與星光指引。長夜將盡，妳的夢想正受到祝福，請保持信心與平靜。", reversed: "失望、迷惘或信心喪失。妳可能感到疲憊不堪，暫時看不見前方的路標。", advice: ["保持信心", "身心療癒", "分享愛"], angel: "希望的光芒永不熄滅，它就在妳的眼底。" },
             "ar18": { name: "月亮", upright: "幻覺、恐懼與潛意識。妳正進入一段迷霧期，請信任直覺，而非大腦的焦慮。", reversed: "迷霧散去、看清恐懼或情緒平復。妳開始看穿那些嚇唬妳的幻影，找回方向。", advice: ["面對恐懼", "信任直覺", "保持平靜"], angel: "在黑夜中漫步，妳的直覺就是最亮的指南針。" },
-            "ar19": { name: "太陽", upright: "成功、喜悅與充滿能量。所有的努力都將迎來豐收，陽光照亮了妳生命中每一個角落。", reversed: "暫時的陰霾、過度樂觀或能量低落。雖然有些遲滯，但成功的種子依然在妳手中。", advice: ["盡情歡笑", "分享喜悅", "保持熱熱情"], angel: "妳就是溫暖的光源，去照亮周遭的人吧。" },
+            "ar19": { name: "太陽", upright: "成功、喜悅與充滿能量。所有的努力都將迎來豐收，陽光照亮了妳生命中每一個角落。", reversed: "暫時的陰霾、過度樂觀或能量低落。雖然有些遲滯，但成功的種子依然在妳手中。", advice: ["盡情歡笑", "分享喜悅", "保持熱情"], angel: "妳就是溫暖的光源，去照亮周遭的人吧。" },
             "ar20": { name: "審判", upright: "覺醒、召喚與重生。妳聽見了靈魂的呼喚，是時候對過去做個總結，邁向新階段了。", reversed: "自我譴責、逃避召喚或錯過時機。妳可能還在猶豫，不敢承認那個已經改變的自己。", advice: ["聆聽呼喚", "寬恕過去", "果斷轉化"], angel: "現在就是新生的時刻，勇敢地宣告妳的歸來。" },
             "ar21": { name: "世界", upright: "圓滿、完成與新的旅程。一個階段完美結束，妳已經準備好迎接下一個更高層次的挑戰。", reversed: "未完成的遺憾、阻礙或停滯。雖然快要到達終點，但最後的一里路仍需要妳去跨越。", advice: ["慶祝圓滿", "整合經驗", "跨國視野"], angel: "整個宇宙都在為妳的成就而歡呼。" },
             "wa01": { name: "權杖一", upright: "全新的熱情種子。一個新計畫或新開始正等著妳投入活力。", reversed: "行動力受挫。妳的想法很好，但目前的環境或熱情尚未準備就緒。", advice: ["火速行動", "激發熱情", "勇敢開創"], angel: "能量正在匯聚，準備燃燒妳的熱情吧。" }
@@ -371,10 +371,8 @@
             let finalNum = prefix === 'ar' ? numInt : numInt; 
 
             if (useBackup) {
-                // 備援源處理 (SACRED-TEXTS 通常需要 ar01.jpg 這種雙位格式)
                 return `${BACKUP_IMAGE_BASE}${id}.jpg`;
             } else {
-                // 主源處理 (GitHub)
                 let folder = {"ar":"major", "wa":"wands", "cu":"cups", "sw":"swords", "pe":"pentacles"}[prefix];
                 return `${PRIMARY_IMAGE_BASE}${folder}/${finalNum}.jpg`;
             }
@@ -427,7 +425,6 @@
             document.getElementById('result').classList.add('hidden');
             document.getElementById(`panel-${t}`).classList.remove('hidden');
             
-            // 更新切換鈕樣式
             document.querySelectorAll('[id^="tab-"]').forEach(btn => {
                 btn.className = "flex-1 min-w-[120px] py-6 border-r border-white/5 hover:bg-brand/5 transition-all text-gray-500 font-bold";
             });
@@ -440,7 +437,6 @@
             }
             if (t === 'history') renderHistory();
             
-            // 初始載入時不捲動
             if (!skipScroll) {
                 window.scrollTo({ top: document.getElementById('app').offsetTop - 100, behavior: 'smooth' });
             }
@@ -459,7 +455,6 @@
                     # ${ex}
                 </button>`).join('');
             
-            // 修正捲動邏輯：確保畫面精確對齊提問區
             questionArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
         };
 
@@ -536,10 +531,28 @@
             const intentDisplay = document.getElementById('intent-display');
             if (ai.intent) { intentDisplay.innerText = `「 ${ai.intent} 」`; intentDisplay.classList.remove('hidden'); }
             else intentDisplay.classList.add('hidden');
-            document.getElementById('res-cards').innerHTML = cards.map((c, i) => `<div class="text-center w-36 md:w-44 flex-shrink-0 fade-in" style="animation-delay: ${i*0.2}s"><p class="text-[9px] font-black text-brand mb-2 uppercase tracking-widest">${pos[i] || '指引'}</p><div class="rounded-xl overflow-hidden shadow-2xl aspect-[10/17.5] bg-[#1a1221] border border-white/10"><img src="${getImageUrl(c.id)}" data-id="${c.id}" class="w-full h-full object-cover ${c.isRev?'reversed':''}" onerror="window.handleImageError(this, '${c.name}')"></div><p class="mt-3 text-sm font-bold text-white">${c.name} ${c.isRev?'(逆位)':'(正位)'}</p></div>`).join('');
-            document.getElementById('res-content').innerHTML = ai.interpretations.map((item, i) => `<div class="glass p-8 rounded-[2rem] border-brand/20 mb-4 font-serif text-lg leading-relaxed text-gray-200"><h3 class="text-xs font-black text-brand uppercase mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand rounded-full"></span>【${pos[i] || '核心'}】能量</h3>${item.meaning}</div>`).join('') + `<p class="text-center italic text-xl py-6 font-serif text-gray-400">${ai.summary}</p>`;
-            document.getElementById('action-list').innerHTML = ai.actions.map(a => `<li class="flex gap-2 text-gray-300"><span>✦</span><span>${a}</span></li>`).join('');
+            
+            document.getElementById('res-cards').innerHTML = cards.map((c, i) => `
+                <div class="text-center w-36 md:w-44 flex-shrink-0 fade-in" style="animation-delay: ${i*0.2}s">
+                    <p class="text-[9px] font-black text-brand mb-2 uppercase tracking-widest">${pos[i] || '指引'}</p>
+                    <div class="rounded-xl overflow-hidden shadow-2xl aspect-[10/17.5] bg-[#1a1221] border border-white/10">
+                        <img src="${getImageUrl(c.id)}" data-id="${c.id}" class="w-full h-full object-cover ${c.isRev?'reversed':''}" onerror="window.handleImageError(this, '${c.name}')">
+                    </div>
+                    <p class="mt-3 text-sm font-bold text-white">${c.name} ${c.isRev?'(逆位)':'(正位)'}</p>
+                </div>`).join('');
+            
+            document.getElementById('res-content').innerHTML = ai.interpretations.map((item, i) => `
+                <div class="glass p-8 rounded-[2rem] border-brand/20 mb-4 font-serif text-lg leading-relaxed text-gray-200">
+                    <h3 class="text-xs font-black text-brand uppercase mb-4 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-brand rounded-full"></span>【${pos[i] || '核心'}】能量
+                    </h3>
+                    ${item.meaning}
+                </div>`).join('') + `<p class="text-center italic text-xl py-6 font-serif text-gray-400">${ai.summary}</p>`;
+            
+            document.getElementById('action-list').innerHTML = (ai.actions || []).map(a => `<li class="flex gap-2 text-gray-300"><span>✦</span><span>${a}</span></li>`).join('');
             document.getElementById('archangel-msg').innerText = `「 ${ai.archangelMsg} 」`;
+            
+            window.state.currentDraw = { intent: ai.intent || "當下的能量狀態", cards: cards };
             window.scrollTo({ top: document.getElementById('app').offsetTop - 50, behavior: 'smooth' });
         }
 
@@ -555,7 +568,18 @@
         };
 
         function saveToHistory(type, cards, res) {
-            const entry = { id: Date.now(), type, cards, intent: res.intent || '', date: new Date().toLocaleString(), summary: res.summary };
+            // 儲存完整的 AI 解讀數據，以便後續還原點擊
+            const entry = { 
+                id: Date.now(), 
+                type: type, 
+                cards: cards, 
+                intent: res.intent || '', 
+                date: new Date().toLocaleString(), 
+                summary: res.summary,
+                interpretations: res.interpretations,
+                actions: res.actions,
+                archangelMsg: res.archangelMsg
+            };
             window.state.history.unshift(entry);
             if (window.state.history.length > 20) window.state.history.pop();
             localStorage.setItem(`${APP_ID}_history`, JSON.stringify(window.state.history));
@@ -563,12 +587,71 @@
 
         function renderHistory() {
             const list = document.getElementById('history-list');
-            if (window.state.history.length === 0) { list.innerHTML = `<div class="text-center py-20 text-gray-600 italic">目前尚無能量軌跡...</div>`; return; }
-            list.innerHTML = window.state.history.map(h => `<div class="glass p-6 rounded-2xl border-white/5 flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-brand/30 transition-all group"><div class="flex -space-x-4">${h.cards.map(c => `<img src="${getImageUrl(c.id)}" class="w-12 h-20 rounded shadow-lg border border-white/10 object-cover ${c.isRev?'reversed':''}">`).join('')}</div><div class="flex-1"><div class="flex items-center gap-2 mb-1"><span class="text-[10px] font-black text-brand uppercase tracking-tighter">${h.type}</span><span class="text-[10px] text-gray-500">${h.date}</span></div><h4 class="text-white font-bold mb-1">${h.intent || '隨感占卜'}</h4><p class="text-[11px] text-gray-400 italic">${h.cards.map(c => c.name + (c.isRev?'(逆)':'(正)')).join(' / ')}</p></div><button onclick="window.deleteHistory(${h.id})" class="opacity-0 group-hover:opacity-100 p-2 text-gray-600 hover:text-red-400 transition-all"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`).join('');
+            if (window.state.history.length === 0) { 
+                list.innerHTML = `<div class="text-center py-20 text-gray-600 italic">目前尚無能量軌跡...</div>`; 
+                return; 
+            }
+            list.innerHTML = window.state.history.map(h => `
+                <div class="glass p-6 rounded-2xl border-white/5 flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-brand/30 transition-all group cursor-pointer" onclick="window.viewHistoryDetail(${h.id})">
+                    <div class="flex -space-x-4">
+                        ${h.cards.map(c => `
+                            <div class="w-12 h-20 rounded shadow-lg border border-white/10 overflow-hidden bg-black/50">
+                                <img src="${getImageUrl(c.id)}" data-id="${c.id}" class="w-full h-full object-cover ${c.isRev?'reversed':''}" onerror="window.handleImageError(this, '${c.name}')">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-[10px] font-black text-brand uppercase tracking-tighter">${h.type}</span>
+                            <span class="text-[10px] text-gray-500">${h.date}</span>
+                        </div>
+                        <h4 class="text-white font-bold mb-1">${h.intent || '隨感占卜'}</h4>
+                        <p class="text-[11px] text-gray-400 italic">${h.cards.map(c => c.name + (c.isRev?'(逆)':'(正)')).join(' / ')}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="event.stopPropagation(); window.deleteHistory(${h.id})" class="p-3 text-gray-600 hover:text-red-400 transition-all">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        window.deleteHistory = (id) => { window.state.history = window.state.history.filter(h => h.id !== id); localStorage.setItem(`${APP_ID}_history`, JSON.stringify(window.state.history)); renderHistory(); window.showToast("已刪除該筆紀錄"); };
-        window.clearHistory = () => { if(confirm("確定要清除所有能量軌跡嗎？")) { window.state.history = []; localStorage.removeItem(`${APP_ID}_history`); renderHistory(); window.showToast("軌跡已歸零"); } };
+        window.viewHistoryDetail = (id) => {
+            const record = window.state.history.find(h => h.id === id);
+            if (!record) return;
+            
+            const isDaily = record.type.includes('能量照見');
+            const pos = isDaily ? ["核心能量"] : ["過去因果", "現在卡點", "未來顯化"];
+            
+            // 還原顯示內容
+            displayResult(record.type, record.cards, pos, {
+                intent: record.intent,
+                interpretations: record.interpretations,
+                actions: record.actions,
+                archangelMsg: record.archangelMsg,
+                summary: record.summary,
+                type: isDaily ? 'DAILY' : 'READING'
+            });
+            window.showToast("已還原當次能量軌跡");
+        };
+
+        window.deleteHistory = (id) => { 
+            window.state.history = window.state.history.filter(h => h.id !== id); 
+            localStorage.setItem(`${APP_ID}_history`, JSON.stringify(window.state.history)); 
+            renderHistory(); 
+            window.showToast("已刪除該筆紀錄"); 
+        };
+        
+        window.clearHistory = () => { 
+            if(confirm("確定要清除所有能量軌跡嗎？")) { 
+                window.state.history = []; 
+                localStorage.removeItem(`${APP_ID}_history`); 
+                renderHistory(); 
+                window.showToast("軌跡已歸零"); 
+            } 
+        };
+
         window.setDrawMode = m => {
             window.state.drawMode = m;
             document.getElementById('mode-auto').className = m === 'auto' ? 'text-[10px] px-3 py-1 rounded-full bg-brand text-black font-black' : 'text-[10px] px-3 py-1 rounded-full bg-white/10 text-gray-400 font-black';
@@ -595,9 +678,8 @@
                 grid.appendChild(btn);
             });
             
-            // 確保初始化時停留在頂端
             window.scrollTo(0, 0);
-            window.switchTab('daily', true); // 第二個參數設為 true 以跳過捲動動畫
+            window.switchTab('daily', true); 
         });
     </script>
 </body>
