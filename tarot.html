@@ -129,7 +129,7 @@
                 <div class="glass p-10 rounded-[3rem] border-brand/10 hover:border-brand/40 transition-all group">
                     <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition-transform origin-left">☾</div>
                     <h3 class="text-xl font-black text-white mb-4">靈感訊息</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">有時候不是發生大事，而是整個人悶悶卡卡的。這區比較像靈魂 debug，看看到底是哪條線又打結了。</p>
+                    <p class="text-gray-400 text-sm leading-relaxed">有時候不是發生大事，而是整個人悶悶卡卡的.這區比較像靈魂 debug，看看到底是哪條線又打結了。</p>
                 </div>
             </div>
         </div>
@@ -230,13 +230,6 @@
                     
                     <div id="intent-display" class="max-w-2xl mx-auto text-center italic text-gray-400 border-l-2 border-brand/30 pl-6 py-2 hidden font-serif text-lg"></div>
 
-                    <div id="ai-prompt-area" class="text-center hidden">
-                        <button onclick="window.copyAIPrompt()" class="inline-flex items-center gap-2 bg-white/10 border border-white/10 px-8 py-4 rounded-full text-sm font-bold text-white hover:bg-brand/20 hover:text-brand transition-all shadow-xl">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> 複製 AI 深度對談指令
-                        </button>
-                        <p class="text-[10px] text-gray-500 mt-3 italic">複製後貼給 AI 助理，獲得針對性的「三位一體」靈魂解析</p>
-                    </div>
-
                     <div class="flex flex-wrap justify-center gap-6 md:gap-12 py-10" id="res-cards"></div>
                     
                     <!-- 牌卡總結區塊 -->
@@ -249,7 +242,15 @@
 
                     <div id="res-content" class="max-w-4xl mx-auto space-y-12"></div>
                     
-                    <div id="extra-content" class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+                    <!-- 複製 AI 指令按鈕移動到此處 -->
+                    <div id="ai-prompt-area" class="text-center hidden pt-4">
+                        <button onclick="window.copyAIPrompt()" class="inline-flex items-center gap-2 bg-white/10 border border-white/10 px-8 py-4 rounded-full text-sm font-bold text-white hover:bg-brand/20 hover:text-brand transition-all shadow-xl">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 複製 AI 深度對談指令
+                        </button>
+                        <p class="text-[10px] text-gray-500 mt-3 italic">複製後貼給 AI 助理，獲得針對性的「三位一體」靈魂解析</p>
+                    </div>
+
+                    <div id="extra-content" class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 pt-8">
                         <div class="glass p-8 rounded-[2.5rem] border-brand/20"><h3 class="text-brand font-black mb-6 text-sm italic"><i class="fa-solid fa-list-check"></i> 具體行動建議</h3><ul id="action-list" class="space-y-4 text-gray-200 font-serif"></ul></div>
                         <div class="glass p-8 rounded-[2.5rem] border-brand/20 bg-brand/5"><h3 class="text-brand font-black mb-6 text-sm italic"><i class="fa-solid fa-dove"></i> 靈魂叮嚀</h3><div id="archangel-msg" class="italic text-white font-medium font-serif leading-relaxed"></div></div>
                     </div>
@@ -265,7 +266,7 @@
                     <div id="secret-zone" class="max-w-4xl mx-auto pt-16 border-t border-white/5 space-y-10">
                         <div class="text-center space-y-4">
                             <h3 class="text-2xl serif font-black gold-glow">結束前的靈魂祝福</h3>
-                            <p class="text-gray-500 italic text-sm text-gray-400">除了牌陣，宇宙還有一句私密的話想告訴妳。<br>點擊下方卡片領取妳的「宇宙神祕祝福」。</p>
+                            <p class="text-gray-400 italic text-sm text-gray-400">除了牌陣，宇宙還有一句私密的話想告訴妳。<br>點擊下方卡片領取妳的「宇宙神祕祝福」。</p>
                         </div>
                         <div class="flex justify-center">
                             <div id="secret-card-container" onclick="window.drawSecretCard()" class="secret-card-float cursor-pointer w-48 h-72 glass rounded-2xl border-brand/40 flex flex-col items-center justify-center p-6 text-center space-y-4 group hover:border-brand shadow-2xl transition-all">
@@ -322,8 +323,6 @@
         const BACKUP_IMAGE_BASE = "https://www.sacred-texts.com/tarot/pkt/img/"; 
         const APP_ID = 'dokidokiboomboom-tarot-v5';
 
-        const MAJOR_NAMES = ["愚者", "魔術師", "女祭司", "女皇", "皇帝", "教皇", "戀人", "戰車", "力量", "隱者", "命運之輪", "正義", "倒吊人", "死神", "節制", "惡魔", "高塔", "星星", "月亮", "太陽", "審判", "世界"];
-        
         // --- 完整 78 張偉特牌義在地資料庫 ---
         const TAROT_DATA = {
             "ar00": { name: '愚者', upright: '新的開始、冒險、自由感。妳正站在一個新入口，別急著要完整地圖，先確認自己是否真的想出發。', reversed: '衝動、逃避、不看後果。妳可能只想離開現狀，卻還沒想清楚下一步要去哪。' },
@@ -421,20 +420,20 @@
                 title: "事業轉折", icon: "fa-briefcase", color: "#60a5fa", 
                 examples: [
                     "未來三個月，轉職面試準備有什麼核心建議？",
-                    "未來半年內，目前的職場瓶頸該如何突破（建議）？",
-                    "下個月開始，如何提升工作能見度（建議）以獲得晉升？",
-                    "未來三個月，這項創業計畫的第一步該注意什麼建議？",
+                    "未來半年，目前的職場瓶頸該如何突破（建議）？",
+                    "下個月開始，如何提升工作能見度與競爭力（建議）？",
+                    "未來三個月，這項創業計畫的第一步該注意什麼？",
                     "本季工作中，如何調頻（建議）才能找回熱情？"
                 ] 
             },
             money: { 
                 title: "財富豐盛", icon: "fa-coins", color: "#fbbf24", 
                 examples: [
-                    "未來一個月，我該如何做（建議）能顯化更多財富收入？",
+                    "未來一個月，如何做（建議）能顯化更多財富收入？",
                     "未來三個月，這項具體投資該注意什麼（建議）？",
-                    "現在此刻，我該如何清理（建議）金錢匱乏感？",
+                    "現在此刻，該如何清理金錢匱乏感以提升顯化力？",
                     "下半年內，如何準備（建議）來抓住額外收入機會？",
-                    "未來一季，優化目前財務模式的靈魂建議？"
+                    "未來一季，優化目前理財模式的靈魂建議？"
                 ] 
             },
             growth: { 
@@ -450,11 +449,11 @@
             general: { 
                 title: "綜合指引", icon: "fa-compass", color: "#a78bfa", 
                 examples: [
-                    "下週內，面對目前的生活變動該如何應對建議？",
-                    "未來一個月，如何維持高頻率（建議）以迎接轉機？",
+                    "下週內，面對目前的生活變動該如何應對？",
+                    "未來一個月，如何維持高頻率以迎接轉機？",
                     "接下來三個月，保護自身能量場的具體建議？",
                     "現在此刻，為了讓生活更好（建議）該做出什麼改變？",
-                    "未來三個月，我目前最該優先關注哪部分的建議？"
+                    "未來三個月，我目前最該優先關注哪一部分的建議？"
                 ] 
             }
         };
@@ -641,7 +640,7 @@
                 const res = generateLocalAnalysis(intent, cards, window.state.currentCategory);
                 window.state.currentDraw = { intent: intent || "當下的能量狀態", cards };
                 saveToHistory("深度解析", cards, { ...res, intent: intent || "當下的能量狀態" });
-                displayResult("生命演化解析", cards, ["過去能量", "現在卡點", "行動建議"], { ...res, intent, type: 'READING' });
+                displayResult("靈魂路徑解析", cards, ["過去能量", "現在卡點", "行動建議"], { ...res, intent, type: 'READING' });
                 document.getElementById('loading').classList.add('hidden');
                 window.showToast("靈魂對話已開啟");
             }, 1500);
