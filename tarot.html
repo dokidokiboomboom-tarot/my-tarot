@@ -61,6 +61,7 @@
     <div id="toast-container" class="msg-box"></div>
     <div class="stars-container"><div class="star-layer"></div></div>
     
+    <!-- 導覽列 -->
     <nav class="fixed top-0 w-full z-[60] glass border-b border-white/5 py-4 px-6 transition-all">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
@@ -90,6 +91,7 @@
         </div>
     </header>
 
+    <!-- 塔羅介紹 -->
     <section id="intro" class="py-24 px-6 max-w-5xl mx-auto space-y-20">
         <div class="grid md:grid-cols-2 gap-16 items-center">
             <div class="space-y-6">
@@ -128,8 +130,10 @@
         </div>
     </section>
 
+    <!-- 主占卜區 -->
     <main id="app" class="py-20 px-4 max-w-6xl mx-auto scroll-mt-24">
         <div class="glass rounded-[3rem] overflow-hidden shadow-2xl border border-white/10">
+            <!-- 選項切換 -->
             <div class="flex border-b border-white/5 bg-black/40 font-black text-[10px] md:text-sm tracking-widest uppercase overflow-x-auto">
                 <button id="tab-daily" onclick="window.switchTab('daily')" class="flex-1 min-w-[120px] py-6 border-r border-white/5 hover:bg-brand/5 transition-all">每日能量</button>
                 <button id="tab-reading" onclick="window.switchTab('reading')" class="flex-1 min-w-[120px] py-6 border-r border-white/5 hover:bg-brand/5 transition-all">深度解惑</button>
@@ -137,6 +141,7 @@
             </div>
             
             <div class="p-6 md:p-16 min-h-[600px] relative">
+                <!-- 每日一抽 -->
                 <div id="panel-daily" class="tab-panel flex flex-col items-center text-center">
                     <h2 class="text-4xl serif font-black mb-4">今日能量照見</h2>
                     <p class="text-gray-500 mb-8 font-serif italic">每日領取一次，作為妳今日行動的能量指引</p>
@@ -149,6 +154,7 @@
                     <button id="btn-draw-daily" onclick="window.drawDaily()" class="btn-mystic px-16 py-4 font-black tracking-widest">開啟今日指引</button>
                 </div>
 
+                <!-- 深度解析 -->
                 <div id="panel-reading" class="tab-panel hidden flex flex-col items-center">
                     <div id="reading-step-1" class="w-full space-y-10">
                         <div class="text-center"><h2 class="text-4xl serif font-black mb-4">選擇感應類別</h2><p class="text-gray-500 italic text-sm">讓星圖根據妳的情況進行深層調頻</p></div>
@@ -182,6 +188,7 @@
                     </div>
                 </div>
 
+                <!-- 結果展示區 -->
                 <div id="result" class="hidden space-y-16 pb-12">
                     <div class="text-center space-y-4">
                         <span id="res-badge" class="bg-brand/20 text-brand px-4 py-1 rounded-full text-[10px] font-black tracking-widest uppercase italic">SOUL GUIDANCE</span>
@@ -221,6 +228,7 @@
                         </p>
                     </div>
 
+                    <!-- 宇宙神祕祝福 -->
                     <div id="secret-zone" class="max-w-4xl mx-auto pt-16 border-t border-white/5 space-y-10">
                         <div class="text-center space-y-4">
                             <h3 class="text-2xl serif font-black gold-glow">結束前的靈魂祝福</h3>
@@ -233,16 +241,24 @@
                         </div>
                     </div>
 
-                    <div class="text-center pt-10 space-y-8 border-t border-white/5">
+                    <div class="text-center pt-10 space-y-10 border-t border-white/5">
+                        <!-- 引導文字 -->
+                        <div class="max-w-lg mx-auto">
+                            <p class="text-gray-400 text-sm md:text-base font-serif italic leading-relaxed">
+                                如果這組牌有準到讓妳想罵髒話，那代表妳真的該面對了。<br>
+                                想 <span class="text-brand font-black">deeper</span> 一點，也可以來找我做個人占卜。
+                            </p>
+                        </div>
                         <div class="flex flex-col sm:flex-row gap-4 justify-center">
                             <button onclick="window.switchTab('reading')" class="btn-mystic px-12 py-4 shadow-lg">再次連結能量</button>
                             <a href="https://www.instagram.com/dokidokiboomboom.tarot/" target="_blank" class="glass px-12 py-4 rounded-full font-black border-brand/40 text-brand hover:bg-brand/10 transition-all flex items-center justify-center gap-2 text-sm">
-                                <i class="fa-brands fa-instagram text-xl"></i> 追蹤 IG 預約深度占卜
+                                <i class="fa-brands fa-instagram text-xl"></i> 預約個人深度占卜
                             </a>
                         </div>
                     </div>
                 </div>
 
+                <!-- 歷史紀錄 -->
                 <div id="panel-history" class="tab-panel hidden">
                     <div class="flex justify-between items-end mb-10 border-b border-white/10 pb-6">
                         <h2 class="text-4xl serif font-black">能量軌跡</h2>
@@ -251,6 +267,7 @@
                     <div id="history-list" class="space-y-4 max-h-[600px] overflow-y-auto pr-2"></div>
                 </div>
 
+                <!-- Loading -->
                 <div id="loading" class="hidden absolute inset-0 glass z-[1000] flex flex-col items-center justify-center text-center rounded-[3rem]">
                     <div class="relative w-24 h-24 mb-8">
                         <div class="absolute inset-0 border-4 border-brand/20 rounded-full"></div>
@@ -273,45 +290,87 @@
         const APP_ID = 'dokidokiboomboom-tarot-v5';
 
         const MAJOR_NAMES = ["愚者", "魔術師", "女祭司", "女皇", "皇帝", "教皇", "戀人", "戰車", "力量", "隱者", "命運之輪", "正義", "倒吊人", "死神", "節制", "惡魔", "高塔", "星星", "月亮", "太陽", "審判", "世界"];
-        const MINOR_NAMES = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "侍從", "騎士", "皇后", "國王"];
         
-        // --- 精準偉特牌義數據 ---
-        const DB = {
-            "ar00": { 
-                name: "愚者", 
-                love: { upright: "妳即將開啟一段完全沒有包袱的新關係。放下過去的陰影，單純地享受當下的心跳，這是重生的冒險。", reversed: "妳可能在感情中顯得太過盲目，沒看清楚腳下的懸崖。請注意妳是否正為了短暫的新鮮感而忽略了原本的責任。" },
-                career: { upright: "現在適合跳脫舒適圈。不要害怕未知，這是一個發揮創意並嘗試非傳統職涯路徑的大好時機。", reversed: "妳目前的計畫有些異想天開。缺乏實際的腳步會讓妳陷入不穩定的局面，請務必先做好基本功。" },
-                growth: { upright: "靈魂正在召喚妳回歸「零點」。放下所有對自己的限制與成見，重新像孩子一樣探索這個世界。", reversed: "妳正因為害怕犯錯而遲遲不敢前進。妳可能在原地繞圈，請找回內在的勇氣，而非一味逃避。" },
-                advice: ["保持赤子之心", "勇敢跨出舒適圈", "相信宇宙驚喜"], angel: "妳的夢想正在顯化，勇敢跨出那一小步。" 
-            },
-            "ar01": { 
-                name: "魔術師", 
-                love: { upright: "妳擁有吸引對方的強大魅力。現在只要主動且自信地表達妳的心意，兩人的關係會發展得非常迅速。", reversed: "感情中妳或對方可能顯得有些言不由衷。請檢視關係中是否摻雜了太多的操弄，而非真誠的對待。" },
-                career: { upright: "所有的資源已經到位。現在就是將點子轉化為行動的最佳時刻，妳的能力將得到充分的展現與發揮。", reversed: "妳有很多才華但卻難以落地。妳可能感覺有力無處使，需要重新整合資源並專注於一個具體目標。" },
-                growth: { upright: "妳就是自己生命的創造者。妳的意念正在塑造實相，現在是發揮天賦力量的強大時刻。", reversed: "能量目前處於渙散狀態。妳感到失去掌控，請重新對齊妳的初衷，找回內在的火花。" },
-                advice: ["主動創造機會", "善用溝通才華", "專注目標顯化"], angel: "宇宙智慧與妳同在，妳就是生命的創造者。" 
-            },
-            "ar02": { 
-                name: "女祭司", 
-                love: { upright: "一段靈魂層次的深度連結正在形成。目前不適合太過主動，請靜靜聆聽內心的指引，等待時機成熟。", reversed: "妳正在忽視直覺的警訊。妳可能因為外在的社交誘惑或不安，背離了內心真實的渴望。" },
-                career: { upright: "這不是急於出擊的時刻。深度的觀察與潛伏比盲目衝刺更有利，妳需要更多內在的佈局與智慧。", reversed: "職場中可能隱藏著妳沒看見的真相。妳可能被表面現象迷惑，請冷靜下來，看穿目前的迷霧。" },
-                growth: { upright: "答案就在靜謐之中。信任妳的夢境與直覺，妳正進入一個高度靈性啟發的時期。", reversed: "內在的焦慮遮蔽了神性的指引。找回獨處的時間，那是妳力量與平靜的源泉。" },
-                advice: ["練習深度冥想", "信任第一直覺", "保持神祕感"], angel: "安安靜止下來，妳早就在靈魂深處知道了答案。" 
-            },
-            "ar06": { 
-                name: "戀人", 
-                love: { upright: "這是一個和諧且契合的時刻。妳正面臨一個對未來影響深遠的選擇，請選擇那個讓妳心跳加速的方向。", reversed: "關係中出現了價值觀的衝突。妳正面臨兩難的抉擇，需要誠實面對內心被妳掩蓋的不安。" },
-                career: { upright: "非常利於團隊合作或夥伴關係。透過與他人的強強聯手，妳將獲得超乎預期的成果。", reversed: "工作中的合作關係可能出現裂痕。請檢視妳目前的職位是否真的符合妳的核心價值觀。" },
-                growth: { upright: "學習平衡內在的衝突。當妳的心念與行動高度合一時，所有的美好事物都會被妳吸引過來。", reversed: "自我拉扯感強烈。妳的理性與感性正在打架，請找回內在的平衡點，而非逃避選擇。" },
-                advice: ["誠實表達心意", "對齊內在價值", "信任吸引力法則"], angel: "愛是一切的答案。在所有分叉路口前，請選擇那條能讓妳平安的路。" 
-            },
-            "ar10": { 
-                name: "命運之輪", 
-                love: { upright: "一段命定般的相遇或轉折正在發生。好運降臨，請順應這股改變的風，大膽接受新的關係進展。", reversed: "妳可能正陷入重覆的情感輪迴中。如果妳不打破舊有的模式，同樣的問題將會再次找上門。" },
-                career: { upright: "職涯出現了上升的轉機。之前的努力正要開花結果，妳將進入一個全新的幸運週期。", reversed: "目前的進展有些停滯或意外阻礙。放手無法掌控的事，接受無常並靜待下一個時機點。" },
-                growth: { upright: "體悟生命起伏的自然規律。接受順境與逆境，在變動中尋找靈魂不變的中心真理。", reversed: "妳正在抗拒必然的改變。與命運對抗會消耗妳極大的能量，請練習臣服並學著順流而行。" },
-                advice: ["順應環境變化", "抓住突發機會", "接受生命流動"], angel: "命運正引領妳走向更高層次的顯化。" 
-            }
+        // --- 完整 78 張偉特牌義在地資料庫 ---
+        const TAROT_DATA = {
+            "ar00": { name: '愚者', upright: '新的開始、冒險、自由感。妳正站在一個新入口，別急著要完整地圖，先確認自己是否真的想出發。', reversed: '衝動、逃避、不看後果。妳可能只想離開現狀，卻還沒想清楚下一步要去哪。' },
+            "ar01": { name: '魔術師', upright: '資源到位、主動創造、溝通有力。妳手上其實有牌，問題是妳敢不敢打出去。', reversed: '能量分散、話術過多、行動不足。不要只想靠氣勢撐場，真正的成果要落地。' },
+            "ar02": { name: '女祭司', upright: '直覺、秘密、靜觀其變。妳已經感覺到答案，只是還在等外界替妳確認。', reversed: '忽略直覺、資訊不明、情緒遮眼。現在不要硬猜，先把焦慮跟事實分開。' },
+            "ar03": { name: '皇后', upright: '魅力、豐盛、滋養。妳的吸引力不是靠追來的，是靠把自己養回發光狀態。', reversed: '過度付出、缺乏自我照顧、價值感下滑。妳不能一邊枯萎一邊期待開花。' },
+            "ar04": { name: '皇帝', upright: '穩定、規劃、掌控局面。現在需要的是界線和制度，不是靠感覺亂飄。', reversed: '控制慾、僵化、權威壓力。妳可能太想掌控結果，反而把局面弄緊。' },
+            "ar05": { name: '教皇', upright: '傳統、承諾、學習。適合尋求成熟建議，或用更穩的方式處理關係與選擇。', reversed: '不想被規則綁住、價值觀衝突。別為了合群就背叛自己的真心。' },
+            "ar06": { name: '戀人', upright: '選擇、吸引、關係對齊。心動很重要，但妳也要看彼此是否真的走同一個方向。', reversed: '價值不合、曖昧混亂、選擇逃避。不是沒有感覺，而是感覺不等於答案。' },
+            "ar07": { name: '戰車', upright: '推進、決心、突破。妳可以往前衝，但方向盤要握在自己手上。', reversed: '失控、方向混亂、硬撐。現在不是比誰更倔，是先搞清楚自己為何而戰。' },
+            "ar08": { name: '力量', upright: '溫柔的控制力、耐心、內在穩定。妳越不慌，越有魅力。', reversed: '自我懷疑、情緒失控、壓抑慾望。別罵內在小怪獸，先聽牠在怕什麼。' },
+            "ar09": { name: '隱者', upright: '獨處、沉澱、找回答案。妳需要暫時離開雜音，聽見自己的聲音。', reversed: '孤立、逃避連結、想太多。安靜很好，但不要把自己關到沒人找得到。' },
+            "ar10": { name: '命運之輪', upright: '轉機、循環、時機來了。事情正在動，別用舊劇本解讀新訊號。', reversed: '卡在輪迴、抗拒變化、運勢延遲。同樣的課題又出現，是因為妳還沒換解法。' },
+            "ar11": { name: '正義', upright: '公平、真相、因果。現在需要看事實，不是只看感受。', reversed: '不公平、逃避責任、資訊失衡。有人沒把話說清楚，也可能是妳不想看清楚。' },
+            "ar12": { name: '倒吊人', upright: '暫停、換角度、等待。卡住不一定是壞事，有時是宇宙叫妳別再硬撞。', reversed: '無意義犧牲、拖延、卡住太久。妳不是在修行，妳是在消耗。' },
+            "ar13": { name: '死神', upright: '結束、轉化、斷捨離。某個舊版本該退場了，新的妳才進得來。', reversed: '抗拒結束、放不下、拖泥帶水。妳抓著的可能不是愛，是習慣。' },
+            "ar14": { name: '節制', upright: '調和、療癒、慢慢來。現在不用極端，找到剛剛好的節奏最重要。', reversed: '失衡、過度、節奏亂掉。妳最近可能太用力，連靈魂都想請假。' },
+            "ar15": { name: '惡魔', upright: '慾望、執著、誘惑。這件事很上癮，但妳要問自己：爽完之後有沒有自由？', reversed: '鬆綁、戒斷、看穿控制。妳開始意識到自己不必再被某個人事物綁住。' },
+            "ar16": { name: '高塔', upright: '突變、真相爆開、結構崩塌。不是宇宙害妳，是假的東西撐不住了。', reversed: '延後爆發、害怕改變、危機未清。妳知道有問題，只是還在假裝房子沒裂。' },
+            "ar17": { name: '星星', upright: '希望、修復、靈感。妳正在慢慢亮回來，別急著逼自己立刻痊癒。', reversed: '失望、信心低落、願景模糊。不是沒有希望，是妳累到暫時看不見光。' },
+            "ar18": { name: '月亮', upright: '迷霧、潛意識、情緒放大。先別下結論，妳可能把害怕看成事實。', reversed: '真相浮現、迷霧散開、焦慮退潮。妳開始分得清直覺和腦補。' },
+            "ar19": { name: '太陽', upright: '開朗、成功、被看見。事情有機會變得明朗，妳也不用再躲著發光。', reversed: '短暫低潮、快樂打折、過度樂觀。不是壞牌，只是提醒妳別硬裝沒事。' },
+            "ar20": { name: '審判', upright: '覺醒、召喚、重新選擇。妳到了該回應人生呼叫的時候。', reversed: '逃避召喚、自我批判、遲遲不敢決定。妳不是沒聽見，是怕一答應就回不去了。' },
+            "ar21": { name: '世界', upright: '完成、整合、階段圓滿。妳走到一個節點，可以準備進下一關。', reversed: '未完成、差最後一步、循環沒收尾。不是失敗，是還有一個尾巴要處理。' },
+            "wa01": { name: '權杖一', upright: '熱情啟動、新機會、想做就做。火已經點起來了，別讓它只停在腦內小劇場。', reversed: '動力不足、熱情熄火、想很多做很少。先做一個小版本，不要等完美。' },
+            "wa02": { name: '權杖二', upright: '規劃、遠方、選路。妳已經看見可能性，現在要決定站在哪邊。', reversed: '猶豫、視野受限、不敢走出去。妳不是沒選擇，是怕選了就要負責。' },
+            "wa03": { name: '權杖三', upright: '擴展、等待成果、布局。妳的行動已經送出，接下來看回音。', reversed: '延遲、合作不順、期待落空。先檢查計畫，不要只盯著遠方乾等。' },
+            "wa04": { name: '權杖四', upright: '慶祝、穩定、關係進展。這是一種可以安心落地的能量。', reversed: '不穩、家庭或關係壓力、表面和諧。笑得很漂亮，但桌底可能有人在踢腳。' },
+            "wa05": { name: '權杖五', upright: '競爭、摩擦、各說各話。不是世界末日，只是大家都想贏。', reversed: '避免衝突、暗中較勁、內耗。表面沒吵，不代表心裡沒有開戰。' },
+            "wa06": { name: '權杖六', upright: '勝利、被看見、得到肯定。妳的努力有機會被注意到。', reversed: '自信不足、掌聲延遲、怕被比較。不要因為沒人拍手就懷疑自己沒在前進。' },
+            "wa07": { name: '權杖七', upright: '防守、堅持立場、守住位置。妳不是難搞，是需要保護自己的界線。', reversed: '疲於防守、想放棄、界線被壓。不是每場戰都值得妳打到沒血。' },
+            "wa08": { name: '權杖八', upright: '快速進展、訊息、行動加速。事情會動很快，手機可能也會熱鬧起來。', reversed: '延遲、訊息卡住、節奏混亂。不要每五分鐘刷新一次，妳會先壞掉。' },
+            "wa09": { name: '權杖九', upright: '防備、撐住、最後考驗。妳很累，但其實比自己想的更有韌性。', reversed: '過度警戒、舊傷觸發、快撐不住。不是每個靠近妳的人都要先過安檢。' },
+            "wa10": { name: '權杖十', upright: '責任過重、壓力、硬扛。妳可以很能幹，但不代表什麼都要妳扛。', reversed: '放下重擔、拒絕過勞、責任重分配。該還給別人的鍋，不要再揹著走。' },
+            "wa11": { name: '權杖侍者', upright: '新消息、好奇、熱情探索。有新火花出現，適合嘗試新方向。', reversed: '三分鐘熱度、消息不成熟、說得多做得少。先別太快當真，觀察後續。' },
+            "wa12": { name: '權杖騎士', upright: '衝勁、冒險、快速靠近。能量很熱，但也可能來得快去得快。', reversed: '魯貌、忽冷忽熱、沒耐性。這種火很迷人，但小心燒到眉毛。' },
+            "wa13": { name: '權杖皇后', upright: '自信、魅力、主場感。妳越活出自己，越有人被妳吸住。', reversed: '嫉妒、不安、魅力失焦。不要拿別人的反應當妳的價值秤。' },
+            "wa14": { name: '權杖國王', upright: '領導、遠見、成熟行動。適合主動規劃，把想法變成局。', reversed: '霸道、自我中心、控制慾強。氣場很強，但別強到沒人想靠近。' },
+            "cu01": { name: '聖杯一', upright: '情感新開始、心打開、療癒。新的感受正在冒出來，溫柔接住它。', reversed: '情緒堵住、愛不流動、心累。妳不是沒感覺，是暫時裝不下了。' },
+            "cu02": { name: '聖杯二', upright: '互相吸引、和解、雙向連結。這是關係裡很漂亮的互相靠近。', reversed: '不對等、誤會、連結失衡。喜歡不難，難的是兩個人有沒有同步。' },
+            "cu03": { name: '聖杯三', upright: '聚會、朋友、慶祝。適合社交，也可能從朋友圈出現好消息。', reversed: '小圈圈、三角干擾、玩樂過頭。熱鬧背後不一定每個人都真心。' },
+            "cu04": { name: '聖杯四', upright: '無聊、冷淡、心門半關。機會在旁邊，但妳現在興致缺缺。', reversed: '重新打開、看見機會、走出低潮。妳開始願意抬頭，不再只盯著失望。' },
+            "cu05": { name: '聖杯五', upright: '失落、遺憾、看著沒了的東西。難過可以，但別忘了還有沒倒的杯子。', reversed: '釋懷、復原、願意往前。妳終於不再每天替過去守靈。' },
+            "cu06": { name: '聖杯六', upright: '回憶、舊人、單純的溫柔。過去可能回來敲門，也可能只是提醒妳初心。', reversed: '困在過去、濾鏡太厚、長不大。懷念可以，但不要把回憶當未來。' },
+            "cu07": { name: '聖杯七', upright: '幻想、選項、誘惑很多。妳現在不是沒路，是太多畫面在腦中開派對。', reversed: '看清選擇、幻想破除、回到現實。很好，戀愛腦開始下班。' },
+            "cu08": { name: '聖杯八', upright: '離開、尋找更深意義。不是不愛了，是妳知道這裡不能再餵飽靈魂。', reversed: '捨不得走、反覆回頭、逃避空虛。妳怕失去，但留下也沒有比較快樂。' },
+            "cu09": { name: '聖杯九', upright: '願望成真、滿足、享受成果。妳可以允許自己開心，不用怕快樂會被收回。', reversed: '表面滿足、內在空虛、慾望過量。吃很多糖，不代表心真的甜。' },
+            "cu10": { name: '聖杯十', upright: '幸福、家庭、情感圓滿。這是一種安心又被接住的能量。', reversed: '期待落差、家庭或關係不和、幸福表演。別把別人的版本硬套在自己身上。' },
+            "cu11": { name: '聖杯侍者', upright: '曖昧訊息、溫柔邀請、心動小芽。可能有人用很可愛的方式靠近。', reversed: '情緒幼稚、曖昧不穩、想太多。別因為一句話就把小孩名字都想好。' },
+            "cu12": { name: '聖杯騎士', upright: '浪漫、邀約、情感表達。有人可能帶著心意靠近，氣氛很會。', reversed: '花言巧語、情緒飄忽、浪漫過度包裝。會撩不代表會負責。' },
+            "cu13": { name: '聖杯皇后', upright: '共感、溫柔、直覺力。妳很會感受別人，但也要記得感受自己。', reversed: '情緒氾濫、過度共情、界線融化。妳不是情緒垃圾桶，別什麼都收。' },
+            "cu14": { name: '聖杯國王', upright: '成熟情緒、包容、穩定的愛。感情可以深，但不必失控。', reversed: '情緒壓抑、冷處理、溫柔操控。看起來很穩，不代表心裡沒風暴。' },
+            "sw01": { name: '寶劍一', upright: '真相、決斷、清醒。妳會看懂一件事，雖然有點刺，但很必要。', reversed: '混亂、誤解、話說不清。現在先別急著判刑，證據還沒齊。' },
+            "sw02": { name: '寶劍二', upright: '僵局、逃避選擇、假裝看不見。妳不是不知道，只是不想選。', reversed: '遲早要面對、真相逼近、選擇壓力。眼罩快掉了，別再裝睡。' },
+            "sw03": { name: '寶劍三', upright: '心痛、失望、真相刺穿。難過不是妳太脆弱，是這件事真的傷人。', reversed: '療傷、放下痛、傷口開始癒合。妳還會痛，但不會永遠這麼痛。' },
+            "sw04": { name: '寶劍四', upright: '休息、暫停、恢復。先不要回訊息、不要做決定，妳需要充電。', reversed: '休息不足、焦慮復發、硬撐。再不休息，妳的靈魂要貼請假單了。' },
+            "sw05": { name: '寶劍五', upright: '爭執、輸贏心、傷人的勝利。贏了嘴巴，不一定贏了關係。', reversed: '停戰、放下爭辯、離開消耗。不是每件事都要吵到水落石出。' },
+            "sw06": { name: '寶劍六', upright: '離開混亂、過渡期、慢慢變好。妳正在離開讓妳心累的地方。', reversed: '走不出去、拖延轉場、舊問題跟著走。人走了，腦內劇場還沒搬家。' },
+            "sw07": { name: '寶劍七', upright: '隱瞞、策略、偷偷來。有人沒說全，也可能是妳在保留後路。', reversed: '秘密曝光、良心不安、策略失效。藏起來的東西，遲早會自己冒頭。' },
+            "sw08": { name: '寶劍八', upright: '受困、限制性信念、想太多。妳以為沒路，其實是腦袋把門鎖上了。', reversed: '鬆綁、走出困局、看見出口。妳開始發現自己不是那麼無能為力。' },
+            "sw09": { name: '寶劍九', upright: '焦慮、失眠、自責。腦袋又在半夜開恐怖片馬拉松了。', reversed: '焦慮下降、願意求助、看見希望。妳不必一個人扛全部黑夜。' },
+            "sw10": { name: '寶劍十', upright: '結束、崩潰到底、不能再騙自己。痛到這裡，反而代表最壞已經過了。', reversed: '復原、重新站起、痛苦收尾。妳還沒滿血，但已經不是昨天那個妳。' },
+            "sw11": { name: '寶劍侍者', upright: '觀察、訊息、好奇心。有人在看、在想、在蒐集資訊。', reversed: '口舌是非、偷看、訊息混亂。別把每個蛛絲馬跡都當神諭。' },
+            "sw12": { name: '寶劍騎士', upright: '快速決定、直接衝刺、說話很利.適合快刀斬亂麻。', reversed: '衝動發言、急躁、傷人不自知。傳訊息前先深呼吸，不然會變戰書。' },
+            "sw13": { name: '寶劍皇后', upright: '清醒、界線、理性判斷。妳可以溫柔，但不用好欺負。', reversed: '尖銳、防衛、冷到結冰。保護自己很好，但別把所有人都當敵人。' },
+            "sw14": { name: '寶劍國王', upright: '理智、判斷、規則。現在適合用邏輯處理，不要讓情緒開車。', reversed: '冷酷、控制、話語壓迫。理性不是拿來切人的刀。' },
+            "pe01": { name: '錢幣一', upright: '新資源、新收入、落地機會。這是可以慢慢養大的種子。', reversed: '錯過機會、資源浪費、起步不穩.先別急著放大，地基要補。' },
+            "pe02": { name: '錢幣二', upright: '平衡、調度、多工。妳正在人生雜耍，還沒掉球已經很厲害。', reversed: '失衡、忙到爆、財務混亂。不要再假裝自己是八爪章魚。' },
+            "pe03": { name: '錢幣三', upright: '合作、專業、被看見的能力。有人願意認可妳的技術與努力。', reversed: '合作卡住、專業被低估、溝通不良。不是妳不行，是團隊可能沒對齊。' },
+            "pe04": { name: '錢幣四', upright: '守住、安全感、存錢。妳想穩，這很合理，但別穩到不敢活。', reversed: '過度抓緊、金錢焦慮、害怕失去。妳抓越緊，手越酸。' },
+            "pe05": { name: '錢幣五', upright: '匱乏、孤立、資源不足。妳可能覺得沒人幫，但門其實在旁邊。', reversed: '走出困境、接受協助、慢慢回暖。妳不是只能苦撐，可以求援。' },
+            "pe06": { name: '錢幣六', upright: '給予與接受、資源流動、公平支援。有人願意幫妳，妳也值得收下。', reversed: '不平等、施捨感、付出失衡。別用討好換安全感。' },
+            "pe07": { name: '錢幣七', upright: '等待成果、評估、耐心耕耘。妳種的東西還在長，不是沒用。', reversed: '急著收成、投資不耐、懷疑努力。不要今天種花明天就罵它不開。' },
+            "pe08": { name: '錢幣八', upright: '練習、職人精神、持續精進。妳正在靠重複累積真正的底氣。', reversed: '敷衍、倦怠、技能卡關。不是不適合，是妳可能失去成就感。' },
+            "pe09": { name: '錢幣九', upright: '獨立、享受成果、質感生活。妳正在靠自己長出漂亮的安全感。', reversed: '表面光鮮、依賴、價值感不穩。別只打造外殼，內在也要補貨。' },
+            "pe10": { name: '錢幣十', upright: '長期穩定、家業、累積成果。這是適合談未來與長線規劃的牌。', reversed: '家庭壓力、長期不穩、價值觀落差。看起來很穩的東西，也可能藏著老問題。' },
+            "pe11": { name: '錢幣侍者', upright: '學習、實習、新技能。適合開始建立一項會變現的能力。', reversed: '拖延、懶散、眼高手低。想賺錢很好，但先把基本功練起來。' },
+            "pe12": { name: '錢幣騎士', upright: '穩定、負責、慢慢推進。速度不快，但很可靠。', reversed: '停滯、固執、太保守。穩定不是不動，別把龜速當策略。' },
+            "pe13": { name: '錢幣皇后', upright: '務實照顧、生活感、富養自己。妳值得把日子過得舒服一點。', reversed: '過度操心、缺乏安全感、把自己放最後。妳不是後勤部唯一員工。' },
+            "pe14": { name: '錢幣國王', upright: '成熟財務、穩定成就、資源掌控。適合做長期且務實的決策。', reversed: '物質控制、貪心、太現實。錢很重要，但別讓它變成唯一的神。' }
         };
 
         const CATEGORIES = {
@@ -321,7 +380,7 @@
                     "接下來三個月，與他如何溝通（建議）能增進穩定？",
                     "未來兩個月，目前的暗戀對象是否有發展契機（建議）？",
                     "下個月開始，單身的我如何提升魅力（建議）吸引正緣？",
-                    "未來三個月，這段關係中我的盲點與調整建議為何？",
+                    "未來三個月，這段關係中的盲點與調整建議為何？",
                     "本週內，面對目前的冷戰該採取什麼行動（建議）？"
                 ] 
             },
@@ -329,20 +388,20 @@
                 title: "事業轉折", icon: "fa-briefcase", color: "#60a5fa", 
                 examples: [
                     "未來三個月，轉職面試準備有什麼核心建議？",
-                    "未來半年，目前的職場瓶頸該如何突破（建議）？",
-                    "下個月開始，如何提升工作能見度與競爭力（建議）？",
-                    "未來三個月，這項創業計畫的第一步該注意什麼？",
+                    "未來半年內，目前的職場瓶頸該如何突破（建議）？",
+                    "下個月開始，如何提升工作能見度（建議）以獲得晉升？",
+                    "未來三個月，這項創業計畫的第一步該注意什麼建議？",
                     "本季工作中，如何調頻（建議）才能找回熱情？"
                 ] 
             },
             money: { 
                 title: "財富豐盛", icon: "fa-coins", color: "#fbbf24", 
                 examples: [
-                    "未來一個月，如何做（建議）能顯化更多財富收入？",
+                    "未來一個月，我該如何做（建議）能顯化更多財富收入？",
                     "未來三個月，這項具體投資該注意什麼（建議）？",
-                    "現在此刻，該如何清理金錢匱乏感以提升顯化力？",
+                    "現在此刻，我該如何清理（建議）金錢匱乏感？",
                     "下半年內，如何準備（建議）來抓住額外收入機會？",
-                    "未來一季，優化目前理財模式的靈魂建議？"
+                    "未來一季，優化目前財務模式的靈魂建議？"
                 ] 
             },
             growth: { 
@@ -358,105 +417,68 @@
             general: { 
                 title: "綜合指引", icon: "fa-compass", color: "#a78bfa", 
                 examples: [
-                    "下週內，面對目前的生活變動該如何應對？",
-                    "未來一個月，如何維持高頻率以迎接轉機？",
+                    "下週內，面對目前的生活變動該如何應對建議？",
+                    "未來一個月，如何維持高頻率（建議）以迎接轉機？",
                     "接下來三個月，保護自身能量場的具體建議？",
                     "現在此刻，為了讓生活更好（建議）該做出什麼改變？",
-                    "未來三個月，我目前最該優先關注哪一部分的建議？"
+                    "未來三個月，我目前最該優先關注哪部分的建議？"
                 ] 
             }
         };
 
         const SECRETS = ["當妳專注於擁有的事物，全宇宙會給妳更多。豐盛始於感謝。", "保持高頻的喜悅，妳渴望的人事物就會自動奔向妳。妳就是磁鐵。", "放手交給宇宙去編排細節，妳只需要維持願景。一切都在完美時程上。", "妳的直覺就是導航器。不要猶豫，信任妳看見的第一個徵兆。", "妳已經做得很好了。請溫柔地對待自己，像對待妳最愛的人一樣。"];
 
+        // --- 全量牌組生成 ---
         const FULL_DECK = [];
-        const SUITS_MAP = [{ code: 'ar', name: '大牌', count: 22 }, { code: 'wa', name: '權杖', count: 14 }, { code: 'cu', name: '聖杯', count: 14 }, { code: 'sw', name: '寶劍', count: 14 }, { code: 'pe', name: '錢幣', count: 14 }];
+        const SUITS_MAP = [{ code: 'ar', count: 22 }, { code: 'wa', count: 14 }, { code: 'cu', count: 14 }, { code: 'sw', count: 14 }, { code: 'pe', count: 14 }];
         SUITS_MAP.forEach(suit => { 
             for(let i=0; i<suit.count; i++) { 
-                let idNum = suit.code === 'ar' ? String(i).padStart(2,'0') : String(i+1).padStart(2,'0'); 
-                let cardName = suit.code === 'ar' ? MAJOR_NAMES[i] : `${suit.name}${MINOR_NAMES[i]}`; 
-                FULL_DECK.push({ id: suit.code + idNum, name: cardName }); 
+                let idNum = (suit.code === 'ar' ? i : i + 1);
+                let id = suit.code + String(idNum).padStart(2,'0');
+                FULL_DECK.push({ id: id, name: TAROT_DATA[id]?.name || '神祕卡片' }); 
             } 
         });
 
         window.state = { history: JSON.parse(localStorage.getItem(`${APP_ID}_history`) || '[]'), currentDraw: null, drawMode: 'auto', selectedManualCards: [], currentCategory: 'general' };
 
-        // --- 白話牌義解析邏輯 ---
+        // --- 核心邏輯：純牌義解析與智慧總結 ---
         function generateLocalAnalysis(intent, cards, categoryKey) {
             let revCount = 0;
             let arCount = 0;
             let suiteCounts = { ar: 0, wa: 0, cu: 0, sw: 0, pe: 0 };
             
             const interpretations = cards.map((c) => {
+                const cardInfo = TAROT_DATA[c.id];
                 if (c.isRev) revCount++;
                 const prefix = c.id.substring(0, 2);
                 suiteCounts[prefix]++;
                 if(prefix === 'ar') arCount++;
                 
-                let meaning = "";
-                // 1. 處理大牌 (Major)
-                if (prefix === 'ar') {
-                    if (DB[c.id]) {
-                        const pool = DB[c.id][categoryKey] || DB[c.id]['growth'] || DB[c.id]['general'];
-                        meaning = c.isRev ? pool.reversed : pool.upright;
-                    } else {
-                        meaning = c.isRev 
-                            ? `這張牌暗示妳內在正感到一種束縛或恐懼，目前的進度可能因為妳過度保護自己而受阻。請練習放掉妳對未來的「控制感」，讓事情自然發生。` 
-                            : `妳正處於一個非常關鍵的影響期。目前的事情並非偶然，而是妳靈魂長期選擇的結果，妳只需對準妳的真實想法，勇敢前行。`;
-                    }
-                } 
-                // 2. 處理小牌 (Minor) - 白話拼合邏輯
-                else {
-                    const elements = { 
-                        'wa': { theme: '具體的行動與熱情', action: '去做、去開創' }, 
-                        'cu': { theme: '情感的流動與感受', action: '去體會、去愛' }, 
-                        'sw': { theme: '思維的判斷與理性', action: '去思考、去決定' }, 
-                        'pe': { theme: '物質的成果與穩定', action: '去累積、去執行' } 
-                    };
-                    const ranks = {
-                        '01': '一個全新的起點', '02': '正在考慮與權衡', '03': '初步看見成果', 
-                        '04': '處於一個穩定的舒適圈', '05': '面臨一些混亂與競爭', '06': '獲得勝利或被祝福', 
-                        '07': '正在面臨評估與挑戰', '08': '節奏變得非常快速', '09': '即將達成目標前的內省', 
-                        '10': '迎來一個階段的大圓滿', '11': '接收到新的資訊', '12': '有股明確的推動力量',
-                        '13': '成熟且滋潤的能量', '14': '穩重且掌控全局的態勢'
-                    };
-                    
-                    const el = elements[prefix];
-                    const rk = ranks[c.id.substring(2)];
-                    
-                    if (c.isRev) {
-                        meaning = `妳目前在「${el.theme}」方面似乎有點受阻。這正處於${rk}的過程中，妳可能覺得事與願違，或者妳的心思並不在此，請先停下來整理妳的雜訊。`;
-                    } else {
-                        meaning = `目前在「${el.theme}」方面非常有進展。這代表${rk}正為妳帶來正面的改變，妳適合繼續保持這份初心，大膽地${el.action}。`;
-                    }
-                }
+                let meaning = c.isRev ? cardInfo.reversed : cardInfo.upright;
+                const parts = meaning.split(/[。！？]/);
+                const advicePart = parts.length > 1 ? parts[parts.length - 2] : "聽從直覺";
 
-                return {
-                    meaning: meaning,
-                    advice: (DB[c.id]?.advice || ["聽從直覺", "保持耐心", "調整節奏"])[Math.floor(Math.random() * 3)]
-                };
+                return { meaning, advice: advicePart };
             });
 
-            // 動態總結邏輯
             let summary = "";
-            if (arCount >= 2) summary = "這組牌陣非常強大，代表妳現在正面臨人生中極其關鍵的轉折，這是靈魂深處的安排。";
-            else if (revCount >= 2) summary = "妳目前感受到的阻礙大多源於內在的擔憂與舊習慣，現在是清理自己、重新出發的時機。";
-            else if (suiteCounts.sw >= 2) summary = "目前的局勢需要妳保持極度的理性。切斷那些情緒的紛擾，用邏輯與冷靜來做決定。";
-            else if (suiteCounts.wa >= 2) summary = "妳的行動力就是目前的燃料。不要猶豫太久，現在大膽行動將會事半功倍。";
-            else if (suiteCounts.cu >= 2) summary = "這是一個關於心靈修復與情感流動的時期，請溫柔地對待自己與他人。";
-            else if (suiteCounts.pe >= 2) summary = "現在的重點在於「實踐」。腳踏實地地耕耘目前的物質基礎，成功會隨之而來。";
-            else summary = "能量正在重新校準中。請保持開放的心，妳即將迎來一個讓妳耳目一新的啟示。";
+            if (arCount >= 2) summary = "這組牌陣出現多張關鍵大牌，預示著妳正面臨人生中重大的靈魂轉折，這是一次必要的蛻變。";
+            else if (revCount >= 2) summary = "逆位牌偏多，暗示目前的卡點大多來自內在的擔憂或舊習，現在是清理自己的最好時機。";
+            else if (suiteCounts.sw >= 2) summary = "思維能量非常集中，妳現在需要保持極度的冷靜，用理智切斷那些情緒的干擾。";
+            else if (suiteCounts.wa >= 2) summary = "行動力正在爆發，這是一個適合大膽開展計畫的最佳時刻，不要再猶豫。";
+            else if (suiteCounts.cu >= 2) summary = "情感流動非常豐富，目前的重點在於心靈的照護與對直覺的信任。";
+            else if (suiteCounts.pe >= 2) summary = "物質能量穩定，這是一個耕耘基礎、追求實際成果的時期。";
+            else summary = "能量正在重新校準，請保持開放與覺察，答案即將在平靜中浮現。";
 
             return {
                 interpretations,
                 actions: [...new Set(interpretations.map(i => i.advice))],
-                archangelMsg: (DB[cards[cards.length - 1].id]?.angel || "宇宙正細細聆聽妳的願望，妳是被溫柔守護著的。"),
+                archangelMsg: "宇宙正細細聆聽妳的願望，妳是被守護著的。",
                 summary,
                 type: 'READING'
             };
         }
 
-        // --- 其餘 UI 功能維持不變 ---
         function getImageUrl(id, useBackup = false) {
             const prefix = id.substring(0, 2); 
             let num = parseInt(id.substring(2));
@@ -523,7 +545,8 @@
             loading.classList.remove('hidden');
             setTimeout(() => {
                 const idx = Math.floor(Math.random() * 22);
-                const card = { id: `ar${String(idx).padStart(2,'0')}`, name: MAJOR_NAMES[idx], isRev: Math.random() > 0.5 };
+                const id = `ar${String(idx).padStart(2,'0')}`;
+                const card = { id: id, name: TAROT_DATA[id].name, isRev: Math.random() > 0.5 };
                 const res = generateLocalAnalysis("今日能量指引", [card], 'general');
                 document.getElementById('daily-card-front').innerHTML = `<img src="${getImageUrl(card.id)}" data-id="${card.id}" class="tarot-img ${card.isRev?'reversed':''}" onerror="window.handleImageError(this, '${card.name}')">`;
                 document.getElementById('daily-card-element').style.transform = 'rotateY(180deg)';
@@ -574,12 +597,18 @@
             const intent = document.getElementById('reading-intent').value.trim();
             setTimeout(() => {
                 const cards = isManual 
-                    ? window.state.selectedManualCards.map(i => ({ ...FULL_DECK[i], isRev: Math.random() > 0.5 })) 
-                    : Array.from({length:3}).map(() => ({ ...FULL_DECK[Math.floor(Math.random()*FULL_DECK.length)], isRev: Math.random() > 0.5 }));
+                    ? window.state.selectedManualCards.map(i => {
+                        const base = FULL_DECK[i];
+                        return { ...base, isRev: Math.random() > 0.5 };
+                    }) 
+                    : Array.from({length:3}).map(() => {
+                        const base = FULL_DECK[Math.floor(Math.random()*FULL_DECK.length)];
+                        return { ...base, isRev: Math.random() > 0.5 };
+                    });
                 const res = generateLocalAnalysis(intent, cards, window.state.currentCategory);
                 window.state.currentDraw = { intent: intent || "當下的能量狀態", cards };
                 saveToHistory("深度解析", cards, { ...res, intent: intent || "當下的能量狀態" });
-                displayResult("生命演化解析", cards, ["過去因果", "現在卡點", "未來顯化"], { ...res, intent, type: 'READING' });
+                displayResult("生命演化解析", cards, ["過去能量", "現在卡點", "行動建議"], { ...res, intent, type: 'READING' });
                 document.getElementById('loading').classList.add('hidden');
                 window.showToast("靈魂對話已開啟");
             }, 1500);
@@ -657,7 +686,7 @@
             const record = window.state.history.find(h => h.id === id);
             if (!record) return;
             const isDaily = record.type.includes('能量照見');
-            const pos = isDaily ? ["核心能量"] : ["過去因果", "現在卡點", "未來顯化"];
+            const pos = isDaily ? ["核心能量"] : ["過去能量", "現在卡點", "行動建議"];
             displayResult(record.type, record.cards, pos, { intent: record.intent, interpretations: record.interpretations, actions: record.actions, archangelMsg: record.archangelMsg, summary: record.summary, type: isDaily ? 'DAILY' : 'READING' });
             window.showToast("已還原當次能量軌跡");
         };
@@ -673,7 +702,7 @@
         window.copyAIPrompt = () => {
             const current = window.state.currentDraw;
             if (!current) return;
-            const labels = ["過去因果", "現在卡點", "未來顯化"];
+            const labels = ["過去能量", "現在卡點", "行動建議"];
             let cardStr = current.cards.map((c, i) => `${i+1}. ${labels[i]}：${c.name} (${c.isRev?'逆位':'正位'})`).join('\n');
             const prompt = `你好，我是占卜者。我剛在『心小跳塔羅』完成了一次靈魂調頻。\n\n【我的困惑】：『 ${current.intent || '當下能量'} 』\n【抽出的牌陣】：\n${cardStr}\n\n請以專業塔羅師視角提供深度靈性解析、能量流動分析與具體行動建議。`;
             const el = document.createElement('textarea'); el.value = prompt; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
