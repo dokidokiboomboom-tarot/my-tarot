@@ -92,7 +92,7 @@
     </header>
 
     <!-- 塔羅介紹 -->
-    <section id="intro" class="py-24 px-6 max-w-5xl mx-auto space-y-20">
+    <section id="intro" class="py-24 px-6 max-w-5xl mx-auto space-y-24">
         <div class="grid md:grid-cols-2 gap-16 items-center">
             <div class="space-y-6">
                 <h2 class="text-4xl serif font-black gold-glow underline decoration-brand/30">什麼是塔羅？</h2>
@@ -103,6 +103,34 @@
             <div class="relative flex justify-center">
                 <div class="absolute inset-0 bg-brand/10 blur-[80px] rounded-full"></div>
                 <img src="https://cdn.jsdelivr.net/gh/jekyll/rider-waite-tarot@master/images/tarot/major/17.jpg" data-id="ar17" class="relative z-10 w-64 rounded-3xl shadow-2xl border border-white/20 transform rotate-3" alt="星星牌" onerror="window.handleImageError(this, '星星')">
+            </div>
+        </div>
+
+        <!-- 妳可以在這裡問的事 -->
+        <div class="space-y-12">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl serif font-black gold-glow">妳可以在這裡問的事</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto italic text-sm md:text-base leading-relaxed">
+                    不會跟妳說什麼前世業力爆炸，也不會叫妳花八千塊消災。<br class="hidden md:block">
+                    就是一起看清現在發生什麼事，然後想辦法不要再內耗到凌晨三點。
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass p-10 rounded-[3rem] border-brand/10 hover:border-brand/40 transition-all group">
+                    <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition-transform origin-left">♡</div>
+                    <h3 class="text-xl font-black text-white mb-4">感情關係</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">他到底有沒有意思？是曖昧、養魚，還是真的在龜？一起拆解那些忽冷忽熱、已讀不回、突然消失又突然出現的迷惑行為。</p>
+                </div>
+                <div class="glass p-10 rounded-[3rem] border-brand/10 hover:border-brand/40 transition-all group">
+                    <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition-transform origin-left">✦</div>
+                    <h3 class="text-xl font-black text-white mb-4">財運與工作</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">想離職但又怕窮？副業做半天像在做功德？牌不一定幫妳暴富，但至少能幫妳少走一些冤枉路。</p>
+                </div>
+                <div class="glass p-10 rounded-[3rem] border-brand/10 hover:border-brand/40 transition-all group">
+                    <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition-transform origin-left">☾</div>
+                    <h3 class="text-xl font-black text-white mb-4">靈感訊息</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">有時候不是發生大事，而是整個人悶悶卡卡的。這區比較像靈魂 debug，看看到底是哪條線又打結了。</p>
+                </div>
             </div>
         </div>
 
@@ -157,7 +185,12 @@
                 <!-- 深度解析 -->
                 <div id="panel-reading" class="tab-panel hidden flex flex-col items-center">
                     <div id="reading-step-1" class="w-full space-y-10">
-                        <div class="text-center"><h2 class="text-4xl serif font-black mb-4">選擇感應類別</h2><p class="text-gray-500 italic text-sm">讓星圖根據妳的情況進行深層調頻</p></div>
+                        <div class="text-center space-y-4">
+                            <h2 class="text-4xl serif font-black">選擇感應類別</h2>
+                            <p class="text-gray-400 max-w-lg mx-auto italic text-[13px] leading-relaxed px-4">
+                                想到什麼就問什麼。感情、工作、財運都可以。<br>反正人生本來就夠亂了，至少先把你腦內那團毛線拆開一點。
+                            </p>
+                        </div>
                         <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="cat-grid"></div>
                         <div id="question-area" class="hidden space-y-8 animate-fade-in">
                             <div class="bg-white/5 p-8 rounded-[2rem] border border-white/10 space-y-6">
@@ -244,7 +277,7 @@
                     <div class="text-center pt-10 space-y-10 border-t border-white/5">
                         <!-- 引導文字 -->
                         <div class="max-w-lg mx-auto">
-                            <p class="text-gray-400 text-sm md:text-base font-serif italic leading-relaxed">
+                            <p class="text-gray-400 text-sm md:text-base font-serif italic leading-relaxed px-4">
                                 如果這組牌有準到讓妳想罵髒話，那代表妳真的該面對了。<br>
                                 想 <span class="text-brand font-black">deeper</span> 一點，也可以來找我做個人占卜。
                             </p>
@@ -380,7 +413,7 @@
                     "接下來三個月，與他如何溝通（建議）能增進穩定？",
                     "未來兩個月，目前的暗戀對象是否有發展契機（建議）？",
                     "下個月開始，單身的我如何提升魅力（建議）吸引正緣？",
-                    "未來三個月，這段關係中的盲點與調整建議為何？",
+                    "未來三個月，這段關係中我的盲點與調整建議為何？",
                     "本週內，面對目前的冷戰該採取什麼行動（建議）？"
                 ] 
             },
@@ -693,6 +726,7 @@
 
         window.deleteHistory = (id) => { window.state.history = window.state.history.filter(h => h.id !== id); localStorage.setItem(`${APP_ID}_history`, JSON.stringify(window.state.history)); renderHistory(); window.showToast("已刪除該筆紀錄"); };
         window.clearHistory = () => { if(confirm("確定要清除所有能量軌跡嗎？")) { window.state.history = []; localStorage.removeItem(`${APP_ID}_history`); renderHistory(); window.showToast("軌跡已歸零"); } };
+        
         window.setDrawMode = m => {
             window.state.drawMode = m;
             document.getElementById('mode-auto').className = m === 'auto' ? 'text-[10px] px-3 py-1 rounded-full bg-brand text-black font-black' : 'text-[10px] px-3 py-1 rounded-full bg-white/10 text-gray-400 font-black';
