@@ -61,15 +61,16 @@
     <div id="toast-container" class="msg-box"></div>
     <div class="stars-container"><div class="star-layer"></div></div>
     
-    <!-- 導覽列 -->
+    <!-- 導覽列優化：調整跳轉地方與 Logo 動作 -->
     <nav class="fixed top-0 w-full z-[60] glass border-b border-white/5 py-4 px-6 transition-all">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
                 <i class="fa-solid fa-heart-pulse text-brand text-2xl animate-pulse"></i>
                 <span class="serif font-black text-xl gold-glow tracking-tighter">心小跳塔羅</span>
             </div>
             <div class="flex items-center gap-4 text-[10px] md:text-xs font-bold uppercase tracking-widest">
                 <a href="#intro" class="hover:text-brand transition hidden sm:block">認識塔羅</a>
+                <button onclick="window.switchTab('daily')" class="hover:text-brand transition hidden md:block">開始占卜</button>
                 <button onclick="window.switchTab('history')" class="hover:text-brand transition">我的軌跡</button>
                 <a href="https://www.instagram.com/dokidokiboomboom.tarot/" target="_blank" class="bg-brand/20 text-brand px-4 py-2 rounded-full border border-brand/30 hover:bg-brand hover:text-black transition-all flex items-center gap-2">
                     <i class="fa-brands fa-instagram text-lg"></i> 預約占卜
@@ -106,7 +107,7 @@
             </div>
         </div>
 
-        <!-- 你可以在這裡問的事 -->
+        <!-- 你可以在這裡問的事 (文案更新) -->
         <div class="space-y-12">
             <div class="text-center space-y-4">
                 <h2 class="text-4xl serif font-black gold-glow">你可以在這裡問的事</h2>
@@ -202,7 +203,7 @@
                                     </div>
                                 </div>
                                 <textarea id="reading-intent" placeholder="請在此描述你的情況或問題，或是留空讓直覺帶領你..." class="w-full bg-black/50 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-brand h-28 resize-none font-serif transition-all"></textarea>
-                                <div id="example-box" class="space-y-4">
+                                <div id="example-list-container" class="space-y-4">
                                     <p class="text-[11px] text-brand/80 tracking-widest font-black uppercase flex items-center gap-2"><i class="fa-solid fa-lightbulb"></i> 推薦提問句型：</p>
                                     <div id="example-list" class="flex flex-wrap gap-2"></div>
                                 </div>
@@ -242,7 +243,7 @@
 
                     <div id="res-content" class="max-w-4xl mx-auto space-y-12"></div>
                     
-                    <!-- 複製 AI 指令按鈕移動到此處 -->
+                    <!-- 複製 AI 指令按鈕 -->
                     <div id="ai-prompt-area" class="text-center hidden pt-4">
                         <button onclick="window.copyAIPrompt()" class="inline-flex items-center gap-2 bg-white/10 border border-white/10 px-8 py-4 rounded-full text-sm font-bold text-white hover:bg-brand/20 hover:text-brand transition-all shadow-xl">
                             <i class="fa-solid fa-wand-magic-sparkles"></i> 複製 AI 深度對談指令
@@ -371,7 +372,7 @@
             "cu08": { name: '聖杯八', upright: '離開、尋找更深意義。不是不愛了，是你知道這裡不能再餵飽靈魂。', reversed: '捨不得走、反覆回頭、逃避空虛。你怕失去，但留下也沒有比較快樂。' },
             "cu09": { name: '聖杯九', upright: '願望成真、滿足、享受成果。你可以允許自己開心，不用怕快樂會被收回。', reversed: '表面滿足、內在空虛、慾望過量。吃很多糖，不代表心真的甜。' },
             "cu10": { name: '聖杯十', upright: '幸福、家庭、情感圓滿。這是一種安心又被接住的能量。', reversed: '期待落差、家庭或關係不和、幸福表演。別把別人的版本硬套在自己身上。' },
-            "cu11": { name: '聖杯侍者', upright: '曖昧訊息、溫柔邀請、心動小芽。可能有人用很可愛的方式靠近。', reversed: '情緒幼稚、曖昧不穩、想太多。別因為一句話就把小孩名字都想好。' },
+            "cu11": { name: '聖杯侍者', upright: '曖昧訊息、溫柔邀請、心動小芽。可能有人用很可愛的方式靠近. ', reversed: '情緒幼稚、曖昧不穩、想太多。別因為一句話就把小孩名字都想好。' },
             "cu12": { name: '聖杯騎士', upright: '浪漫、邀約、情感表達。有人可能帶著心意靠近，氣氛很會。', reversed: '花言巧語、情緒飄忽、浪漫過度包裝。會撩不代表會負責。' },
             "cu13": { name: '聖杯皇后', upright: '共感、溫柔、直覺力。你很會感受別人，但也要記得感受自己。', reversed: '情緒氾濫、過度共情、界線融化。你不是情緒垃圾桶，別什麼都收。' },
             "cu14": { name: '聖杯國王', upright: '成熟情緒、包容、穩定的愛。感情可以深，但不必失控。', reversed: '情緒壓抑、冷處理、溫柔操控。看起來很穩，不代表心裡沒風暴。' },
@@ -385,11 +386,11 @@
             "sw08": { name: '寶劍八', upright: '受困、限制性信念、想太多。你以為沒路，其實是腦袋把門鎖上了。', reversed: '鬆綁、走出困局、看見出口。你開始發現自己不是那麼無能為力。' },
             "sw09": { name: '寶劍九', upright: '焦慮、失眠、自責。腦袋又在半夜開恐怖片馬拉松了。', reversed: '焦慮下降、願意求助、看見希望。你不必一個人扛全部黑夜。' },
             "sw10": { name: '寶劍十', upright: '結束、崩潰到底、不能再騙自己。痛到這裡，反而代表最壞已經過了。', reversed: '復原、重新站起、痛苦收尾。你還沒滿血，但已經不是昨天那個你。' },
-            "sw11": { name: '寶劍侍者', upright: '觀察、訊息、好奇心。有人在看、在想、在蒐集資訊。', reversed: '口舌是非、偷看、訊息混亂。別把每個蛛絲馬跡都當神諭。' },
-            "sw12": { name: '寶劍騎士', upright: '快速決定、直接衝刺、說話很利.適合快刀斬亂麻。', reversed: '衝動發言、急躁、傷人不自知。傳訊息前先深呼吸，不然會變戰書。' },
+            "sw11": { name: '寶劍侍者', upright: '觀察、訊息、好奇心。有人在看、在想、在蒐集資訊。', reversed: '口舌是非、偷看、訊息混亂. 別把每個蛛絲馬跡都當神諭。' },
+            "sw12": { name: '寶劍騎士', upright: '快速決定、直接衝刺、說話很利. 適合快刀斬亂麻。', reversed: '衝動發言、急躁、傷人不自知。傳訊息前先深呼吸，不然會變戰書。' },
             "sw13": { name: '寶劍皇后', upright: '清醒、界線、理性判斷。你可以溫柔，但不用好欺負。', reversed: '尖銳、防衛、冷到結冰。保護自己很好，但別把所有人都當敵人。' },
             "sw14": { name: '寶劍國王', upright: '理智、判斷、規則。現在適合用邏輯處理，不要讓情緒開車。', reversed: '冷酷、控制、話語壓迫。理性不是拿來切人的刀。' },
-            "pe01": { name: '錢幣一', upright: '新資源、新收入、落地機會。這是可以慢慢養大的種子。', reversed: '錯過機會、資源浪費、起步不穩.先別急著放大，地基要補。' },
+            "pe01": { name: '錢幣一', upright: '新資源、新收入、落地機會。這是可以慢慢養大的種子。', reversed: '錯過機會、資源浪費、起步不穩. 先別急著放大，地基要補。' },
             "pe02": { name: '錢幣二', upright: '平衡、調度、多工。你正在人生雜耍，還沒掉球已經很厲害。', reversed: '失衡、忙到爆、財務混亂。不要再假裝自己是八爪章魚。' },
             "pe03": { name: '錢幣三', upright: '合作、專業、被看見的能力。有人願意認可你的技術與努力。', reversed: '合作卡住、專業被低估、溝通不良。不是你不行，是團隊可能沒對齊。' },
             "pe04": { name: '錢幣四', upright: '守住、安全感、存錢。你想穩，這很合理，但別穩到不敢活。', reversed: '過度抓緊、金錢焦慮、害怕失去。你抓越緊，手越酸。' },
@@ -420,20 +421,20 @@
                 title: "事業轉折", icon: "fa-briefcase", color: "#60a5fa", 
                 examples: [
                     "未來三個月，轉職面試準備有什麼核心建議？",
-                    "未來半年，目前的職場瓶頸該如何突破（建議）？",
-                    "下個月開始，如何提升工作能見度與競爭力（建議）？",
-                    "未來三個月，這項創業計畫的第一步該注意什麼？",
+                    "未來半年內，目前的職場瓶頸該如何突破（建議）？",
+                    "下個月開始，如何提升工作能見度（建議）以獲得晉升？",
+                    "未來三個月，這項創業計畫的第一步該注意什麼建議？",
                     "本季工作中，如何調頻（建議）才能找回熱情？"
                 ] 
             },
             money: { 
                 title: "財富豐盛", icon: "fa-coins", color: "#fbbf24", 
                 examples: [
-                    "未來一個月，如何做（建議）能顯化更多財富收入？",
+                    "未來一個月，我該如何做（建議）能顯化更多財富收入？",
                     "未來三個月，這項具體投資該注意什麼（建議）？",
-                    "現在此刻，該如何清理金錢匱乏感以提升顯化力？",
+                    "現在此刻，我該如何清理（建議）金錢匱乏感？",
                     "下半年內，如何準備（建議）來抓住額外收入機會？",
-                    "未來一季，優化目前理財模式的靈魂建議？"
+                    "未來一季，優化目前財務模式的靈魂建議？"
                 ] 
             },
             growth: { 
@@ -449,11 +450,11 @@
             general: { 
                 title: "綜合指引", icon: "fa-compass", color: "#a78bfa", 
                 examples: [
-                    "下週內，面對目前的生活變動該如何應對？",
-                    "未來一個月，如何維持高頻率以迎接轉機？",
+                    "下週內，面對目前的生活變動該如何應對建議？",
+                    "未來一個月，如何維持高頻率（建議）以迎接轉機？",
                     "接下來三個月，保護自身能量場的具體建議？",
                     "現在此刻，為了讓生活更好（建議）該做出什麼改變？",
-                    "未來三個月，我目前最該優先關注哪一部分的建議？"
+                    "未來三個月，我目前最該優先關注哪部分的建議？"
                 ] 
             }
         };
