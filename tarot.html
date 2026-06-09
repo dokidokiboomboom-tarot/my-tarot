@@ -58,6 +58,11 @@
         
         .summary-title { font-size: 1.125rem; font-weight: 900; color: var(--brand); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
         .summary-text { line-height: 1.8; font-style: italic; color: #e5e7eb; }
+
+        /* 滾動條美化 */
+        .scrollbar-thin::-webkit-scrollbar { width: 4px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(251, 113, 133, 0.3); border-radius: 99px; }
     </style>
 </head>
 <body class="antialiased">
@@ -130,7 +135,7 @@
                 <div class="glass p-10 rounded-[3rem] border-brand/10 hover:border-brand/40 transition-all group">
                     <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition-transform origin-left">☾</div>
                     <h3 class="text-xl font-black text-white mb-4">靈感訊息</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">有時候不是發生大事，而是整個人悶悶卡卡的。這區比較像靈魂 debug，看看到底是哪條線又打結了。</p>
+                    <p class="text-gray-400 text-sm leading-relaxed">有時候不是發生大事，而是整個人悶悶卡卡的。這區比較像靈魂 debug，看看看到底哪條線又打結了。</p>
                 </div>
             </div>
         </div>
@@ -231,7 +236,7 @@
                     <!-- 牌義解析區 -->
                     <div id="res-content" class="max-w-4xl mx-auto space-y-12"></div>
                     
-                    <!-- 優化後的總結區塊：放置於解析下方 -->
+                    <!-- 總結區塊 -->
                     <div id="res-summary-box" class="max-w-4xl mx-auto mb-10 text-center">
                         <div class="inline-block glass px-10 py-6 rounded-[2.5rem] border-brand/30 bg-brand/5">
                             <h3 class="text-brand font-black text-sm italic mb-2"><i class="fa-solid fa-star-of-david"></i> 牌陣靈魂總結</h3>
@@ -239,12 +244,12 @@
                         </div>
                     </div>
 
-                    <!-- 複製 AI 指令按鈕 -->
+                    <!-- 複製 AI 指令按鈕 (用於本地保存與貼到其他 AI 工具對齊) -->
                     <div id="ai-prompt-area" class="text-center hidden pt-4">
                         <button onclick="window.copyAIPrompt()" class="inline-flex items-center gap-2 bg-white/10 border border-white/10 px-8 py-4 rounded-full text-sm font-bold text-white hover:bg-brand/20 hover:text-brand transition-all shadow-xl">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> 複製 AI 深度對談指令
+                            <i class="fa-solid fa-copy"></i> 複製 AI 深度對談指令
                         </button>
-                        <p class="text-[10px] text-gray-500 mt-3 italic">複製後貼給 AI 助理，獲得針對性的「三位一體」靈魂解析</p>
+                        <p class="text-[10px] text-gray-500 mt-3 italic">複製後可貼給其他 AI 助理，隨時隨地二次對齊與深入探索</p>
                     </div>
 
                     <div id="extra-content" class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 pt-8 border-t border-white/5">
@@ -252,8 +257,10 @@
                             <h3 class="text-brand font-black mb-6 text-sm italic"><i class="fa-solid fa-list-check"></i> 具體行動建議</h3>
                             <ul id="action-list" class="space-y-4 text-gray-200 font-serif"></ul>
                         </div>
-                        <div class="glass p-8 rounded-[2.5rem] border-brand/20 bg-brand/5">
-                            <h3 class="text-brand font-black mb-6 text-sm italic"><i class="fa-solid fa-dove"></i> 靈魂叮嚀</h3>
+                        <div class="glass p-8 rounded-[2.5rem] border-brand/20 bg-brand/5 relative">
+                            <h3 class="text-brand font-black mb-6 text-sm italic flex justify-between items-center">
+                                <span><i class="fa-solid fa-dove"></i> 靈魂叮嚀</span>
+                            </h3>
                             <div id="archangel-msg" class="italic text-white font-medium font-serif leading-relaxed"></div>
                         </div>
                     </div>
@@ -310,11 +317,24 @@
                         <div class="absolute inset-0 border-4 border-t-brand rounded-full animate-spin"></div>
                         <i class="fa-solid fa-sparkles absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl text-brand"></i>
                     </div>
-                    <p class="text-brand font-black tracking-[0.5em] text-xl animate-pulse">正在調頻感應...</p>
+                    <p id="loading-text" class="text-brand font-black tracking-[0.5em] text-xl animate-pulse">正在調頻感應...</p>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- 自定義暗色神祕學 Modal 彈窗 -->
+    <div id="custom-modal" class="fixed inset-0 z-[9999] glass bg-black/70 flex items-center justify-center p-4 hidden">
+        <div class="bg-mystic-surface border border-brand/30 rounded-[2.5rem] p-8 max-w-md w-full text-center shadow-2xl relative">
+            <div class="text-brand text-5xl mb-4"><i class="fa-solid fa-moon-stars"></i></div>
+            <h3 class="text-2xl serif font-black text-white mb-2" id="modal-title">確定執行此操作？</h3>
+            <p class="text-gray-400 text-sm mb-8 leading-relaxed" id="modal-desc">此操作將永久清除您的軌跡，且不可復原。</p>
+            <div class="flex gap-4 justify-center">
+                <button id="modal-cancel" class="px-8 py-3 rounded-full border border-white/10 text-gray-400 font-bold hover:bg-white/5 transition-all text-sm">取消</button>
+                <button id="modal-confirm" class="btn-mystic px-10 py-3 font-black text-sm">確定</button>
+            </div>
+        </div>
+    </div>
 
     <footer class="py-20 text-center opacity-30">
         <p class="text-[10px] font-black tracking-[0.5em] uppercase">© 2026 心小跳塔羅 | 靈魂共鳴研究室</p>
@@ -331,14 +351,14 @@
             "ar01": { name: '魔術師', upright: '資源到位、主動創造、溝通有力。你手上其實有牌，問題是你敢不敢打出去。', reversed: '能量分散、話術過多、行動不足。不要只想靠氣勢撐場，真正的成果要落地。', actions: { upright: "盤點你現有的資源清單，並立刻開始執行其中最簡單的一項計畫。", reversed: "檢查目前向外傳達的資訊是否有誤導，誠實面對自己的能力範疇。" } },
             "ar02": { name: '女祭司', upright: '直覺、秘密、靜觀其變。你已經感覺到答案，只是還在等外界替你確認。', reversed: '忽略直覺、資訊不明、情緒遮眼。現在不要硬猜，先把焦慮跟事實分開。', actions: { upright: "給自己 30 分鐘的絕對安靜時間，不使用電子產品，單純呼吸。", reversed: "不要在此刻做重大決定。先去收集更多背景資料，減少憑空猜測。" } },
             "ar03": { name: '皇后', upright: '魅力、豐盛、滋養。你的吸引力不是靠追來的，是靠把自己養回發光狀態。', reversed: '過度付出、缺乏自我照顧、價值感下滑。你不能一邊枯萎一邊期待開花。', actions: { upright: "買一束鮮花給自己，或是享受一頓細嚼慢嚥的美餐，豐盛你的感官。", reversed: "婉拒一個你不情願的邀約，將那段時間用來照顧你疲憊的身體。" } },
-            "ar04": { name: '皇帝', upright: '穩定、規劃、掌控局面。現在需要的是界線和制度，不是靠感覺亂飄。', reversed: '控制慾、僵化、權威壓力。你可能太想掌控結果，反而把局面弄緊。', actions: { upright: "建立一個具體的目標時間表，並嚴格執行第一條規範。", reversed: "放寬對某個計畫的掌控，授權給夥伴或信任事情會有自己的出路。" } },
+            "ar04": { name: '皇帝', upright: '穩定、規劃、掌控局面。現在需要的是界線和制度，不是靠感覺慢跑。', reversed: '控制慾、僵化、權威壓力。你可能太想掌控結果，反而把局面弄緊。', actions: { upright: "建立一個具體的目標時間表，並嚴格執行第一條規範。", reversed: "放寬對某個計畫的掌控，授權給夥伴或信任事情會有自己的出路。" } },
             "ar05": { name: '教皇', upright: '傳統、承諾、學習。適合尋求成熟建議，或用更穩的方式處理關係與選擇。', reversed: '不想被規則綁住、價值觀衝突。別為了合群就背叛自己的真心。', actions: { upright: "找一位你信任的前輩或導師，詢問他對你目前困惑的具體看法。", reversed: "問問自己：我現在守的規則是為了保護我，還是純粹因為害怕別人的眼光？" } },
-            "ar06": { name: '戀人', upright: '選擇、吸引、關係對齊。心動很重要，但你也要看彼此是否真的走同一個方向。', reversed: '價值不合、曖昧混難、選擇逃避。不是沒有感覺，而是感覺不等於答案。', actions: { upright: "安排一場深入的對話，確認雙方的長遠價值觀是否一致。", reversed: "列出關係中讓你委曲求全的地方，思考如果你更愛自己，你會怎麼選。" } },
+            "ar06": { name: '戀人', upright: '選擇、吸引、關係對齊。心動很重要，但你也要看彼此是否真的走同一個方向。', reversed: '價值不合、曖昧混雜、選擇逃避。不是沒有感覺，而是感覺不等於答案。', actions: { upright: "安排一場深入的對話，確認雙方的長遠價值觀是否一致。", reversed: "列出關係中讓你委曲求全的地方，思考如果你更愛自己，你會怎麼選。" } },
             "ar07": { name: '戰車', upright: '推進、決心、突破。你可以往前衝，但方向盤要握在自己手上。', reversed: '失控、方向混亂、硬撐。現在不是比誰更倔，是先搞清楚自己為何而戰。', actions: { upright: "排除萬難執行一個你拖延已久的具體行動，直接切入重點。", reversed: "暫停衝刺！檢查你的動力是否用錯了方向，過度的倔強會導致內耗。" } },
             "ar08": { name: '力量', upright: '溫柔的控制力、耐心、內在穩定。你越不慌，越有魅力。', reversed: '自我懷疑、情緒失控、壓抑慾望。別罵內在小怪獸，先聽牠在怕什麼。', actions: { upright: "在衝突發生時選擇先沈默三秒，用溫柔但堅定的眼神表達立場。", reversed: "承認你的恐懼與憤怒，抱抱自己，找個安全的地方釋放情緒。" } },
             "ar09": { name: '隱者', upright: '獨處、沉澱、找回答案。你需要暫時離開雜音，聽見自己的聲音。', reversed: '孤立、逃避連結、想太多。安靜很好，但不要把自己關到沒人找得到。', actions: { upright: "寫一封信給未來的自己，梳理你目前真正的內在渴求。", reversed: "主動聯繫一位能給你正能量的朋友，試著把腦中的結說出來。" } },
             "ar10": { name: '命運之輪', upright: '轉機、循環、時機來了。事情正在動，別用舊劇本解讀新訊號。', reversed: '卡在輪迴、抗拒變化、運勢延遲。同樣的課題又出現，是因為你還沒換解法。', actions: { upright: "把握今天出現的第一個意外機會，即使它不在計畫內。", reversed: "觀察這件事是否在過去重演過？試著用一個與以往完全不同的反應來打破它。" } },
-            "ar11": { name: '正義', upright: '公平、真相、因果。現在需要看事實，不是只看感受。', reversed: '不公平、逃避責任、資訊失衡。有人沒把話說清楚，也可能是你不想看清楚。', actions: { upright: "收集所有的對話截圖或合約數據，客觀地進行損益評估。", reversed: "停止抱怨不公。檢視自己在這個局勢中是否也有需要承擔的責任。" } },
+            "ar11": { name: '正義', upright: '公平、真相、因果。現在需要看事实，不是只看感受。', reversed: '不公平、逃避責任、資訊失衡。有人沒把話說清楚，也可能是你不想看清楚。', actions: { upright: "收集所有的對話截圖或合約數據，客觀地進行損益評估。", reversed: "停止抱怨不公。檢視自己在這個局勢中是否也有需要承擔的責任。" } },
             "ar12": { name: '倒吊人', upright: '暫停、換角度、等待。卡住不一定是壞事，有時是宇宙叫你別再硬撞。', reversed: '無意義犧牲、拖延、卡住太久。你不是在修行，你是在消耗。', actions: { upright: "主動推遲一個決定，觀察如果你什麼都不做，事情會怎麼演變。", reversed: "停止無謂的等待。問自己：這份犧牲真的值得嗎？如果值得，你在等什麼？" } },
             "ar13": { name: '死神', upright: '結束、轉化、斷捨離。某個舊版本該退場了，新的你才進得來。', reversed: '抗拒結束、放不下、拖泥帶水。你抓著的可能不是愛，是習慣。', actions: { upright: "徹底丟掉一件很久沒穿的衣服或刪掉一段讓你沈重的訊息。", reversed: "承認這件事已經「結束」了，允許悲傷發生，而不是假裝它還在。" } },
             "ar14": { name: '節制', upright: '調和、療癒、慢慢來。現在不用極端，找到剛剛好的節奏最重要。', reversed: '失衡、過度、節奏亂掉。你最近可能太用力，連靈魂都想請假。', actions: { upright: "練習「中道」。在兩端選擇之間，找一個平衡折衷的第三方案。", reversed: "調整作息與飲食，平衡太過偏激的腦袋與疲累的身體能量。" } },
@@ -346,24 +366,24 @@
             "ar16": { name: '高塔', upright: '突變、真相爆開、結構崩塌。不是宇宙害你，是假的東西撐不住了。', reversed: '延後爆發、害怕改變、危機未清。你知道有問題，只是還在假裝房子沒裂。', actions: { upright: "接受現狀的徹底重組。不要急著修補，在廢墟中觀察什麼才是真的。", reversed: "主動揭開一個隱瞞已久的瘡疤。痛快的一次爆發勝過慢慢腐爛。" } },
             "ar17": { name: '星星', upright: '希望、修復、靈感。你正在慢慢亮回來，別急著逼自己立刻痊癒。', reversed: '失望、信心低落、願景模糊。不是沒有希望，是你累到暫時看不見光。', actions: { upright: "花一小時從事與藝術、靈感有關的活動，不帶任何目的。", reversed: "別再盯著黑暗看。寫下三個你曾經成功度過的難關，找回力量感。" } },
             "ar18": { name: '月亮', upright: '迷霧、潛意識、情緒放大。先別下結論，你可能把害怕看成事實。', reversed: '真相浮現、迷霧散開、焦慮退潮。你開始分得清直覺和腦補。', actions: { upright: "不要在此刻做任何回訊或決定。等待情緒潮汐退去後再看一次。", reversed: "去檢證一個你最擔心的人或事，真相往往比你想像的溫和得多。" } },
-            "ar19": { name: '太陽', upright: '開朗、成功、被看見。事情有機會變得明朗，你也不用再躲著發光。', reversed: '短暫低潮、快樂打折、過度樂觀。不是壞牌，只是提醒你別硬裝沒事。', actions: { upright: "主動公開你的一個成果或計畫，迎接陽光與眾人的肯定。", reversed: "即使外在看起來很好，也請允許自己今天可以不那麼「積極」。" } },
+            "ar19": { name: '太陽', upright: '開朗、成功、被看見。事情有機會變得明朗，你也不用再躲著發光。', reversed: '短暫低潮、快樂打折、過度樂觀。不是壞牌，只是提醒你別硬裝沒事. ', actions: { upright: "主動公開你的一個成果或計畫，迎接陽光與眾人的肯定。", reversed: "即使外在看起來很好，也請允許自己今天可以不那麼「積極」。" } },
             "ar20": { name: '審判', upright: '覺醒、召喚、重新選擇。你到了該回應人生呼叫的時候。', reversed: '逃避召喚、自我批判、遲遲不敢決定。你不是沒聽見，是怕一答應就回不去了。', actions: { upright: "對一件懸而未決的舊事做最後的總結陳詞，徹底翻篇。", reversed: "停止在心中審判自己。問：如果我現在完全原諒自己，我會怎麼做？" } },
             "ar21": { name: '世界', upright: '完成、整合、階段圓滿。你走到一個節點，可以準備進下一關。', reversed: '未完成、差最後一步、循環沒收尾。不是失敗，是還有一個尾巴要處理。', actions: { upright: "慶祝目前的成果。無論多小，給自己一個小獎賞來劃下句點。", reversed: "找出那個最後的細節缺口，補上它，你的成就感才能真正圓滿。" } },
 
             "wa01": { name: '權杖一', upright: '熱情啟動、新機會、想做就做。火已經點起來了，別讓它只停在腦內小劇場。', reversed: '動力不足、熱情熄火、想很多做很少。先做一個小版本，不要等完美。', actions: { upright: "立刻執行你腦中浮現的第一個衝動！不需要完美計畫，動起來就是贏。", reversed: "將你的大目標拆解成 5 分鐘就能做完的小任務，現在就做一個。" } },
-            "wa02": { name: '權杖二', upright: '規劃、遠方、選路。你已經看見可能性，現在要決定站在哪邊。', reversed: '猶豫、視野受限、不敢走出去。你不是沒選擇，是怕選了就要負責。', actions: { upright: "列出兩個可能的方向，並在 24 小時內決定你要站在哪一邊。", reversed: "走出戶外，擴大你的視線範圍。別只待在小空間裡鑽牛角尖。" } },
+            "wa02": { name: '權杖二', upright: '規劃、遠方、選路。你已經看見可能性，逆境中要決定站在哪邊。', reversed: '猶豫、視野受限、不敢走出去。你不是沒選擇，是怕選了就要負責。', actions: { upright: "列出兩個可能的方向，並在 24 小時內決定你要站在哪一邊。", reversed: "走出戶外，擴大你的視線範圍。別只待在小空間裡鑽牛角尖。" } },
             "wa03": { name: '權杖三', upright: '擴展、等待成果、布局。你的行動已經送出，接下來看回音。', reversed: '延遲、合作不順、期待落空。先檢查計畫，不要只盯著遠方乾等。', actions: { upright: "主動向外尋求合作，或是釋放一個希望被看見的訊號。", reversed: "檢查你的等待是否有明確的截止日？如果沒有，主動詢問進度。" } },
             "wa04": { name: '權杖四', upright: '慶祝、穩定、關係進展。這是一種可以安心落地的能量。', reversed: '不穩、家庭或關係壓力、表面和諧。笑得很漂亮，但桌底可能有人在踢腳。', actions: { upright: "與朋友或家人聚餐，分享一個好消息，共享穩定的喜悅。", reversed: "檢查目前的家庭或團隊關係中，是否有沒說出口的不滿，主動破冰。" } },
             "wa05": { name: '權杖五', upright: '競爭、摩擦、各說各話。不是世界末日，只是大家都想贏。', reversed: '避免衝突、暗中較勁、內耗。表面沒吵，不代表心裡沒有開戰。', actions: { upright: "在會議或對話中大膽說出你的不同見解，別怕碰撞。", reversed: "停止腦內的自我爭論。去運動出一身汗，釋放多餘的競爭能量。" } },
             "wa06": { name: '權杖六', upright: '勝利、被看見、得到肯定。你的努力有機會被注意到。', reversed: '自信不足、掌聲延遲、怕被比較。不要因為沒人拍手就懷疑自己沒在前進。', actions: { upright: "在社群媒體或朋友群中分享你的小小成就，大方收下讚美。", reversed: "別人的拍手不是你前進的動力。今天回顧一次你最驕傲的舊時光。" } },
             "wa07": { name: '權杖七', upright: '防守、堅持立場、守住位置。你不是難搞，是需要保護自己的界線。', reversed: '疲於防守、想放棄、界線被壓。不是每場戰都值得你打到沒血。', actions: { upright: "對一個不合理的要求堅定地說「不」。你不需要討好每個人。", reversed: "分清楚哪些仗值得打。如果你累了，撤退並不是輸，是策略。" } },
-            "wa08": { name: '權杖八', upright: '快速進展、訊息、行動加速。事情會動很快，手機可能也會熱鬧起來。', reversed: '延遲、訊息卡住、節奏混亂。不要每五分鐘刷新一次，你會先壞掉。', actions: { upright: "立刻回覆那些積壓的短訊息，效率會帶來正向循環。", reversed: "關掉通訊軟體的通知 2 小時。不要被碎片的資訊打亂你的步調。" } },
+            "wa08": { name: '權杖八', upright: '快速進展、訊息、行動加速。事情會動很快，手機可能也會熱鬧起來。', reversed: '延遲、訊息卡住、節奏混亂. 不要每五分鐘刷新一次，你會先壞掉。', actions: { upright: "立刻回覆那些積壓的短訊息，效率會帶來正向循環。", reversed: "關掉通訊軟體的通知 2 小時。不要被碎片的資訊打亂你的步調。" } },
             "wa09": { name: '權杖九', upright: '防備、撐住、最後考驗。你很累，但其實比自己想的更有韌性。', reversed: '過度警戒、舊傷觸發、快撐不住。不是每個靠近你的人都要先過安檢。', actions: { upright: "再堅持一下下。這已經是最後一關了，撐過去就是你的。", reversed: "卸下你的防護。去洗個熱水澡或按摩，告訴身體：現在這裡很安全。" } },
             "wa10": { name: '權杖十', upright: '責任過重、壓力、硬扛。你可以很能幹，但不代表什麼都要你扛。', reversed: '放下重擔、拒絕過勞、責任重分配。該還給別人的鍋，不要再揹著走。', actions: { upright: "分出三件事交給別人做。即使他們做得不夠好，也比你累死強。", reversed: "今天停止處理別人的爛攤子。那是他們該學的功課，不是你的。" } },
             "wa11": { name: '權杖侍者', upright: '新消息、好奇、熱情探索。有新火花出現，適合嘗試新方向。', reversed: '三分鐘熱度、消息不成熟、說得多做得少。先別太快當真，觀察後續。', actions: { upright: "去書店或網上瀏覽一個你完全不熟悉的領域，給靈魂新靈感。", reversed: "別再只是想。針對目前的興趣，報名一個正式的入門課程或講座。" } },
-            "wa12": { name: '權杖騎士', upright: '衝勁、冒險、快速靠近。能量很熱，但也可能來得快去得快。', reversed: '魯貌、忽冷忽熱、沒耐性。這種火很迷人，但小心燒到眉毛。', actions: { upright: "立刻出發！針對你的目標進行一次大動作的進攻。", reversed: "在傳送衝動的簡訊或郵件前，先深呼吸 10 次，不要毀掉目前的局。" } },
+            "wa12": { name: '權杖騎士', upright: '衝勁、冒險、快速靠近. 能量很熱，但也可能來得快去得快。', reversed: '魯莽、忽冷忽熱、沒耐性。這種火很迷人，但小心燒到眉毛。', actions: { upright: "立刻出發！針對你的目標進行一次大動作的進攻。", reversed: "在傳送衝動的簡訊或郵件前，先深呼吸 10 次，不要毀掉目前的局。" } },
             "wa13": { name: '權杖皇后', upright: '自信、魅力、主場感。你越活出自己，越有人被你吸住。', reversed: '嫉妒、不安、魅力失焦。不要拿別人的反應當你的價值秤。', actions: { upright: "穿上讓你感到最自信的戰袍出門，大方展現你的能量。", reversed: "停止瀏覽你羨慕的人的動態。你的舞台在你腳下，不在別人螢幕裡。" } },
-            "wa14": { name: '權杖國王', upright: '領導、遠見、成熟行動。適合主動規劃，把想法變成局。', reversed: '霸道、自我中心、控制慾強。氣場很強，但別強到沒人想靠近。', actions: { upright: "帶領大家做決定。現在需要的是你的果斷，不是模糊的妥協。", reversed: "聽聽別人的意見。你的權威不需要透過大聲咆哮來證明。" } },
+            "wa14": { name: '權杖國王', upright: '領導、遠見、成熟行動。適合主動規劃，把想法變成局。', reversed: '霸道、自我中心、控制慾強。氣場很強，但別強到沒人想靠近。', actions: { upright: "帶領大家做決定. 現在需要的是你的果斷，不是模糊的妥協。", reversed: "聽聽別人的意見。你的權威不需要透過大聲咆哮來證明。" } },
 
             "cu01": { name: '聖杯一', upright: '情感新開始、心打開、療癒。新的感受正在冒出來，溫柔接住它。', reversed: '情緒堵住、愛不流動、心累。你不是沒感覺，是暫時裝不下了。', actions: { upright: "主動向心儀的人或好友表達一句溫暖的問候。", reversed: "給自己留一段獨處時間，靜靜喝杯熱茶，排空情緒雜訊。" } },
             "cu02": { name: '聖杯二', upright: '互相吸引、和解、雙向連結。這是關係裡很漂亮的互相靠近。', reversed: '不對等、誤會、連結失衡。喜歡不難，難的是兩個人有沒有同步。', actions: { upright: "邀請那個你想更親近的人共進午餐，誠實表達你的欣賞。", reversed: "檢視你在這段關係中是否卑微了？今天練習不主動聯繫，看對方反應。" } },
@@ -378,7 +398,7 @@
             "cu11": { name: '聖杯侍者', upright: '曖昧訊息、溫柔邀請、心動小芽。可能有人用很可愛的方式靠近。', reversed: '情緒幼稚、曖昧不穩、想太多。別因為一句話就把小孩名字都想好。', actions: { upright: "發送一個帶有溫柔表情的關心給你在乎的人。", reversed: "停止在對話中測試對方的底線。直接說出你的需求，不要耍小脾氣。" } },
             "cu12": { name: '聖杯騎士', upright: '浪漫、邀約、情感表達。有人可能帶著心意靠近，氣氛很會。', reversed: '花言巧語、情緒飄忽、浪漫過度包裝。會撩不代表會負責。', actions: { upright: "準備一個充滿儀式感的約會，或是向喜歡的人遞出邀請。", reversed: "別被那種太甜的文字沖昏頭。觀察他的實際行動是否跟得上他的嘴巴。" } },
             "cu13": { name: '聖杯皇后', upright: '共感、溫柔、直覺力。你很會感受別人，但也要記得感受自己。', reversed: '情緒氾濫、過度共情、界線融化。你不是情緒垃圾桶，別什麼都收。', actions: { upright: "去傾聽一位朋友的苦水，並給予他不帶評判的全然接納。", reversed: "對過度的情緒索求說不。今天你不當情緒垃圾桶，你要回歸自己。" } },
-            "cu14": { name: '聖杯國王', upright: '成熟情緒、包容、穩定的愛。感情可以深，但不必失控. ', reversed: '情緒壓抑、冷處理、溫柔操控。看起來很穩，不代表心裡沒風暴。', actions: { upright: "在風暴中保持平靜，用包容的方式處理目前棘手的人際衝突。", reversed: "檢查你是否在用「冷處理」來報發對方？試著用理智誠實溝通。" } },
+            "cu14": { name: '聖杯國王', upright: '成熟情緒、包容、穩定的愛。感情可以深，但不必失控.', reversed: '情緒壓抑、冷處理、溫柔操控。看起來很穩，不代表心裡沒風暴。', actions: { upright: "在風暴中保持平靜，用包容的方式處理目前棘手的人際衝突。", reversed: "檢查你是否在用「冷處理」來報復對方？試著用理智誠實溝通。" } },
 
             "sw01": { name: '寶劍一', upright: '真相、決斷、清醒。你會看懂一件事，雖然有點刺，但很必要。', reversed: '混亂、誤解、話說不清。現在先別急著判刑，證據還沒齊。', actions: { upright: "立刻做下那個你猶豫已久的「決定」。真相大白，你已經準備好了。", reversed: "在資訊未明前不要開口。寫下所有事實清單，找出邏輯斷點。" } },
             "sw02": { name: '寶劍二', upright: '僵局、逃避選擇、假裝看不見。你不是不知道，只是不想選。', reversed: '遲早要面對、真相逼近、選擇壓力。眼罩快掉了，別再裝睡。', actions: { upright: "今天不逃避。選擇一個你最怕面對的細節進行初步確認。", reversed: "揭開眼罩。哪怕真相再痛，主動面對也比被動被拆穿強。" } },
@@ -390,25 +410,25 @@
             "sw08": { name: '寶劍八', upright: '受困、限制性信念、想太多。你以為沒路，其實是腦袋把門鎖上了。', reversed: '鬆綁、走出困局、看見出口。你開始發現自己不是那麼無能為力。', actions: { upright: "蒙著眼睛走一步。你會發現束縛其實很鬆，路一直都在腳下。", reversed: "找出那個「你以為不行」的藉口，用行動去戳破它。你有能力的。" } },
             "sw09": { name: '寶劍九', upright: '焦慮、失眠、自責。腦袋又在半夜開恐怖片馬拉松了。', reversed: '焦慮下降、願意求助、看見希望。你不必一個人扛全部黑夜。', actions: { upright: "睡前把腦中所有的煩惱寫在紙上。告訴自己：明天醒來再說。", reversed: "向信任的人坦露你的脆弱。對抗黑夜最好的方式就是尋求光。" } },
             "sw10": { name: '寶劍十', upright: '結束、崩潰到底、不能再騙自己。痛到這裡，反而代表最壞已經過了。', reversed: '復原、重新站起、痛苦收尾。你還沒滿血，但已經不是昨天那個你。', actions: { upright: "停止所有的掙扎。躺平也是一種姿態，最糟的已經發生，天快亮了。", reversed: "清點你身上殘餘的力量。站起來，哪怕只是去洗個臉、喝杯水。" } },
-            "sw11": { name: '寶劍侍者', upright: '觀察、訊息、好奇心。有人在看、在想、在蒐集資訊。', reversed: '口舌是非、偷看、訊息混亂. 別把每個蛛絲馬跡都當神諭。', actions: { upright: "去調查那些你存疑的資訊。現在多問、多聽是對的。", reversed: "今天停止在群組發言。你的每一句話都可能被誤解或造成二次傷害。" } },
-            "sw12": { name: '寶劍騎士', upright: '快速決定、直接衝刺、說話很利. 適合快刀斬亂麻。', reversed: '衝動發言、急躁、傷人不自知.傳訊息前先深呼吸，不然會變戰書。', actions: { upright: "用最短的時間處理最棘手的文書或邏輯問題。衝就對了。", reversed: "收回你那句帶刺的話。在發脾氣前先數 100 下，冷靜再談。" } },
-            "sw13": { name: '寶劍皇后', upright: '清醒、界線、理性判斷。你可以溫柔，但不用好欺負。', reversed: '尖銳、防衛、冷到結冰.保護自己很好，但別把所有人都當敵人。', actions: { upright: "用事實而非情緒來捍衛你的權益。保持你的專業與利落。", reversed: "在冷靜的理智中加入一點慈悲。對犯錯的人展現一點點溫度。" } },
-            "sw14": { name: '寶劍國王', upright: '理智、判斷、規則。現在適合用邏輯處理，不要讓情緒開車。', reversed: '冷酷、控制、話語壓迫.理性不是拿來切人的刀。', actions: { upright: "依據目前的法律或規則進行最客觀的裁決，不偏袒任何人。", reversed: "放寬你的批判標準。別用你的聰明去羞辱那些反應較慢的人。" } },
+            "sw11": { name: '寶劍侍者', upright: '觀察、訊息、好奇心. 有人在看、在想、在蒐集資訊。', reversed: '口舌是非、偷看、訊息混亂. 別把每個蛛絲馬跡都當神諭。', actions: { upright: "去調查那些你存疑的資訊。現在多問、多聽是對的。", reversed: "今天停止在群組發言。你的每一句話都可能被誤解或造成二次傷害。" } },
+            "sw12": { name: '寶劍騎士', upright: '快速決定、直接衝刺、說話很利. 適合快刀斬亂麻。', reversed: '衝動發言、急躁、傷人不自知. 傳訊息前先深呼吸，不然會變戰書。', actions: { upright: "用最短的時間處理最棘手的文書或邏輯問題。衝就對了。", reversed: "收回你那句帶刺的話。在發脾氣前先數 100 下，冷靜再談。" } },
+            "sw13": { name: '寶劍皇后', upright: '清醒、界線、理性判斷。你可以溫柔，但不用好欺負。', reversed: '尖銳、防衛、冷到結冰. 保護自己很好，但別把所有人都當敵人。', actions: { upright: "用事實而非情緒來捍衛你的權益。保持你的專業與利落。", reversed: "在冷靜的理智中加入一點慈悲。對犯錯的人展現一點點溫度。" } },
+            "sw14": { name: '寶劍國王', upright: '理智、判斷、規則。現在適合用邏輯處理，不要讓情緒開車。', reversed: '冷酷、控制、話語壓迫. 理性不是拿來切人的刀。', actions: { upright: "依據目前的法律或規則進行最客觀的裁決，不偏袒任何人。", reversed: "放寬你的批判標準。別用你的聰明去羞辱那些反應較慢的人。" } },
 
-            "pe01": { name: '錢幣一', upright: '新資源、新收入、落地機會。這是可以慢慢養大的種子。', reversed: '錯過機會、資源浪費、起步不穩. 先別急著放大，地基要補。', actions: { upright: "去存一筆小錢，或是啟動一項跟身體健康有關的具體目標。", reversed: "重新檢查你的財務細節。地基不穩時，千萬不要急著擴張。" } },
-            "pe02": { name: '錢幣二', upright: '平衡、調度、多工。你正在人生雜耍，還沒掉球已經很厲害。', reversed: '失衡、忙到爆、財務混亂.不要再假裝自己是八爪章魚。', actions: { upright: "維持靈活的調度。今天適合同時處理多件小事，不需糾結深度。", reversed: "放棄其中一項任務！你不是八爪章魚，今天只做最重要的兩件事。" } },
-            "pe03": { name: '錢幣三', upright: '合作、專業、被看見的能力。有人願意認可你的技術與努力。', reversed: '合作卡住、專業被低估、溝通不良.不是你不行，是團隊可能沒對齊。', actions: { upright: "與跨領域的人才交流，聽聽他們對你專業領域的具體建議。", reversed: "重新整理你的專業履歷或作品集，找回你對這份工作的價值感。" } },
-            "pe04": { name: '錢幣四', upright: '守住、安全感、存錢。你想穩，這很合理，但別穩到不敢活。', reversed: '過度抓緊、金錢焦慮、害怕失去.你抓越緊，手越酸。', actions: { upright: "今天不進行非必要的消費。確認你的存款是安全的。", reversed: "進行一次小規模的慷慨行為。請朋友喝咖啡，打破你的匱乏恐懼。" } },
-            "pe05": { name: '錢幣五', upright: '匱乏、孤立、資源不足。你可能覺得沒人幫，但門其實在旁邊。', reversed: '走出困境、接受協助、慢慢回暖.你不是只能苦撐，可以求援。', actions: { upright: "不要一個人苦撐。看看你身邊那扇亮著燈的門，主動敲開它。", reversed: "去向那些曾想幫你的人伸出手。承認你需要幫助，這不可恥。" } },
-            "pe06": { name: '錢幣六', upright: '給予與接受、資源流動、公平支援。有人願意幫你，你也值得收下。', reversed: '不平等、施捨感、付出失衡.別用討好換安全感。', actions: { upright: "清理出一堆你不需要的好物件，捐贈或轉送給更需要的人。", reversed: "拒絕一場單方面的索取。檢查你的付出是否是為了討好別人？" } },
-            "pe07": { name: '錢幣七', upright: '等待成果、評估、耐心耕耘。你種的東西還在長，不是沒用。', reversed: '急著收成、投資不耐、懷疑努力.不要今天種花明天就罵它不開。', actions: { upright: "停下來評估目前進度。在收穫前，你需要一段耐心的觀察期。", reversed: "別再今天種樹明天就要摘果。去散個步，讓時間幫你完成剩下的工作。" } },
-            "pe08": { name: '錢幣八', upright: '練習、職人精神、持續精進。你正在靠重複累積真正的底氣。', reversed: '敷衍、倦怠、技能卡關.不是不適合，是你可能失去成就感。', actions: { upright: "今天專注練習一項技能至少一小時，完全不看手機或社交軟體。", reversed: "換一種學習方式。如果是看書看不下去，那就去聽聽線上講座。" } },
-            "pe09": { name: '錢幣九', upright: '獨立、享受成果、質感生活。你正在靠自己長出漂亮的安全感。', reversed: '表面光鮮、依賴、價值感不穩.別只打造外殼，內在也要補貨。', actions: { upright: "給自己買一份有質感的小禮物，享受完全由你自己創造的空間。", reversed: "別只為了面子穿給別人看。今天穿一件最舒服的睡衣，跟自己對話。" } },
-            "pe10": { name: '錢幣十', upright: '長期穩定、家業、累積成果。這是適合談未來與長線規劃的牌。', reversed: '家庭壓力、長期不穩、價值觀落差.看起來很穩的東西，也可能藏著老問題。', actions: { upright: "與前輩或資深人士長談，聽聽他們對你長期資產配置的看法。", reversed: "處理家中那個壞了很久卻沒修的東西。環境清爽了，關係才會動。" } },
-            "pe11": { name: '錢幣侍者', upright: '學習、實習、新技能。適合開始建立一項會變現的能力。', reversed: '拖延、懶散、眼高手低.想賺錢很好，但先把基本功練起來。', actions: { upright: "報名一個實用的證照課或技能班，這是一個變現的好機會。", reversed: "停止空談發財夢。去完成一份具體的收支分析表，看清事實。" } },
-            "pe12": { name: '錢幣騎士', upright: '穩定、負責、慢慢推進。速度不快，但很可靠。', reversed: '停滯、固執、太保守.穩定不是不動，別把龜速當策略。', actions: { upright: "依照既定計畫踏實執行。今天不求快，只求做得精準無誤。", reversed: "打破固執。嘗試一個你平時覺得「太不保險」的小小實驗。" } },
-            "pe13": { name: '錢幣皇后', upright: '務實照顧、生活感、富養自己。你值得把日子過得舒服一點。', reversed: '過度操心、缺乏安全感、把自己放最後.你不是後勤部唯一員工。', actions: { upright: "今天親自下廚或去按摩。你的身體就是你最需要投資的資產。", reversed: "在所有照顧任務開始前，先讓自己睡飽 8 小時。你好別人才會好。" } },
-            "pe14": { name: '錢幣國王', upright: '成熟財務、穩定成就、資源掌控。適合做長期且務實的決策。', reversed: '物質控制、貪心、太現實.錢很重要，但別讓它變成唯一的神。', actions: { upright: "做出一個基於長期回報的投資或財務決定。現在適合談大局。", reversed: "問自己：除了錢，我還剩下什麼？去參與一個與利益無關的活動。" } }
+            "pe01": { name: '錢幣一', upright: '新資源、新收入、落地機會。這是可以慢慢養大的種子。', reversed: '錯過機會、資源浪費、起步不穩. 先別急著放大，地基要補。', actions: { upright: "去存一筆小錢，或是傾斜一項跟身體健康有關的具體目標。", reversed: "重新檢查你的財務細節。地基不穩時，千萬不要急著擴張。" } },
+            "pe02": { name: '錢幣二', upright: '平衡、調度、多工。你正在人生雜耍，還沒掉球已經很厲害。', reversed: '失衡、忙到爆、財務混亂. 不要再假裝自己是八爪章魚。', actions: { upright: "維持靈活的調度。今天適合同時處理多件小事，不需糾結深度。", reversed: "放棄其中一項任務！你不是八爪章魚，今天只做最重要的兩件事。" } },
+            "pe03": { name: '錢幣三', upright: '合作、專業、被看見的能力。有人願意認可你的技術與努力。', reversed: '合作卡住、專業被低估、溝通不良. 不是你不行，是團隊可能沒對齊。', actions: { upright: "與跨領域的人才交流，聽聽他們對你專業領域的具體建議。", reversed: "重新整理你的專業履歷或作品集，找回你對這份工作的價值感。" } },
+            "pe04": { name: '錢幣四', upright: '守住、安全感、存錢。你想穩，這很合理，但別穩到不敢活。', reversed: '過度抓緊、金錢焦慮、害怕失去. 你抓越緊，手越酸。', actions: { upright: "今天不進行非必要的消費。確認你的存款是安全的。", reversed: "進行一次小規模的慷慨行為。請朋友喝咖啡，打破你的匱乏恐懼。" } },
+            "pe05": { name: '錢幣五', upright: '匱乏、孤立、資源不足。你可能覺得沒人幫，但門其實在旁邊。', reversed: '走出困境、接受協助、慢慢回暖. 你不是只能苦撐，可以求援。', actions: { upright: "不要一個人苦撐。看看你身邊那扇亮著燈的門，主動敲開它。", reversed: "去向那些曾想幫你的人伸出手。承認你需要幫助，這不可恥。" } },
+            "pe06": { name: '錢幣六', upright: '給予與接受、資源流動、公平支援。有人願意幫你，你也值得收下。', reversed: '不平等、施捨感、付出失衡. 別用討好換安全感。', actions: { upright: "清理出一堆你不需要的好物件，捐贈或轉送給更需要的人。", reversed: "拒絕一場單方面的索取。檢查你的付出是否是為了討好別人？" } },
+            "pe07": { name: '錢幣七', upright: '等待成果、評估、耐心耕耘。你種的東西還在長，不是沒用。', reversed: '急著收成、投資不耐、懷疑努力. 不要今天種花明天就罵它不開。', actions: { upright: "停下來評估目前進度。在收穫前，你需要一段耐心的觀察期。", reversed: "別再今天種樹明天就要摘果。去散個步，讓時間幫你完成剩下的工作。" } },
+            "pe08": { name: '錢幣八', upright: '練習、職人精神、持續精進。你正在靠重複累積真正的底氣。', reversed: '敷衍、倦怠、技能卡關. 不是不適合，是你可能失去成就感。', actions: { upright: "今天專注練習一項技能至少一小時，完全不看手機或社交軟體。", reversed: "換一種學習方式。如果是看書看不下去，那就去聽聽線上講座。" } },
+            "pe09": { name: '錢幣九', upright: '獨立、享受成果、質感生活。你正在靠自己長出漂亮的安全感。', reversed: '表面光鮮、依賴、價值感不穩. 別只打造外殼，內在也要補貨。', actions: { upright: "給自己買一份有質感的小禮物，享受完全由你自己創造的空間。", reversed: "別只為了面子穿給別人看。今天穿一件最舒服的睡衣，跟自己對話。" } },
+            "pe10": { name: '錢幣十', upright: '長期穩定、家業、累積成果。這是適合談未來與長線規劃的牌。', reversed: '家庭壓力、長期不穩、價值觀落差. 看起來很穩的東西，也可能藏著老問題。', actions: { upright: "與前輩或資深人士長談，聽聽他們對你長期資產配置的看法。", reversed: "處理家中那個壞了很久卻沒修的東西。環境清爽了，關係才會動。" } },
+            "pe11": { name: '錢幣侍者', upright: '學習、實習、新技能。適合開始建立一項會變現的能力。', reversed: '拖延、懶散、眼高手低. 想賺錢很好，但先把基本功練起來。', actions: { upright: "報名一個實用的證照課或技能班，這是一個變現的好機會。", reversed: "停止空談發財夢。去完成一份具體的收支分析表，看清事實。" } },
+            "pe12": { name: '錢幣騎士', upright: '穩定、負責、慢慢推進。速度不快，但很可靠。', reversed: '停滯、固執、太保守. 穩定不是不動，別把龜速當策略。', actions: { upright: "依照既定計畫踏實執行. 今天不求快，只求做得精準無誤。", reversed: "打破固執。嘗試一個你平時覺得「太不保險」的小小實驗。" } },
+            "pe13": { name: '錢幣皇后', upright: '務實照顧、生活感、富養自己。你值得把日子過得舒服一點。', reversed: '過度操心、缺乏安全感、把自己放最後. 你不是後勤部唯一員工。', actions: { upright: "今天親自下廚或去按摩。你的身體就是你最需要投資的資產。", reversed: "在所有照顧任務開始前，先讓自己睡飽 8 小時。你好別人才會好。" } },
+            "pe14": { name: '錢幣國王', upright: '成熟財務、穩定成就、資源掌控。適合做長期且務實的決策。', reversed: '物質控制、貪心、太現實. 錢很重要，但別讓它變成唯一的神。', actions: { upright: "做出一個基於長期回報的投資或財務決定。現在適合談大局。", reversed: "問自己：除了錢，我還剩下什麼？去參與一個與利益無關的活動。" } }
         };
 
         const CATEGORIES = {
@@ -424,7 +444,7 @@
             career: ["未來三個月，轉職面試準備有什麼核心建議？", "未來半年內，目前的職場瓶頸該如何突破？", "下個月開始，如何提升工作能見度以獲得晉升？", "未來三個月，這項創業計畫的第一步該注意什麼？", "本季工作中，如何調頻才能找回熱情？"],
             money: ["未來一個月，我該如何做能顯化更多財富收入？", "未來三個月，這項具體投資該注意什麼？", "現在此刻，我該如何清理金錢匱乏感？", "下半年內，如何準備來抓住額外收入機會？", "未來一季，優化目前財務模式的靈魂建議？"],
             growth: ["現階段，跨越目前的靈魂卡點該做什麼？", "未來三個月，發掘天賦力量的核心建議？", "接下來一個月，找回內在平靜的具體建議？", "未來半年，這段低潮期帶給我的靈魂課題為何？", "接下來三個月，建立更強自信心的方向？"],
-            general: ["下週內，面對目前的生活變動該如何應對？", "未來一個月，如何維持高頻率以迎接轉機？", "接下來三個月，保護自身能量場的具體建議？", "現在此刻，為了讓生活更好該做出什麼改變？", "未來三個月，我目前最該優先關注哪一部分？"]
+            general: ["下週內，面對目前的生活變動該如何应對？", "未來一個月，如何維持高頻率以迎接轉機？", "接下來三個月，保護自身能量場的具體建議？", "現在此刻，為了讓生活更好該做出什麼改變？", "未來三個月，我目前最該優先關注哪一部分？"]
         };
 
         const SECRETS = ["當你專注於擁有的事物，全宇宙會給你更多。豐盛始於感謝。", "保持高頻的喜悅，你渴望的人事物就會自動奔向你。你就是磁鐵。", "放手交給宇宙去編排細節，你只需要維持願景。一切都在完美時程上。", "你的直覺就是導航器。不要猶豫，信任你看見的第一個徵兆。", "你已經做得很好了。請溫柔地對待自己，像對待你最愛的人一樣。"];
@@ -440,49 +460,91 @@
             } 
         });
 
-        window.state = { history: JSON.parse(localStorage.getItem(`${APP_ID}_history`) || '[]'), currentDraw: null, drawMode: 'auto', selectedManualCards: [], currentCategory: 'general' };
+        window.state = { 
+            history: JSON.parse(localStorage.getItem(`${APP_ID}_history`) || '[]'), 
+            currentDraw: null, 
+            drawMode: 'auto', 
+            selectedManualCards: [], 
+            currentCategory: 'general'
+        };
+
+        // --- 自定義 UI Modal 函數 ---
+        window.showModal = (title, desc, onConfirm) => {
+            const modal = document.getElementById('custom-modal');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            const btnConfirm = document.getElementById('modal-confirm');
+            const btnCancel = document.getElementById('modal-cancel');
+
+            const cleanup = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            };
+
+            btnConfirm.onclick = () => { onConfirm(); cleanup(); };
+            btnCancel.onclick = cleanup;
+        };
 
         // --- 核心邏輯：總結生成系統 ---
         function makeSummary(categoryKey, cards) {
             const cat = CATEGORIES[categoryKey] || CATEGORIES.general;
             let revCount = 0;
-            let arCount = 0;
+            let suits = { ar: 0, wa: 0, cu: 0, sw: 0, pe: 0 };
+            
             cards.forEach(c => {
                 if (c.isRev) revCount++;
-                if (c.id.startsWith('ar')) arCount++;
+                const prefix = c.id.substring(0, 2);
+                if (suits[prefix] !== undefined) suits[prefix]++;
             });
 
-            let summary = `<span class="text-brand font-black">${cat.title}題重點：</span> `;
-            const categoryBase = {
-                love: "別只看對方怎麼想，也要看你有沒有在關係裡越來越不像自己。",
-                career: "別只看職位或薪水，也要看這份選擇是否讓你感到受限或失去創造力。",
-                money: "別只盯著數字的增減，也要看你內在對匱乏的恐懼是否正在主導你的決策。",
-                growth: "這不是一個外在事件的挑戰，而是你靈魂在邀請你進行一次深層的自我對齊。",
-                general: "人生本來就夠亂了，這組牌是在幫你把糾結的毛線稍微理順一點。"
+            // 找出主導的能量元素
+            let primaryElement = 'general';
+            let maxCount = 0;
+            Object.entries(suits).forEach(([el, count]) => {
+                if (count > maxCount) {
+                    maxCount = count;
+                    primaryElement = el;
+                }
+            });
+
+            const elementNotes = {
+                ar: "大阿爾克那占主導，暗示你目前正面臨重大的靈魂生命轉折與內在覺醒契機，需要以更高的視野與覺察來看待這個課題。",
+                wa: "權杖元素旺盛，核心主題圍繞在『行動力、生命火花與意志決策』。宇宙提醒你，空想無法解決現狀，動手執行是唯一的破局法。",
+                cu: "聖杯元素明顯，代表你的困惑深埋在『情感、關係投射與內在安全感』。此時需要溫柔地傾聽並承接情緒，而不是強行用理性壓抑。",
+                sw: "寶劍元素當道，暗示目前面臨著『思維過載、抉擇混亂與精神內耗』。請看清客觀事實，快刀斬亂麻，主動劃清邊界。",
+                pe: "錢幣元素沉穩，聚焦於『現實資源、物質落地與具體回報』。此時切忌急功近利，需踏實地在現實生活中耕耘打好地基。"
             };
-            summary += categoryBase[categoryKey] || categoryBase.general;
+
+            const flowPath = cards.map(c => `<span class="text-brand font-black">${c.name}${c.isRev ? '(逆)' : '(正)'}</span>`).join(' ➜ ');
+
+            let summary = `<div class="text-left space-y-3 font-serif text-sm md:text-base leading-relaxed">`;
+            summary += `<p><span class="text-brand font-black">【${cat.title}能量流向】</span>：${flowPath}</p>`;
+            
+            if (elementNotes[primaryElement]) {
+                summary += `<p class="text-gray-300">${elementNotes[primaryElement]}</p>`;
+            }
 
             if (revCount >= 2) {
-                summary += " <br class='my-2'>這次逆位偏多，代表你現在真正卡住的不是事件本身，而是焦慮、抗拒、舊習慣或沒說出口的情緒。先不要急著做大動作，整理內在會比硬推進更有效。";
-            } else if (arCount >= 2) {
-                summary += " <br class='my-2'>牌陣中出現多張重量級大牌，代表這件事對你的生命影響很大，是一個必須經歷的靈魂轉折點。請保持覺知，迎接這個必要的蛻變。";
+                summary += `<p class="text-rose-300 text-xs md:text-sm italic">★ 逆位牌卡偏多：暗示此時真正卡住你的是焦慮、抗拒、舊有思維防禦或未梳理的情緒。暫緩向外強推，先對齊內在狀態。</p>`;
             } else {
-                summary += " <br class='my-2'>目前的能量流動相對平穩。這是一個適合微調腳步、維持現有成果並細心耕耘的時期。答案就在日常的細微處。";
+                summary += `<p class="text-emerald-300 text-xs md:text-sm italic">★ 能量流動順暢：代表外在阻礙相對單純。相信你內在的第一直覺，踏實採取具體行動即可破開迷霧。</p>`;
             }
+            summary += `</div>`;
 
             return summary;
         }
 
-        // --- STREAMING_CHUNK:Handling card logic and image loading... ---
+        // --- 處理卡片邏輯與圖像加載... ---
         function generateLocalAnalysis(intent, cards, categoryKey) {
             const interpretations = cards.map((c) => {
                 const cardInfo = TAROT_DATA[c.id];
                 let meaning = c.isRev ? cardInfo.reversed : cardInfo.upright;
-                // 從牌義中提取核心描述
                 const parts = meaning.split(/[。！？]/);
                 const advicePart = parts.length > 1 ? parts[parts.length - 2] : "聽從直覺";
-                
-                // 獲取具體行動建議
                 const action = c.isRev ? cardInfo.actions.reversed : cardInfo.actions.upright;
 
                 return { meaning, advice: advicePart, action };
@@ -492,8 +554,8 @@
 
             return {
                 interpretations,
-                actions: interpretations.map(i => i.action), // 這裡存的是真正的落地建議
-                archangelMsg: "宇宙正細細聆聽你的願望，你是被溫柔守護著的。",
+                actions: interpretations.map(i => i.action),
+                archangelMsg: "宇宙正細細聆聽你的願望，你是被溫柔守護著的。調頻呼吸，你會感覺到力量在體內甦醒。",
                 summary,
                 type: 'READING'
             };
@@ -531,7 +593,6 @@
             document.getElementById('result').classList.add('hidden');
             document.getElementById(`panel-${t}`).classList.remove('hidden');
             
-            // 重置祝福卡片狀態
             resetSecretCard();
 
             if (t === 'reading') {
@@ -576,6 +637,7 @@
 
         window.drawDaily = () => {
             const loading = document.getElementById('loading');
+            document.getElementById('loading-text').innerText = "今日能量校正中...";
             loading.classList.remove('hidden');
             setTimeout(() => {
                 const idx = Math.floor(Math.random() * 22);
@@ -635,6 +697,7 @@
         }
 
         window.drawReading = (isManual = false) => {
+            document.getElementById('loading-text').innerText = "正在調頻感應...";
             document.getElementById('loading').classList.remove('hidden');
             const intent = document.getElementById('reading-intent').value.trim();
             setTimeout(() => {
@@ -660,7 +723,13 @@
         function displayResult(title, cards, pos, ai) {
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('result').classList.remove('hidden');
-            document.getElementById('ai-prompt-area').classList.toggle('hidden', ai.type === 'DAILY');
+            
+            // 安全檢查：確認元素存在後才設定 class
+            const aiPromptArea = document.getElementById('ai-prompt-area');
+            if (aiPromptArea) {
+                aiPromptArea.classList.toggle('hidden', ai.type === 'DAILY');
+            }
+            
             document.getElementById('res-title').innerText = title;
             const intentDisplay = document.getElementById('intent-display');
             if (ai.intent) { intentDisplay.innerText = `「 ${ai.intent} 」`; intentDisplay.classList.remove('hidden'); }
@@ -684,16 +753,16 @@
                     ${item.meaning}
                 </div>`).join('');
             
-            // 這裡顯示的是專門設計的落地建議
             document.getElementById('action-list').innerHTML = (ai.actions || []).map(a => `<li class="flex gap-2 text-white font-bold bg-brand/10 p-4 rounded-2xl border border-brand/20"><span>✨</span><span>${a}</span></li>`).join('');
             document.getElementById('archangel-msg').innerText = `「 ${ai.archangelMsg} 」`;
-            window.state.currentDraw = { intent: ai.intent || "當下的能量狀態", cards: cards };
+
+            window.state.currentDraw = { intent: ai.intent || "當下的能量狀態", cards: cards, category: window.state.currentCategory };
             window.scrollTo({ top: document.getElementById('app').offsetTop - 50, behavior: 'smooth' });
         }
 
+        // --- 結束前的宇宙神祕祝福 ---
         window.drawSecretCard = () => {
             const container = document.getElementById('secret-card-inner');
-            // 開禮物的調頻動畫
             container.innerHTML = `<div class="flex flex-col items-center justify-center gap-4">
                 <div class="animate-spin h-10 w-10 border-4 border-brand border-t-transparent rounded-full"></div>
                 <p class="text-[10px] text-brand font-black animate-pulse uppercase tracking-[0.2em]">靈魂校準中...</p>
@@ -702,12 +771,11 @@
             setTimeout(() => {
                 const msg = SECRETS[Math.floor(Math.random() * SECRETS.length)];
                 document.getElementById('secret-card-container').classList.remove('secret-card-float');
-                // 顯現禮物內容
                 container.innerHTML = `
                     <div class="fade-in space-y-4">
-                        <div class="text-brand text-3xl"><i class="fa-solid fa-gift"></i></div>
+                        <div class="text-brand text-3xl"><i class="fa-solid fa-gift animate-bounce"></i></div>
                         <h4 class="text-brand font-black text-sm underline decoration-brand/30">宇宙神祕祝福</h4>
-                        <p class="text-[13px] text-white font-serif px-2 leading-relaxed font-medium italic">「 ${msg} 」</p>
+                        <p id="secret-msg-text" class="text-[13px] text-white font-serif px-2 leading-relaxed font-medium italic">「 ${msg} 」</p>
                     </div>
                 `;
                 window.showToast("已拆閱靈魂私語");
@@ -747,8 +815,21 @@
             window.showToast("已還原當次能量軌跡");
         };
 
-        window.deleteHistory = (id) => { window.state.history = window.state.history.filter(h => h.id !== id); localStorage.setItem(`${APP_ID}_history`, JSON.stringify(window.state.history)); renderHistory(); window.showToast("已刪除該筆紀錄"); };
-        window.clearHistory = () => { if(confirm("確定要清除所有能量軌跡嗎？")) { window.state.history = []; localStorage.removeItem(`${APP_ID}_history`); renderHistory(); window.showToast("軌跡已歸零"); } };
+        window.deleteHistory = (id) => { 
+            window.state.history = window.state.history.filter(h => h.id !== id); 
+            localStorage.setItem(`${APP_ID}_history`, JSON.stringify(window.state.history)); 
+            renderHistory(); 
+            window.showToast("已刪除該筆紀錄"); 
+        };
+        
+        window.clearHistory = () => { 
+            window.showModal("清除所有紀錄？", "這項操作將永久刪除所有存儲在本地的占卜歷史軌跡，此操作不可回復。", () => {
+                window.state.history = []; 
+                localStorage.removeItem(`${APP_ID}_history`); 
+                renderHistory(); 
+                window.showToast("軌跡已歸零"); 
+            });
+        };
         
         window.setDrawMode = m => {
             window.state.drawMode = m;
@@ -762,8 +843,15 @@
             const labels = ["過去能量", "現在卡點", "行動建議"];
             let cardStr = current.cards.map((c, i) => `${i+1}. ${labels[i]}：${c.name} (${c.isRev?'逆位':'正位'})`).join('\n');
             const prompt = `你好，我是占卜者。我剛在『心小跳塔羅』完成了一次靈魂調頻。\n\n【我的困惑】：『 ${current.intent || '當下能量'} 』\n【抽出的牌陣】：\n${cardStr}\n\n請以專業塔羅師視角提供針對性的「三位一體」靈魂解析`;
-            const el = document.createElement('textarea'); el.value = prompt; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
-            window.showToast("✨ 指令已複製！可貼給 AI 助理進行深度對談。");
+            
+            // 安全剪貼簿寫法
+            const el = document.createElement('textarea'); 
+            el.value = prompt; 
+            document.body.appendChild(el); 
+            el.select(); 
+            document.execCommand('copy'); 
+            document.body.removeChild(el);
+            window.showToast("✨ 指令已複製！可貼給其他 AI 助理。");
         };
 
         document.addEventListener('DOMContentLoaded', () => {
